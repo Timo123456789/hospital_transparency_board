@@ -25,7 +25,10 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => {
+  console.log("Hospital Transparency Board  Copyright (C) 2023  Maximilian Elfers, Ben Jannis Giese, Timo Lietmeyer, Hendrik Lüning This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions.")
+  console.log(`Listening on port ${port}`)
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
