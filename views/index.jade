@@ -3,5 +3,21 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div#mapDiv
+    div(id="map")
+      button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample")
+        | Open Sidebar
+
+  div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
+    div.offcanvas-header
+      h5.offcanvas-title(id="offcanvasExampleLabel")
+        | Sidebar for filters
+      button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
+    div.offcanvas-body
+      div
+      | We will add the filters here
+
+  script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin="")
+  script(src="/javascripts/index_script.js")
