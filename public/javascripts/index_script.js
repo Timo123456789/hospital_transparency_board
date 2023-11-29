@@ -35,7 +35,7 @@ fetch(url)
 	data = JSON.parse(data);
 	console.log(data);
 	console.log("______________________");
-	console.log(data.features.length);
+	console.log(data.features[2]);
 
 
 	for (let i = 0; i < data.features.length; i++) {
@@ -43,7 +43,13 @@ fetch(url)
 		coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 		console.log(coords);
 		if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined'){
-			L.marker(coords).addTo(map);
+			console.log(data.features[i].properties.name);
+			text_json =  {"Name": data.features[i].properties.USER_Adresse_Name_Standort,
+						 "Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
+						 "Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
+						 "Ort": data.features[i].properties.USER_Adresse_Ort_Standort}
+			console.log(text_json)
+			L.marker(coords).addTo(map).bindPopup(JSON.stringify(text_json));
 		}
 		
 
