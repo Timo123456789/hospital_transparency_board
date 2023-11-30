@@ -22,6 +22,8 @@ var data = JSON.stringify()
 var marker = L.marker([51.9607, 7.6261]).addTo(map);
 var url = "http://localhost:3000/kh_verzeichnis";
 
+
+
 // URL der Datei
 var url = "http://localhost:3000/kh_verzeichnis";
 
@@ -37,37 +39,60 @@ fetch(url)
 	console.log("______________________");
 	console.log(data.features[2]);
 
+	// Angenommen, center ist der Mittelpunkt Ihres Radius
+	var center = L.latLng(51.9607, 7.6261);
+
+	// Angenommen, radius ist der Radius in Metern
+	var radius = 10000; 
 
 	for (let i = 0; i < data.features.length; i++) {
-		console.log(i);
-		coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
-		console.log(coords);
-		if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined'){
+	var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
+	
+	
+	
+	console.log(distance);
+	if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined'){
+		// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
+		var distance = center.distanceTo(coords);
+
+		if (distance<=radius) {
 			console.log(data.features[i].properties.name);
 			text_json =  {"Name": data.features[i].properties.USER_Adresse_Name_Standort,
-						 "Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
-						 "Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
-						 "Ort": data.features[i].properties.USER_Adresse_Ort_Standort}
+						"Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
+						"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
+						"Ort": data.features[i].properties.USER_Adresse_Ort_Standort}
 			console.log(text_json)
-			L.marker(coords).addTo(map).bindPopup(JSON.stringify(text_json));
+			var temp_marker = L.marker(coords).addTo(map).bindPopup(JSON.stringify(text_json));
 		}
-		
+
 
 	}
-    // for (var key in data) {
-	// 	console.log(key);
-	// 	var obj = data[key];
-	// 	console.log(obj);
-	// 	console.log(obj.features);
-	// 	coords = [data.features[0].geometry.coordinates[1], data.features[0].geometry.coordinates[0]]
+
+	// for (let i = 0; i < data.features.length; i++) {
+	// 	console.log(i);
+	// 	coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 	// 	console.log(coords);
-	// 	var marker2 = L.marker(coords).addTo(map);
-	// }
+	// 	if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined'){
+	// 		console.log(data.features[i].properties.name);
+	// 		text_json =  {"Name": data.features[i].properties.USER_Adresse_Name_Standort,
+	// 					 "Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
+	// 					 "Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
+	// 					 "Ort": data.features[i].properties.USER_Adresse_Ort_Standort}
+	// 		console.log(text_json)
+	// 		L.marker(coords).addTo(map).bindPopup(JSON.stringify(text_json));
+	// 	}
+	 }
+
+
 	
+    
   })
   .catch(error => console.error('Fehler beim Lesen der Datei:', error));
 
-function add_marker(data, L, map) {
-	
-	
-}
+
+ document.getElementById('button_PZC').addEventListener('click', function() {
+    var inputValue = document.getElementById('input_PZC').value;
+    // Hier können Sie Ihre Logik implementieren
+	console.log(inputValue);
+
+  });
