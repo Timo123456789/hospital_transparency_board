@@ -3,13 +3,17 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const NodeGeocoder = require('node-geocoder');
 
 var indexRouter = require('./routes/index_route');
 var usersRouter = require('./routes/users_route');
 var impressumRouter = require('./routes/impressum_route');
 var fileRouter = require('./routes/file_route');
 
+
 var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
