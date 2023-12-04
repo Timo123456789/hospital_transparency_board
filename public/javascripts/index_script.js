@@ -1,10 +1,9 @@
 var map = L.map("map", { zoomControl: false }).setView([51.505, -0.09], 13);
 map.panTo(new L.LatLng(51.9607, 7.6261));
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 	minZoom: 0,
 	maxZoom: 20,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 }).addTo(map);
 
 // controls
@@ -48,12 +47,7 @@ fetch(url)
 	.then(response => response.text())
 	.then(data => {
 		// Verarbeiten Sie die Daten hier
-		console.log(data);
-		console.log("______________________");
 		data = JSON.parse(data);
-		console.log(data);
-		console.log("______________________");
-		console.log(data.features[2]);
 
 		// Angenommen, center ist der Mittelpunkt Ihres Radius
 		var center = L.latLng(51.9607, 7.6261);
@@ -64,14 +58,11 @@ fetch(url)
 		for (let i = 0; i < data.features.length; i++) {
 			var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
 
-
-			console.log(distance);
 			if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
 				// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
 				var distance = center.distanceTo(coords);
 
 				if (distance <= radius) {
-					console.log(data.features[i].properties.name);
 					text_json = {
 						"Name": data.features[i].properties.USER_Adresse_Name_Standort,
 						"Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
@@ -79,7 +70,6 @@ fetch(url)
 						"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
 						"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
 					}
-					console.log(text_json)
 					temp_marker = L.marker(coords).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
 					markers_kh_pos.push(temp_marker)
 
@@ -91,8 +81,6 @@ fetch(url)
 				}
 			}
 		}
-		console.log(markers_kh_pos);
-		console.log("LLLLLLLLLLLLL");
 		for (let i = 0; i < markers_kh_pos.length; i++) {
 			map.addControl(markers_kh_pos[i])
 		}
@@ -107,8 +95,6 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
 			var lng = position.coords.longitude;
-			console.log('Ihre Position ist:', lat, lng);
-			console.log(markers_kh_pos);
 			clear_markers()
 
 			//setze User Position Marker
@@ -167,13 +153,11 @@ function set_kh_marker(radius, center) {
 			for (let i = 0; i < data.features.length; i++) {
 				var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
 
-				console.log(distance);
 				if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
 					// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
 					var distance = center.distanceTo(coords);
 
 					if (distance <= radius) {
-						console.log(data.features[i].properties.name);
 						text_json = {
 							"Name": data.features[i].properties.USER_Adresse_Name_Standort,
 							"Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
@@ -181,7 +165,6 @@ function set_kh_marker(radius, center) {
 							"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
 							"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
 						}
-						console.log(text_json)
 						temp_marker = L.marker(coords).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
 						markers_kh_pos.push(temp_marker)
 
@@ -197,20 +180,11 @@ function set_kh_marker(radius, center) {
 }
 
 
-
-
-console.log("vor geocoder");
 const geoCoder = NodeGeocoder(options);
-console.log("nach geocoder");
 document.getElementById('button_PZC').addEventListener('click', function () {
-	console.log("button_PZC clicked");
 	var inputValue = document.getElementById('input_PZC').value;
-	console.log(inputValue);
 	// Hier können Sie Ihre Logik implementieren
 	var temp = geocoder.geocode(inputValue)
-		
-			console.log(inputValue);
-			console.log(res[0].latitude, res[0].longitude);
 	})
 		
 
