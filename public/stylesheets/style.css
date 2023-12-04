@@ -1,3 +1,31 @@
+:root{
+  /* Primary: Livid */
+--primary-100: #F2F3FF;
+--primary-200: #D7DAFE;
+--primary-300: #B8C2F9;
+--primary-400: #95A7EB;
+--primary-500: #6D87CF;
+--primary-600: #4463A4;
+--primary-700: #2B4A7A;
+--primary-800: #1B3250;
+--primary-900: #0D1926;
+
+/* Neutral */
+--neutral-100: #FAFAFC;
+--neutral-200: #E9EAEE;
+--neutral-300: #D8DADF;
+--neutral-400: #C8CAD0;
+--neutral-500: #B8BBC2;
+--neutral-600: #91959B;
+--neutral-700: #6B6F74;
+--neutral-800: #464A4D;
+--neutral-900: #222426;
+  
+--footer-height: 8%;
+--navbar-height: 8%;
+}
+
+
 html, body {
   height: 100%;
   margin: 0;
@@ -5,24 +33,53 @@ html, body {
 }
 
 a {
-  color: #00B7FF;
+  color: var(--primary-700);
+}
+
+input {
+  color: var(--neutral-800);
+}
+
+button {
+  color: var(--neutral-800);
+}
+
+a.navbar-brand {
+  color: var(--primary-700);
+}
+
+#navbar {
+  height: var(--navbar-height);
+  width: 100%;
+  position: relative;
+  background-color: transparent;
+  color: var(--primary-700);
+  text-indent: 10%;
+  font-weight: bold;
+  z-index: 1;
 }
 
 #mapDiv {
-  height: 100%;
-  position: relative;
+  top: 0;
+  height: calc(100% - var(--footer-height));
+  width: 100%;
+  position: absolute;
+  z-index: 0;
 }
 
 #map {
+  padding-top: var(--navbar-height);
   height: 100%;
   width: 100%;
 }
 
+/* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
   position: absolute;
-  top: 20pt;
+  top: var(--navbar-height);
   left: 20pt;
   z-index: 500;
+  background-color: var(--primary-400);
 }
 
 .offcanvas-size-xl {
@@ -36,4 +93,25 @@ a {
 }
 .offcanvas-size-sm {
   --bs-offcanvas-width: min(95vw, 250px) !important;
+}
+
+
+/* footer--------------------------------------------------------------------- */
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--footer-height);
+  background-color: var(--primary-400);
+  color: var(--primary-800);
+  text-align: center;
+  padding: 20px 0;
+  z-index: 1;
+  line-height: 0.5;
+}
+
+footer a {
+  color: var(--primary-800);
+  text-decoration: none;
 }
