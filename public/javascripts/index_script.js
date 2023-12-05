@@ -88,7 +88,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
 
 function clear_markers() {
-	console.log("clear markers");
+	
 	//lösche Krankenhausmarker im Umkreis
 	for (let i = 0; i < markers_kh_pos.length; i++) {
 		markers_kh_pos[i].remove()
@@ -130,16 +130,17 @@ function set_kh_marker(radius, center, icons) {
 				if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
 					// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
 					var distance = center.distanceTo(coords);
-
+					//console.log(data.features[i]);
 					if (distance <= radius) {
 						text_json = {
-							"Name": data.features[i].properties.USER_Adresse_Name_Standort,
-							"Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
-							"HNR": data.features[i].properties.USER_Adresse_Haus_Nr__Standort,
-							"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
-							"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
+							"Name": data.features[i].properties.Adresse_Name_Standort,
+							"Strasse": data.features[i].properties.Adresse_Strasse_Standort,
+							"HNR": data.features[i].properties["Adresse_Haus-Nr._Standort"],
+							"Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
+							"Ort": data.features[i].properties.Adresse_Ort_Standort,
+							"Website": data.features[i].properties["Internet-Adresse"]
 						}
-						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
+						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort+"<br>"+text_json.Website)
 						markers_kh_pos.push(temp_marker)
 
 					}
@@ -154,12 +155,12 @@ function set_kh_marker(radius, center, icons) {
 }
 
 
-const geoCoder = NodeGeocoder(options);
-document.getElementById('button_PZC').addEventListener('click', function () {
-	var inputValue = document.getElementById('input_PZC').value;
+// const geoCoder = NodeGeocoder(options);
+// document.getElementById('button_PZC').addEventListener('click', function () {
+//	var inputValue = document.getElementById('input_PZC').value;
 	// Hier können Sie Ihre Logik implementieren
-	var temp = geocoder.geocode(inputValue)
-	})
+//	var temp = geocoder.geocode(inputValue)
+//	})
 		
 
 

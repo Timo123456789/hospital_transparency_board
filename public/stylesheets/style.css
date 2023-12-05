@@ -73,6 +73,14 @@ a.navbar-brand {
   width: 100%;
 }
 
+.btn-outline-primary {
+  --bs-btn-font-weight: 600;
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-hover-color: var(--bs-white);
+}
+
 /* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
   position: absolute;
@@ -82,19 +90,26 @@ a.navbar-brand {
   background-color: var(--primary-400);
 }
 
-.offcanvas-size-xl {
-  --bs-offcanvas-width: min(95vw, 600px) !important;
-}
-.offcanvas-size-xxl {
-  --bs-offcanvas-width: min(95vw, 90vw) !important;
-}
-.offcanvas-size-md { /* add Responsivenes to default offcanvas */
-  --bs-offcanvas-width: min(95vw, 400px) !important;
-}
-.offcanvas-size-sm {
-  --bs-offcanvas-width: min(95vw, 250px) !important;
+#offcanvas {
+  width: min(95vw, 500px) !important;
+  height: calc(100% - var(--footer-height));
 }
 
+/* filter menu ----------------------------------------------------------------*/
+.filter-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.filter {
+  margin: 10px 0;
+}
+
+hr {
+  width: 100%;
+  border-top: 1px solid #000;
+}
 
 /* footer--------------------------------------------------------------------- */
 footer {
