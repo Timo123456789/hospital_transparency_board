@@ -1,4 +1,3 @@
-
 var map = L.map("map", { zoomControl: false }).setView([51.505, -0.09], 13);
 map.panTo(new L.LatLng(51.9607, 7.6261));
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -16,9 +15,7 @@ L.control.scale({
 	position: 'bottomright'
 }).addTo(map);
 
-
-main();
-function main() {
+var markers_kh_pos = new Array();
 
 	/**
 	*@desc declaration of Green Marker for Leafleat Map
@@ -42,24 +39,17 @@ function main() {
 		shadowSize: [41, 41]
 	});
 	icons = [greenIcon, hospIcon]
+
+main();
+function main() {
+
+
+	
 	set_user_marker([51.9607, 7.6261], icons)
 	set_kh_marker(10000, [51.9607, 7.6261], icons)
 
 
 }
-
-
-
-
-
-
-
-
-
-// //test
-
-
-
 
 
 
@@ -75,12 +65,12 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
 			//setze User Position Marker
 			coords = [lat, lng]
-			set_user_marker(coords)
+			set_user_marker(coords, icons)
 
 			//set hospitals markers
 			var radius = document.getElementById('input_radius').value;
 			console.log(radius);
-			set_kh_marker(radius, coords)
+			set_kh_marker(radius, coords, icons)
 
 			//Zoom to user location
 			//var markerBounds = L.latLngBounds(coords);
@@ -92,8 +82,6 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 	} else {
 		console.log('Geolocation wird von Ihrem Browser nicht unterstützt');
 	}
-
-
 });
 
 
