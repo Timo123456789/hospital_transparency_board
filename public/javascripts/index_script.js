@@ -137,9 +137,10 @@ function set_kh_marker(radius, center, icons) {
 							"Strasse": data.features[i].properties.Adresse_Strasse_Standort,
 							"HNR": data.features[i].properties["Adresse_Haus-Nr._Standort"],
 							"Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
-							"Ort": data.features[i].properties.Adresse_Ort_Standort
+							"Ort": data.features[i].properties.Adresse_Ort_Standort,
+							"Website": data.features[i].properties["Internet-Adresse"]
 						}
-						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
+						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort+"<br>"+text_json.Website)
 						markers_kh_pos.push(temp_marker)
 
 					}
