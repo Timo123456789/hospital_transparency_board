@@ -88,7 +88,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
 
 function clear_markers() {
-	console.log("clear markers");
+	
 	//lösche Krankenhausmarker im Umkreis
 	for (let i = 0; i < markers_kh_pos.length; i++) {
 		markers_kh_pos[i].remove()
@@ -133,11 +133,11 @@ function set_kh_marker(radius, center, icons) {
 
 					if (distance <= radius) {
 						text_json = {
-							"Name": data.features[i].properties.USER_Adresse_Name_Standort,
-							"Strasse": data.features[i].properties.USER_Adresse_Strasse_Standort,
-							"HNR": data.features[i].properties.USER_Adresse_Haus_Nr__Standort,
-							"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
-							"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
+							"Name": data.features[i].properties.Adresse_Name_Standort,
+							"Strasse": data.features[i].properties.Adresse_Strasse_Standort,
+							"HNR": data.features[i].properties.Adresse_Haus_Nr__Standort,
+							"Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
+							"Ort": data.features[i].properties.Adresse_Ort_Standort
 						}
 						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
 						markers_kh_pos.push(temp_marker)
