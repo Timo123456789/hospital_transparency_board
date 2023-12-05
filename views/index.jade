@@ -24,6 +24,16 @@ block content
       button(type='button', id="button_getUserLoc") Use User Location
       br
       br
+      div 
+      | Radius in km:
+      select(name='input_radius', id='input_radius') 
+        option(value=2000) 2
+        option(value=5000) 5
+        option(value=10000) 10
+        option(value=20000) 20
+        option(value=50000) 50
+      br
+      br
       hr
       div.filter-menu
         // button
@@ -66,9 +76,9 @@ block content
           option(value='1') Option 1
           option(value='2') Option 2
           option(value='3') Option 3
-              
-
+          
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin="")
   script(src="/javascripts/index_script.js")
+  
