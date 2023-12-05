@@ -3,10 +3,11 @@
 extends layout
 
 block content
+  div.welcome-message Welcome to the Hospital Transparency Portal
   div#mapDiv
     div(id="map")
       button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample")
-        | Open Sidebar
+        i.fas.fa-bars
 
   div.offcanvas.offcanvas-start.offcanvas-size-xl(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
     div.offcanvas-header

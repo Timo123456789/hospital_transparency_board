@@ -20,9 +20,22 @@ a {
 
 #btn_sidebar {
   position: absolute;
-  top: 20pt;
+  top: 40pt;
   left: 20pt;
   z-index: 500;
+}
+
+.highlight-brand {
+  background-color: #ff0000; /* Change this to your preferred color */
+  color: #ffffff; /* This is to ensure the text is visible on the highlight color */
+  border-radius: 10px; /* Makes the element round */
+  padding: 10px; /* Adds space inside the element */
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 15px;
 }
 
 .offcanvas-size-xl {
@@ -36,4 +49,24 @@ a {
 }
 .offcanvas-size-sm {
   --bs-offcanvas-width: min(95vw, 250px) !important;
+}
+
+@keyframes fadeInOut {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.welcome-message {
+  animation: fadeInOut 4s ease-in-out;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: #000;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
 }
