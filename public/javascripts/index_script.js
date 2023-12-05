@@ -114,7 +114,9 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 			set_user_marker(coords)
 
 			//set hospitals markers
-			set_kh_marker(10000, coords)
+			var radius = document.getElementById('input_radius').value;
+			console.log(radius);
+			set_kh_marker(radius, coords)
 
 			//Zoom to user location
 			//var markerBounds = L.latLngBounds(coords);
@@ -177,7 +179,7 @@ function set_kh_marker(radius, center) {
 							"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
 							"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
 						}
-						temp_marker = L.marker(coords).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
+						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
 						markers_kh_pos.push(temp_marker)
 
 					}
