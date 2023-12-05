@@ -180,12 +180,12 @@ function set_kh_marker(radius, center) {
 }
 
 
-const geoCoder = NodeGeocoder(options);
-document.getElementById('button_PZC').addEventListener('click', function () {
-	var inputValue = document.getElementById('input_PZC').value;
+// const geoCoder = NodeGeocoder(options);
+// document.getElementById('button_PZC').addEventListener('click', function () {
+//	var inputValue = document.getElementById('input_PZC').value;
 	// Hier können Sie Ihre Logik implementieren
-	var temp = geocoder.geocode(inputValue)
-	})
+//	var temp = geocoder.geocode(inputValue)
+//	})
 		
 
 
