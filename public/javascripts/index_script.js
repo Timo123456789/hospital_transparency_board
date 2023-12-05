@@ -69,7 +69,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
 			//set hospitals markers
 			var radius = document.getElementById('input_radius').value;
-			console.log(radius);
+			
 			set_kh_marker(radius, coords, icons)
 
 			//Zoom to user location
@@ -113,6 +113,8 @@ function set_kh_marker(radius, center, icons) {
 	var url = "http://localhost:3000/kh_verzeichnis";
 	//var markers_kh_pos = new Array();
 	center = L.latLng(center[0], center[1]);
+
+	var markers
 
 	// Datei lesen
 	fetch(url)
