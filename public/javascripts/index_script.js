@@ -17,28 +17,28 @@ L.control.scale({
 
 var markers_kh_pos = new Array();
 
-	/**
-	*@desc declaration of Green Marker for Leafleat Map
-	*@Source  https://github.com/pointhi/leaflet-color-markers/tree/master/img
-	*/
-	var greenIcon = new L.Icon({
-		iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-		shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-		iconSize: [25, 41],
-		iconAnchor: [12, 41],
-		popupAnchor: [1, -34],
-		shadowSize: [41, 41]
-	});
+/**
+*@desc declaration of Green Marker for Leafleat Map
+*@Source  https://github.com/pointhi/leaflet-color-markers/tree/master/img
+*/
+var greenIcon = new L.Icon({
+	iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+	shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
 
-	var hospIcon = new L.Icon({
-		iconUrl: 'https://icons.veryicon.com/png/o/healthcate-medical/medical-icon-library/hospital-9.png',
-		
-		iconSize: [25, 25],
-		iconAnchor: [6, 20],
-		popupAnchor: [5, -10],
-		shadowSize: [41, 41]
-	});
-	icons = [greenIcon, hospIcon]
+var hospIcon = new L.Icon({
+	iconUrl: 'https://icons.veryicon.com/png/o/healthcate-medical/medical-icon-library/hospital-9.png',
+	
+	iconSize: [25, 25],
+	iconAnchor: [6, 20],
+	popupAnchor: [5, -10],
+	shadowSize: [41, 41]
+});
+icons = [greenIcon, hospIcon]
 
 main();
 function main() {
@@ -88,6 +88,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
 
 function clear_markers() {
+	console.log("clear markers");
 	//lösche Krankenhausmarker im Umkreis
 	for (let i = 0; i < markers_kh_pos.length; i++) {
 		markers_kh_pos[i].remove()
@@ -95,6 +96,9 @@ function clear_markers() {
 
 	//lösche User Position Marker
 	user_loc_marker.remove()
+
+	//leere das Array mit den Positionen
+	markers_kh_pos = new Array();
 }
 
 function set_user_marker(coords, icons) {
@@ -107,7 +111,7 @@ function set_user_marker(coords, icons) {
 function set_kh_marker(radius, center, icons) {
 	var hospIcon = icons[1]
 	var url = "http://localhost:3000/kh_verzeichnis";
-	var markers_kh_pos = new Array();
+	//var markers_kh_pos = new Array();
 	center = L.latLng(center[0], center[1]);
 
 	// Datei lesen
