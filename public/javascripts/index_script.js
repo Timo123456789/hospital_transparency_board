@@ -130,12 +130,12 @@ function set_kh_marker(radius, center, icons) {
 				if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
 					// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
 					var distance = center.distanceTo(coords);
-
+					console.log(data.features[i]);
 					if (distance <= radius) {
 						text_json = {
 							"Name": data.features[i].properties.Adresse_Name_Standort,
 							"Strasse": data.features[i].properties.Adresse_Strasse_Standort,
-							"HNR": data.features[i].properties.Adresse_Haus_Nr__Standort,
+							"HNR": data.features[i].properties["Adresse_Haus-Nr._Standort"],
 							"Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
 							"Ort": data.features[i].properties.Adresse_Ort_Standort
 						}
