@@ -130,7 +130,7 @@ function set_kh_marker(radius, center, icons) {
 				if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
 					// Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
 					var distance = center.distanceTo(coords);
-					console.log(data.features[i]);
+					//console.log(data.features[i]);
 					if (distance <= radius) {
 						text_json = {
 							"Name": data.features[i].properties.Adresse_Name_Standort,
