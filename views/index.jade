@@ -5,24 +5,68 @@ extends layout
 block content
   div#mapDiv
     div(id="map")
-      button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample")
-        | Open Sidebar
+      button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas") 
+        | Filter  
+        svg.bi.bi-filter(xmlns='http://www.w3.org/2000/svg' width='25' height='25' fill='currentColor' viewBox='0 0 16 16')
+          path(d='M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5')
 
-  div.offcanvas.offcanvas-start.offcanvas-size-xl(tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel")
+  div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel")
     div.offcanvas-header
-      h5.offcanvas-title(id="offcanvasExampleLabel")
-        | Sidebar for filters
+      h5.offcanvas-title(id="offcanvasLabel") Sidebar for filters
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
     div.offcanvas-body
-      div
-      | We will add the filters here
+      div We will add the filters here
       br
       input(type='text', name='Post Zip Code', placeholder='Post Zip Code', id="input_PZC")
       button(type='button', id="button_PZC") Submit (not working yet)
       br
       br
       button(type='button', id="button_getUserLoc") Use User Location
-      
+      br
+      br
+      hr
+      div.filter-menu
+        // button
+        button#btn1.btn-check(type='button' name='btn1')
+        label.btn.btn-outline-primary(for='btn1') Filteroption Checkbox
+        hr
+        // buttongroup
+        p Filteroption Buttongroup
+        div.btn-group(role="group" aria-label="Basic example")
+          button#btngroup1.btn-check(type='button' name='btngroup1')
+          label.btn.btn-outline-primary(for='btngroup1') Button 1
+          button#btngroup2.btn-check(type='button' name='btngroup2')
+          label.btn.btn-outline-primary(for='btngroup2') Button 2
+          button#btngroup3.btn-check(type='button' name='btngroup3')
+          label.btn.btn-outline-primary(for='btngroup3') Button 3
+        hr
+        // checkbox toggle buttons
+        p Filteroption checkbox toggle buttons
+        input#btn-check1.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-check1') Option 1
+        input#btn-check2.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-check2') Option 2
+        input#btn-check3.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-check3') Option 3
+        hr
+        // radio group
+        p Filteroption Radio
+        div.btn-group(role='group' aria-label='Basic radio toggle button group')
+          input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off' checked='')
+          label.btn.btn-outline-primary(for='btnradio1') Radio 1
+          input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
+          label.btn.btn-outline-primary(for='btnradio2') Radio 2
+          input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
+          label.btn.btn-outline-primary(for='btnradio3') Radio 3
+        hr
+        // form select
+        p Filteroption Form Select
+        select.form-select(aria-label='Default select example')
+          option(selected='') Select an option
+          option(value='1') Option 1
+          option(value='2') Option 2
+          option(value='3') Option 3
+              
 
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
