@@ -30,6 +30,18 @@ var greenIcon = new L.Icon({
 	popupAnchor: [1, -34],
 	shadowSize: [41, 41]
 });
+
+var hospIcon = new L.Icon({
+	iconUrl: 'https://icons.veryicon.com/png/o/healthcate-medical/medical-icon-library/hospital-9.png',
+	
+	iconSize: [25, 25],
+	iconAnchor: [6, 20],
+	popupAnchor: [5, -10],
+	shadowSize: [41, 41]
+});
+
+
+
 var data = JSON.stringify()
 var user_loc_marker = L.marker([51.9607, 7.6261], { icon: greenIcon })
 user_loc_marker.bindPopup("Your Position");
@@ -70,7 +82,7 @@ fetch(url)
 						"Postleitzahl": data.features[i].properties.USER_Adresse_Postleitzahl_Standort,
 						"Ort": data.features[i].properties.USER_Adresse_Ort_Standort
 					}
-					temp_marker = L.marker(coords).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
+					temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort)
 					markers_kh_pos.push(temp_marker)
 
 
