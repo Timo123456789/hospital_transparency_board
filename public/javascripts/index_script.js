@@ -138,9 +138,56 @@ function set_kh_marker(radius, center, icons) {
 							"HNR": data.features[i].properties["Adresse_Haus-Nr._Standort"],
 							"Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
 							"Ort": data.features[i].properties.Adresse_Ort_Standort,
-							"Website": data.features[i].properties["Internet-Adresse"]
+							"Telefon": data.features[i].properties["Telefonvorwahl/-nummer"],
+							"Website": data.features[i].properties["Internet-Adresse"],
+							"Email": data.features[i].properties["E-Mail Adresse"],
+							"Traeger": decodeTraeger(data.features[i].properties.Traeger),
+							"Typ": decodeType(data.features[i].properties.EinrichtungsTyp)
 						}
-						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup("Name: " + text_json.Name + "<br>" + "Adress: " + text_json.Strasse + " " + text_json.HNR + ", " + text_json.Postleitzahl + " " + text_json.Ort+"<br>"+text_json.Website)
+						//Foramtierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
+						var websiteUrl = text_json.Website.startsWith("http") ? text_json.Website : "http://" + text_json.Website;
+						var mailtoLink = text_json.Email ? `<a href="mailto:${text_json.Email}">${text_json.Email}</a>` : 'N/A';
+						
+						function decodeTraeger(value) {
+							switch (value) {
+							  case 1:
+								return "Öffentlich";
+							  case 2:
+								return "Freigemeinnützig";
+							  case 3:
+								return "Privat";
+							  default:
+								return "Unbekannter Träger";
+							}
+						  }
+
+						  function decodeType(value) {
+							switch (value) {
+							  case 1:
+								return "Hochschulklinik";
+							  case 2:
+								return "Plankrankenhaus";
+							  case 3:
+								return "Krankenhaus mit Versorgungsvertrag";
+							  case 4:
+								return "Krankenhaus ohne Versorgungsvertrag";
+							  case 5:
+								return "Bundeswehrkrankenhaus";
+							  default:
+								return "Unbekannt";
+							}
+						  }
+
+						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup(`
+							<div style="font-size: 1.2em; font-weight: bold;">${text_json.Name}</div>
+							<hr>
+							<b>Address:</b> ${text_json.Strasse} ${text_json.HNR}, ${text_json.Postleitzahl} ${text_json.Ort}<br>
+							<b>Phone Number:</b> ${text_json.Telefon}<br>
+							<b>Website:</b> <a href="${websiteUrl}" target="_blank">${text_json.Website}</a><br>
+							<b>E-mail:</b> ${mailtoLink}<br>
+							<b>provider:</b> ${text_json.Traeger}<br>
+							<b>Type:</b> ${text_json.Typ}<br>
+							`);
 						markers_kh_pos.push(temp_marker)
 
 					}
