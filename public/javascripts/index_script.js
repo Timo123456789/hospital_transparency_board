@@ -135,6 +135,8 @@ function setHospitalMarker (radius, center, icons) {
   // var markersHospital = new Array();
   center = L.latLng(center[0], center[1])
 
+  radius = document.getElementById('inputRadius').value
+
   // Datei lesen
   fetch(url)
     .then(response => response.text())
