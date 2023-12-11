@@ -21,7 +21,9 @@ block content
       button(type='button', id="button_PZC") Submit (not working yet)
       br
       br
-      button(type='button', id="button_getUserLoc") Use User Location
+      button(type='button', id="button_setMarker", data-bs-dismiss="offcanvas",aria-label="Close") Set Marker on Map
+      button(type='button', id="button_getUserLoc", data-bs-dismiss="offcanvas",aria-label="Close") Use User Location
+
       br
       br
       div 
@@ -36,10 +38,60 @@ block content
       br
       hr
       div.filter-menu
-        // button
-        button#btn1.btn-check(type='button' name='btn1')
-        label.btn.btn-outline-primary(for='btn1') Filteroption Checkbox
+        // radius slider
+        p Maximale Entfernung zu einem Krankenhaus in km
+        input#radiusSlider.custom-range(type='range' min='0' max='100' step='1' value='10')
+        .input-group#InputGroup
+          input.form-control#radiusInput(type='number', min='0', max='100', value='10')
+          span.input-group-text km
         hr
+        // Art der Notfallversorgung
+        p Art der Notfallversorgung
+        input#btn-nv1.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-nv1') Option 1
+        input#btn-nv2.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-nv2') Option 2
+        input#btn-nv3.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-nv3') Option 3
+        hr
+        // Eigentümer-Typ
+        p Eigentümer-Typ ?????????
+        input#btn-et-privat.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-et-privat') Privat
+        input#btn-et-oeffentlich.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-et-oeffentlich') Öffentlich
+        input#btn-et-freigemeinnuetzig.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-et-freigemeinnuetzig') Freigemeinnützig
+        hr
+        // Krankenhaus-Typ
+        p Krankenhaus-Typ
+        input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Option 1
+        input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Option 2
+        input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Option 3
+        hr
+        // Spezialisierung
+        p Spezialisierung
+        input#btn-spezialisierung1.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-spezialisierung1') Spezialisierung 1
+        input#btn-spezialisierung2.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-spezialisierung2') Spezialisierung 2
+        input#btn-spezialisierung3.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-spezialisierung3') Spezialisierung 3
+        hr
+        // radius slider
+        p Mindestrating
+        input#ratingSlider.custom-range(type='range' min='0' max='5' step='0.1' value='0')
+        .input-group#InputGroup
+          input.form-control#ratingInput(type='double', min='0', max='5')
+          span.input-group-text 
+            svg.bi.bi-star(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+              path(d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z')
+
+
+      //
         // buttongroup
         p Filteroption Buttongroup
         div.btn-group(role="group" aria-label="Basic example")
@@ -76,9 +128,6 @@ block content
           option(value='1') Option 1
           option(value='2') Option 2
           option(value='3') Option 3
-          
-  script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin="")
+
+  script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/index_script.js")
-  

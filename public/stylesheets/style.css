@@ -38,10 +38,12 @@ a {
 
 input {
   color: var(--neutral-800);
+  margin-top: 10px;
 }
 
 button {
   color: var(--neutral-800);
+  margin-top: 10px;
 }
 
 a.navbar-brand {
@@ -109,6 +111,16 @@ a.navbar-brand {
 hr {
   width: 100%;
   border-top: 1px solid #000;
+}
+
+  
+#InputGroup {
+  margin: 25px;
+  width: 30%;
+}
+
+#radiusInput{
+  text-align: center;
 }
 
 /* footer--------------------------------------------------------------------- */
