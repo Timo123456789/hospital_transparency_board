@@ -1,3 +1,5 @@
+
+
 var map = L.map("map", { zoomControl: false }).setView([51.505, -0.09], 13);
 map.panTo(new L.LatLng(51.9607, 7.6261));
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -40,6 +42,7 @@ var hospIcon = new L.Icon({
 });
 icons = [greenIcon, hospIcon]
 
+
 main();
 function main() {
 
@@ -57,6 +60,7 @@ function main() {
 
 
 document.getElementById('button_getUserLoc').addEventListener('click', function () {
+	closeSidebar()
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
@@ -85,6 +89,23 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 });
 
 
+
+	
+
+document.getElementById('button_setMarker').addEventListener('click', function () {
+	console.log("click");
+	console.log("test123");
+	clear_markers()
+	map.once('click', function(e) {
+        //var marker = L.marker(e.latlng).addTo(map);
+		console.log(e.latlng);
+		coords = [e.latlng.lat, e.latlng.lng]
+		console.log(coords);
+		set_user_marker(coords, icons)
+		set_kh_marker(10000, coords, icons)
+    });
+
+});
 
 
 function clear_markers() {
@@ -115,6 +136,7 @@ function set_kh_marker(radius, center, icons) {
 	center = L.latLng(center[0], center[1]);
 
 	var markers
+	var radius = document.getElementById('input_radius').value;
 
 	// Datei lesen
 	fetch(url)
@@ -161,7 +183,12 @@ function set_kh_marker(radius, center, icons) {
 	// Hier können Sie Ihre Logik implementieren
 //	var temp = geocoder.geocode(inputValue)
 //	})
-		
 
 
-	
+
+function closeSidebar() {
+	//var myOffcanvas = document.getElementById('offcanvas');
+	//var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
+    //bsOffcanvas.hide();
+}
+
