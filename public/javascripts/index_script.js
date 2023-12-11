@@ -170,35 +170,7 @@ function set_kh_marker(radius, center, icons) {
 						var websiteUrl = text_json.Website.startsWith("http") ? text_json.Website : "http://" + text_json.Website;
 						var mailtoLink = text_json.Email ? `<a href="mailto:${text_json.Email}">${text_json.Email}</a>` : 'N/A';
 						
-						function decodeTraeger(value) {
-							switch (value) {
-							  case 1:
-								return "Öffentlich";
-							  case 2:
-								return "Freigemeinnützig";
-							  case 3:
-								return "Privat";
-							  default:
-								return "Unbekannter Träger";
-							}
-						  }
-
-						  function decodeType(value) {
-							switch (value) {
-							  case 1:
-								return "Hochschulklinik";
-							  case 2:
-								return "Plankrankenhaus";
-							  case 3:
-								return "Krankenhaus mit Versorgungsvertrag";
-							  case 4:
-								return "Krankenhaus ohne Versorgungsvertrag";
-							  case 5:
-								return "Bundeswehrkrankenhaus";
-							  default:
-								return "Unbekannt";
-							}
-						  }
+						
 
 						temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup(`
 							<div style="font-size: 1.2em; font-weight: bold;">${text_json.Name}</div>
@@ -224,18 +196,36 @@ function set_kh_marker(radius, center, icons) {
 }
 
 
-// const geoCoder = NodeGeocoder(options);
-// document.getElementById('button_PZC').addEventListener('click', function () {
-//	var inputValue = document.getElementById('input_PZC').value;
-	// Hier können Sie Ihre Logik implementieren
-//	var temp = geocoder.geocode(inputValue)
-//	})
+
+function decodeTraeger(value) {
+	switch (value) {
+	  case 1:
+		return "Öffentlich";
+	  case 2:
+		return "Freigemeinnützig";
+	  case 3:
+		return "Privat";
+	  default:
+		return "Unbekannter Träger";
+	}
+  }
+
+  function decodeType(value) {
+	switch (value) {
+	  case 1:
+		return "Hochschulklinik";
+	  case 2:
+		return "Plankrankenhaus";
+	  case 3:
+		return "Krankenhaus mit Versorgungsvertrag";
+	  case 4:
+		return "Krankenhaus ohne Versorgungsvertrag";
+	  case 5:
+		return "Bundeswehrkrankenhaus";
+	  default:
+		return "Unbekannt";
+	}
+  }
 
 
-
-function closeSidebar() {
-	//var myOffcanvas = document.getElementById('offcanvas');
-	//var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
-    //bsOffcanvas.hide();
-}
 
