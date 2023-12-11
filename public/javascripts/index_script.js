@@ -60,7 +60,6 @@ function main() {
 
 
 document.getElementById('button_getUserLoc').addEventListener('click', function () {
-	closeSidebar()
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			var lat = position.coords.latitude;
@@ -93,8 +92,6 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 	
 
 document.getElementById('button_setMarker').addEventListener('click', function () {
-	console.log("click");
-	console.log("test123");
 	clear_markers()
 	map.once('click', function(e) {
         //var marker = L.marker(e.latlng).addTo(map);
