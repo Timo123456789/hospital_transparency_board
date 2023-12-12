@@ -104,6 +104,67 @@ document.getElementById('button_setMarker').addEventListener('click', function (
 
 });
 
+document.getElementById('button_submit').addEventListener('click', function () {
+	let checkboxes = document.querySelectorAll('.btn-check');
+	var array_prov= [];
+// Iterieren Sie durch die Checkboxen
+	for (let i = 0; i < checkboxes.length; i++) {
+    // Überprüfen Sie, ob die Checkbox ausgewählt ist
+    	if (checkboxes[i].checked) {
+			var temp = {
+				checkbox: i,
+				value: checkboxes[i].value
+			}
+			array_prov.push(temp)
+        // Die Checkbox ist ausgewählt, tun Sie etwas
+        	console.log('Checkbox ' + (i+1) + ' ist ausgewählt.');
+    }
+}
+	//var temp = document.getElementById('button_providerType');	
+	//clear_markers()
+	console.log(array_prov);
+	console.log(getData());
+	var data = getDataAsync() 
+	filterProvider(data, array_prov);
+});
+
+async function getDataAsync() {
+	data = getData();
+	return data;
+}
+function filterProvider(data, array_prov) {
+	var markers_kh_pos = new Array();
+	console.log(data);
+	for (let i = 0; i < data.features.length; i++) {
+		var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
+
+		if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+			for (let j = 0; j < array_prov.length; j++){
+				if (data.features[i].properties.Traeger==array_prov[j].value) {
+					markers_kh_pos.push(create_marker(data.features[i], coords, hospIcon))
+				}
+			}
+		}
+	}
+
+	for (let i = 0; i < markers_kh_pos.length; i++) {
+		map.addControl(markers_kh_pos[i])
+	}
+}
+
+
+async function getData() {
+	var url = "http://localhost:3000/kh_verzeichnis";
+	// Datei lesen
+	fetch(url)
+		.then(response => response.text())
+		.then(data => {
+			// Verarbeiten Sie die Daten hier
+			data = JSON.parse(data);
+			return data;
+		})
+		.catch(error => console.error('Fehler beim Lesen der Datei:', error));
+}
 
 function clear_markers() {
 	
@@ -193,6 +254,37 @@ function set_kh_marker(radius, center, icons) {
 }
 
 
+function create_marker(data, coords, hospIcon) {
+	text_json = {
+		"Name": data.properties.Adresse_Name_Standort,
+		"Strasse": data.properties.Adresse_Strasse_Standort,
+		"HNR": data.properties["Adresse_Haus-Nr._Standort"],
+		"Postleitzahl": data.properties.Adresse_Postleitzahl_Standort,
+		"Ort": data.properties.Adresse_Ort_Standort,
+		"Telefon": data.properties["Telefonvorwahl/-nummer"],
+		"Website": data.properties["Internet-Adresse"],
+		"Email": data.properties["E-Mail Adresse"],
+		"Traeger": decodeTraeger(data.properties.Traeger),
+		"Typ": decodeType(data.properties.EinrichtungsTyp)
+	}
+	//Foramtierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
+	var websiteUrl = text_json.Website.startsWith("http") ? text_json.Website : "http://" + text_json.Website;
+	var mailtoLink = text_json.Email ? `<a href="mailto:${text_json.Email}">${text_json.Email}</a>` : 'N/A';
+	
+	
+
+	temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup(`
+		<div style="font-size: 1.2em; font-weight: bold;">${text_json.Name}</div>
+		<hr>
+		<b>Address:</b> ${text_json.Strasse} ${text_json.HNR}, ${text_json.Postleitzahl} ${text_json.Ort}<br>
+		<b>Phone Number:</b> ${text_json.Telefon}<br>
+		<b>Website:</b> <a href="${websiteUrl}" target="_blank">${text_json.Website}</a><br>
+		<b>E-mail:</b> ${mailtoLink}<br>
+		<b>provider:</b> ${text_json.Traeger}<br>
+		<b>Type:</b> ${text_json.Typ}<br>
+		`);
+	return temp_marker;
+}
 
 function decodeTraeger(value) {
 	switch (value) {
