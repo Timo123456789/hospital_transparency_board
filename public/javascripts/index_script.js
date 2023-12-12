@@ -104,6 +104,9 @@ document.getElementById('button_setMarker').addEventListener('click', function (
 
 });
 
+
+//Funktion muss Async sein, da sonst die Daten nicht rechtzeitig geladen werden (s. Z. 109, Col 68 )
+// Await muss in Zeile 131 eingesetzt werden damit auf die Rückgabe vom Server gewartet wird (sonst ist die Variable leer/undefined)
 document.getElementById('button_submit').addEventListener('click', async function () {
   clear_markers()
   let checkboxes = document.querySelectorAll('.btn-check');
@@ -162,7 +165,7 @@ function filterProvider(data, array_prov) {
 
 
 
-
+//Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
 async function getData() {
   var url = "http://localhost:3000/kh_verzeichnis";
   try {
@@ -203,7 +206,6 @@ function set_kh_marker(radius, center, icons) {
   //var markers_kh_pos = new Array();
   center = L.latLng(center[0], center[1]);
 
-  var markers
   var radius = document.getElementById('input_radius').value;
 
   // Datei lesen
@@ -222,35 +224,9 @@ function set_kh_marker(radius, center, icons) {
           var distance = center.distanceTo(coords);
           //console.log(data.features[i]);
           if (distance <= radius) {
-            text_json = {
-              "Name": data.features[i].properties.Adresse_Name_Standort,
-              "Strasse": data.features[i].properties.Adresse_Strasse_Standort,
-              "HNR": data.features[i].properties["Adresse_Haus-Nr._Standort"],
-              "Postleitzahl": data.features[i].properties.Adresse_Postleitzahl_Standort,
-              "Ort": data.features[i].properties.Adresse_Ort_Standort,
-              "Telefon": data.features[i].properties["Telefonvorwahl/-nummer"],
-              "Website": data.features[i].properties["Internet-Adresse"],
-              "Email": data.features[i].properties["E-Mail Adresse"],
-              "Traeger": decodeTraeger(data.features[i].properties.Traeger),
-              "Typ": decodeType(data.features[i].properties.EinrichtungsTyp)
-            }
-            //Foramtierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
-            var websiteUrl = text_json.Website.startsWith("http") ? text_json.Website : "http://" + text_json.Website;
-            var mailtoLink = text_json.Email ? `<a href="mailto:${text_json.Email}">${text_json.Email}</a>` : 'N/A';
-
-
-
-            temp_marker = L.marker(coords, { icon: hospIcon }).bindPopup(`
-							<div style="font-size: 1.2em; font-weight: bold;">${text_json.Name}</div>
-							<hr>
-							<b>Address:</b> ${text_json.Strasse} ${text_json.HNR}, ${text_json.Postleitzahl} ${text_json.Ort}<br>
-							<b>Phone Number:</b> ${text_json.Telefon}<br>
-							<b>Website:</b> <a href="${websiteUrl}" target="_blank">${text_json.Website}</a><br>
-							<b>E-mail:</b> ${mailtoLink}<br>
-							<b>provider:</b> ${text_json.Traeger}<br>
-							<b>Type:</b> ${text_json.Typ}<br>
-							`);
-            markers_kh_pos.push(temp_marker)
+            
+            var temp = create_marker(data.features[i], coords, hospIcon)
+            markers_kh_pos.push(temp)
 
           }
         }
@@ -263,7 +239,7 @@ function set_kh_marker(radius, center, icons) {
     .catch(error => console.error('Fehler beim Lesen der Datei:', error));
 }
 
-
+//Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
 function create_marker(data, coords, hospIcon) {
   console.log(data);
   console.log(data.Feature);
