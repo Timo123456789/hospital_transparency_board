@@ -59,9 +59,9 @@ function main() {
 
 
 
-document.getElementById('button_getUserLoc').addEventListener('click', function () {
+document.getElementById('button_getUserLoc').addEventListener('click', async function () {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition(async function (position) {
       var lat = position.coords.latitude;
       var lng = position.coords.longitude;
       clear_markers()
@@ -72,7 +72,10 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
       //set hospitals markers
       var radius = document.getElementById('input_radius').value;
-
+      var data = await getData()
+      console.log(data);
+      var test = filter_radius(radius, coords, data)
+      console.log(test);
       set_kh_marker(radius, coords, icons)
 
       //Zoom to user location
@@ -109,6 +112,55 @@ document.getElementById('button_setMarker').addEventListener('click', function (
 // Await muss in Zeile 131 eingesetzt werden damit auf die Rückgabe vom Server gewartet wird (sonst ist die Variable leer/undefined)
 document.getElementById('button_submit').addEventListener('click', async function () {
   clear_markers()
+  var array_prov = check_provider();
+  //var temp = document.getElementById('button_providerType');	
+  //clear_markers()
+  console.log(array_prov);
+  //console.log(getData());
+  var data = await getData()
+  console.log("_____________");
+  console.log(data);
+  console.log("_______________");
+  var filtered_markers = filterProvider(data, array_prov);
+  set_filtered_kh_marker(filtered_markers)
+  markers_kh_pos = filtered_markers;
+  console.log(filtered_markers);
+  filtered_markers = [];
+  console.log(filtered_markers);
+});
+
+
+//functions ---------------------------------------------------------------------------------------------------------------
+function filter_radius(radius, center, data) {
+  var filtered_data = [];
+  center = L.latLng(center[0], center[1]);
+  for (let i = 0; i < data.features.length; i++) {
+    var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
+    if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+    // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
+      console.log(coords);
+      console.log(center);
+      var distance = center.distanceTo(coords);
+      //console.log(data.features[i]);
+      if (distance <= radius) {
+
+        var temp = create_marker(data.features[i], coords, hospIcon)
+        filtered_data.push(temp)
+      }
+    }
+  }
+return filtered_data;
+}
+
+function set_filtered_kh_marker(markers_kh_pos) {
+  console.log("_____________test_____________");
+  console.log(markers_kh_pos);
+  for (let i = 0; i < markers_kh_pos.length; i++) {
+    map.addControl(markers_kh_pos[i])
+  }
+}
+
+function check_provider() {
   let checkboxes = document.querySelectorAll('.btn-check');
   var array_prov = [];
   // Iterieren Sie durch die Checkboxen
@@ -124,20 +176,8 @@ document.getElementById('button_submit').addEventListener('click', async functio
       console.log('Checkbox ' + (i + 1) + ' ist ausgewählt.');
     }
   }
-  //var temp = document.getElementById('button_providerType');	
-  //clear_markers()
-  console.log(array_prov);
-  //console.log(getData());
-  var data = await getData()
-  console.log("_____________");
-  console.log(data);
-  console.log("_______________");
-  filterProvider(data, array_prov);
-});
-
-
-
-
+  return array_prov;
+}
 
 function filterProvider(data, array_prov) {
   var markers_kh_pos = new Array();
@@ -149,18 +189,14 @@ function filterProvider(data, array_prov) {
       for (let j = 0; j < array_prov.length; j++) {
         //console.log(data.features[i].properties.Traeger);
         //console.log(array_prov[j].value);
-        if ( data.features[i].properties.Traeger == array_prov[j].value)  {
+        if (data.features[i].properties.Traeger == array_prov[j].value) {
           var temp = create_marker(data.features[i], coords, hospIcon)
           markers_kh_pos.push(temp)
         }
       }
     }
   }
-  console.log("_____________test_____________");
-  console.log(markers_kh_pos);
-  for (let i = 0; i < markers_kh_pos.length; i++) {
-    map.addControl(markers_kh_pos[i])
-  }
+  return markers_kh_pos;
 }
 
 
@@ -180,7 +216,7 @@ async function getData() {
 }
 
 function clear_markers() {
-
+  console.log("clear");
   //lösche Krankenhausmarker im Umkreis
   for (let i = 0; i < markers_kh_pos.length; i++) {
     markers_kh_pos[i].remove()
@@ -224,7 +260,7 @@ function set_kh_marker(radius, center, icons) {
           var distance = center.distanceTo(coords);
           //console.log(data.features[i]);
           if (distance <= radius) {
-            
+
             var temp = create_marker(data.features[i], coords, hospIcon)
             markers_kh_pos.push(temp)
 
@@ -241,9 +277,9 @@ function set_kh_marker(radius, center, icons) {
 
 //Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
 function create_marker(data, coords, hospIcon) {
-  console.log(data);
-  console.log(data.Feature);
-  console.log(data.properties);
+  //console.log(data);
+  //console.log(data.Feature);
+  //console.log(data.properties);
   text_json = {
     "Name": data.properties.Adresse_Name_Standort,
     "Strasse": data.properties.Adresse_Strasse_Standort,
@@ -264,7 +300,7 @@ function create_marker(data, coords, hospIcon) {
     websiteUrl = "N/A"
   }
 
-  
+
   var mailtoLink = text_json.Email ? `<a href="mailto:${text_json.Email}">${text_json.Email}</a>` : 'N/A';
 
 
