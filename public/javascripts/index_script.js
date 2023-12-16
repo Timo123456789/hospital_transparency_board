@@ -228,3 +228,6 @@ function setHospitalMarker (radius, center, icons) {
 //  Hier können Sie Ihre Logik implementieren
 //  var temp = geocoder.geocode(inputValue)
 //  })
+
+
+

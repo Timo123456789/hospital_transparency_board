@@ -20,7 +20,7 @@
 --neutral-700: #6B6F74;
 --neutral-800: #464A4D;
 --neutral-900: #222426;
-  
+
 --footer-height: 8%;
 --navbar-height: 8%;
 }
@@ -122,6 +122,18 @@ hr {
 #radiusInput{
   text-align: center;
 }
+
+/* sos------------------------------------------------------------------------ */
+#btn_sos {
+  position: absolute;
+  bottom: var(--footer-height);
+  left: 20pt;
+  z-index: 500;
+  background-color: #FF6961;
+  width: 50pt;
+  height: 50pt;
+}
+
 
 /* footer--------------------------------------------------------------------- */
 footer {
