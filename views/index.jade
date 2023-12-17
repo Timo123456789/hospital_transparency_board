@@ -56,36 +56,87 @@ block content
         input#btn-nv5.btn-check(type='checkbox' autocomplete='off')
         label.btn.btn-outline-primary(for='btn-nv5') Durchblutungsstörungen des Herzens
         hr
-        // Eigentümer-Typ
-        p Art des Eigentümers
-        input#btn-et-privat.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-privat') Privat
-        input#btn-et-oeffentlich.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-oeffentlich') Öffentlich
-        input#btn-et-freigemeinnuetzig.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-freigemeinnuetzig') Freigemeinnützig
-        hr
-        // Krankenhaus-Typ
-        p Krankenhaus-Typ
-        input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
-        input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
-        input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
-        input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
-        input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
+        p Allgemeines
+        // Krankenhaus Typ
+        div.row
+          div.col.d-flex.justify-content-center
+            .dropdown
+              button.btn.btn-primary.dropdown-toggle#dropdown-krankenhaus-typ(type='button' data-bs-toggle='dropdown')
+                | Krankenhaus Typ 
+                span.caret
+              ul.dropdown-menu.overflow-auto 
+                .dropdown-item#fixed-li-item
+                  p 0 ausgewählt
+                li.dropdown-item
+                  input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
+                li.dropdown-item
+                  input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
+                li.dropdown-item
+                  input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
+                li.dropdown-item
+                  input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
+                li.dropdown-item
+                  input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
+          // Eigentümer-Typ
+          div.col.d-flex.justify-content-center
+            .dropdown
+              button.btn.btn-primary.dropdown-toggle#dropdown-eigentuemer-typ(type='button' data-bs-toggle='dropdown')
+                | Art des Eigentümers
+                span.caret
+              ul.dropdown-menu.overflow-auto 
+                .dropdown-item#fixed-li-item
+                  p 0 ausgewählt
+                li.dropdown-item
+                  input#btn-eigentuemer-typ1.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ1') Privat
+                li.dropdown-item
+                  input#btn-eigentuemer-typ2.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ2') Öffentlich
+                li.dropdown-item
+                  input#btn-eigentuemer-typ3.btn-check(type='checkbox' autocomplete='off')
+                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ3') Freigemeinnützig
         hr
         // Spezialisierung
-        p Spezialisierung
-        input#btn-spezialisierung1.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-spezialisierung1') Spezialisierung 1
-        input#btn-spezialisierung2.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-spezialisierung2') Spezialisierung 2
-        input#btn-spezialisierung3.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-spezialisierung3') Spezialisierung 3
+        p Spezailisierung
+        .dropdown
+          button.btn.btn-primary.dropdown-toggle(type='button' data-bs-toggle='dropdown')
+            | Dropdown 
+            span.caret
+          ul.dropdown-menu.overflow-auto  
+            li.dropdown-item
+              input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
+              label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
+            li.dropdown-item
+              input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
+              label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
+            li.dropdown-item
+              input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
+              label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
+            li.dropdown-item
+              input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
+              label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
+            li.dropdown-item
+              input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
+              label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
+            li.dropdown-item
+              a(href='#') Item
         hr
         // radius slider
         p Mindestrating
@@ -95,14 +146,6 @@ block content
           span.input-group-text 
             svg.bi.bi-star(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
               path(d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z')
-        hr
-        form select
-        p Filteroption Form Select
-        select.form-select(aria-label='Default select example')
-          option(selected='') Select an option
-          option(value='1') Option 1
-          option(value='2') Option 2
-          option(value='3') Option 3
 
       //
         // buttongroup

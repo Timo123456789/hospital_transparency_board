@@ -83,6 +83,7 @@ a.navbar-brand {
   --bs-btn-hover-color: var(--bs-white);
 }
 
+
 /* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
   position: absolute;
@@ -95,6 +96,22 @@ a.navbar-brand {
 #offcanvas {
   width: min(95vw, 500px) !important;
   height: calc(100% - var(--footer-height));
+}
+
+.dropdown-menu {
+  max-height: 200pt;
+}
+
+
+#dropdown-krankenhaus-typ{
+  background-color: var(--primary-400);
+}
+
+#fixed-li-item {
+  position: sticky;
+  left: 0;
+  width: 100%;
+  background-color: var(--neutral-200);
 }
 
 /* filter menu ----------------------------------------------------------------*/
