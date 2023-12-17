@@ -23,6 +23,7 @@ block content
       br
       button(type='button', id="button_setMarker", data-bs-dismiss="offcanvas",aria-label="Close") Set Marker on Map
       button(type='button', id="button_getUserLoc", data-bs-dismiss="offcanvas",aria-label="Close") Use User Location
+      button(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") filter Provider
 
       br
       br
@@ -56,12 +57,12 @@ block content
         hr
         // Eigentümer-Typ
         p Eigentümer-Typ ?????????
-        input#btn-et-privat.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-privat') Privat
-        input#btn-et-oeffentlich.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-oeffentlich') Öffentlich
-        input#btn-et-freigemeinnuetzig.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-et-freigemeinnuetzig') Freigemeinnützig
+        input#btn-et-privat.btn-check(type='checkbox' autocomplete='off' value = "2")
+        label.btn.btn-outline-primary(for='btn-et-privat' ) Privat
+        input#btn-et-oeffentlich.btn-check(type='checkbox' autocomplete='off' value = "1")
+        label.btn.btn-outline-primary(for='btn-et-oeffentlich' ) Öffentlich
+        input#btn-et-freigemeinnuetzig.btn-check(type='checkbox' autocomplete='off' value = "3")
+        label.btn.btn-outline-primary(for='btn-et-freigemeinnuetzig' ) Freigemeinnützig
         hr
         // Krankenhaus-Typ
         p Krankenhaus-Typ

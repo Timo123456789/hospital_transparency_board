@@ -22,7 +22,7 @@ L.control.scale({
 }).addTo(map)
 
 
-let markersHospital = []
+let markers_hospital = []
 
 /**
 *@desc declaration of Green Marker for Leafleat Map
@@ -53,9 +53,9 @@ const hospIcon = new L.Icon({
 const icons = [greenIcon, hospIcon]
 
 main()
-function main () {
-  setUserMarker([51.9607, 7.6261], icons)
-  setHospitalMarker(10000, [51.9607, 7.6261], icons)
+function main() {
+  set_user_marker([51.9607, 7.6261], icons)
+  set_hospital_marker(10000, [51.9607, 7.6261], icons)
 }
 
 // event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ ratingInput.addEventListener('input', function (e) {
 
 // functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-function clearMarkers () {
+function clearMarkers() {
   // lösche Krankenhausmarker im Umkreis
   for (let i = 0; i < markersHospital.length; i++) {
     markersHospital[i].remove()
@@ -126,6 +126,7 @@ function clearMarkers () {
 
   // lösche User Position Marker
   userLocationMarker.remove()
+}
 
 
 
@@ -146,7 +147,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
       console.log(data);
       var test = filter_radius(radius, coords, data)
       console.log(test);
-      set_kh_marker(radius, coords, icons)
+      set_hospital_marker(radius, coords, icons)
 
       //Zoom to user location
       //var markerBounds = L.latLngBounds(coords);
@@ -172,7 +173,7 @@ document.getElementById('button_setMarker').addEventListener('click', function (
     coords = [e.latlng.lat, e.latlng.lng]
     console.log(coords);
     set_user_marker(coords, icons)
-    set_kh_marker(10000, coords, icons)
+    set_hospital_marker(10000, coords, icons)
   });
 
 });
@@ -192,8 +193,9 @@ document.getElementById('button_submit').addEventListener('click', async functio
   console.log(data);
   console.log("_______________");
   var filtered_markers = filterProvider(data, array_prov);
+  console.log(filtered_markers);
   set_filtered_kh_marker(filtered_markers)
-  markers_kh_pos = filtered_markers;
+  markers_hospital = filtered_markers;
   console.log(filtered_markers);
   filtered_markers = [];
   console.log(filtered_markers);
@@ -207,7 +209,7 @@ function filter_radius(radius, center, data) {
   for (let i = 0; i < data.features.length; i++) {
     var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-    // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
+      // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
       console.log(coords);
       console.log(center);
       var distance = center.distanceTo(coords);
@@ -219,14 +221,14 @@ function filter_radius(radius, center, data) {
       }
     }
   }
-return filtered_data;
+  return filtered_data;
 }
 
-function set_filtered_kh_marker(markers_kh_pos) {
+function set_filtered_kh_marker(markers_hospital) {
   console.log("_____________test_____________");
-  console.log(markers_kh_pos);
-  for (let i = 0; i < markers_kh_pos.length; i++) {
-    map.addControl(markers_kh_pos[i])
+  console.log(markers_hospital);
+  for (let i = 0; i < markers_hospital.length; i++) {
+    map.addControl(markers_hospital[i])
   }
 }
 
@@ -239,18 +241,20 @@ function check_provider() {
     if (checkboxes[i].checked) {
       var temp = {
         checkbox: i,
-        value: parseInt(checkboxes[i].value)
+        value: checkboxes[i].value
       }
       array_prov.push(temp)
       // Die Checkbox ist ausgewählt, tun Sie etwas
       console.log('Checkbox ' + (i + 1) + ' ist ausgewählt.');
     }
   }
+  console.log("array_prov");
+  console.log(array_prov);
   return array_prov;
 }
 
 function filterProvider(data, array_prov) {
-  var markers_kh_pos = new Array();
+  var markers_hospital = new Array();
   console.log(data);
   for (let i = 0; i < data.features.length; i++) {
     var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
@@ -261,12 +265,12 @@ function filterProvider(data, array_prov) {
         //console.log(array_prov[j].value);
         if (data.features[i].properties.Traeger == array_prov[j].value) {
           var temp = create_marker(data.features[i], coords, hospIcon)
-          markers_kh_pos.push(temp)
+          markers_hospital.push(temp)
         }
       }
     }
   }
-  return markers_kh_pos;
+  return markers_hospital;
 }
 
 
@@ -288,15 +292,15 @@ async function getData() {
 function clear_markers() {
   console.log("clear");
   //lösche Krankenhausmarker im Umkreis
-  for (let i = 0; i < markers_kh_pos.length; i++) {
-    markers_kh_pos[i].remove()
+  for (let i = 0; i < markers_hospital.length; i++) {
+    markers_hospital[i].remove()
   }
 
   //lösche User Position Marker
   user_loc_marker.remove()
 
   //leere das Array mit den Positionen
-  markers_kh_pos = new Array();
+  markers_hospital = new Array();
 }
 
 function set_user_marker(coords, icons) {
@@ -306,10 +310,10 @@ function set_user_marker(coords, icons) {
   map.addControl(user_loc_marker)
 }
 
-function set_kh_marker(radius, center, icons) {
+function set_hospital_marker(radius, center, icons) {
   var hospIcon = icons[1]
   var url = "http://localhost:3000/kh_verzeichnis";
-  //var markers_kh_pos = new Array();
+  //var markers_hospital = new Array();
   center = L.latLng(center[0], center[1]);
 
   var radius = document.getElementById('input_radius').value;
@@ -334,14 +338,14 @@ function set_kh_marker(radius, center, icons) {
           if (distance <= radius) {
 
             var temp = create_marker(data.features[i], coords, hospIcon)
-            markers_kh_pos.push(temp)
+            markers_hospital.push(temp)
 
           }
         }
       }
 
-      for (let i = 0; i < markers_kh_pos.length; i++) {
-        map.addControl(markers_kh_pos[i])
+      for (let i = 0; i < markers_hospital.length; i++) {
+        map.addControl(markers_hospital[i])
       }
     })
     .catch(error => console.error('Fehler beim Lesen der Datei:', error));
