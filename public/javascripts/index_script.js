@@ -1,61 +1,131 @@
+/* eslint-disable no-undef */
+let userLocationMarker = null
 
-
-var map = L.map("map", { zoomControl: false }).setView([51.505, -0.09], 13);
-map.panTo(new L.LatLng(51.9607, 7.6261));
+const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
+map.panTo(new L.LatLng(51.9607, 7.6261))
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   minZoom: 0,
   maxZoom: 20,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-}).addTo(map);
+
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+}).addTo(map)
+
 
 // controls
 L.control.zoom({
   position: 'bottomright'
-}).addTo(map);
+
+}).addTo(map)
 L.control.scale({
   metric: true,
   position: 'bottomright'
-}).addTo(map);
+}).addTo(map)
 
-var markers_kh_pos = new Array();
+
+let markersHospital = []
 
 /**
 *@desc declaration of Green Marker for Leafleat Map
 *@Source  https://github.com/pointhi/leaflet-color-markers/tree/master/img
 */
-var greenIcon = new L.Icon({
+
+const greenIcon = new L.Icon({
+
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
-});
 
-var hospIcon = new L.Icon({
+})
+
+const hospIcon = new L.Icon({
+
   iconUrl: 'https://icons.veryicon.com/png/o/healthcate-medical/medical-icon-library/hospital-9.png',
 
   iconSize: [25, 25],
   iconAnchor: [6, 20],
   popupAnchor: [5, -10],
   shadowSize: [41, 41]
-});
-icons = [greenIcon, hospIcon]
 
+})
+const icons = [greenIcon, hospIcon]
 
-main();
-function main() {
-
-
-
-  set_user_marker([51.9607, 7.6261], icons)
-  set_kh_marker(10000, [51.9607, 7.6261], icons)
-
-
+main()
+function main () {
+  setUserMarker([51.9607, 7.6261], icons)
+  setHospitalMarker(10000, [51.9607, 7.6261], icons)
 }
 
+// event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+// Event Listener für den Button
+document.getElementById('button_getUserLoc').addEventListener('click', function () {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const lat = position.coords.latitude
+      const lng = position.coords.longitude
+      clearMarkers()
 
+      // setze User Position Marker
+      const coords = [lat, lng]
+      setUserMarker(coords, icons)
+
+      // set hospitals markers
+      const radius = document.getElementById('radiusInput').value
+
+      setHospitalMarker(radius, coords, icons)
+
+      // Zoom to user location
+      // var markerBounds = L.latLngBounds(coords);
+      map.flyTo(coords, 13)
+    }, function (error) {
+      console.error('Fehler beim Abrufen der Position:', error)
+    })
+  } else {
+    console.log('Geolocation wird von Ihrem Browser nicht unterstützt')
+  }
+})
+
+// Event Listener for radius slider
+const radiusSlider = document.getElementById('radiusSlider')
+const radiusInput = document.getElementById('radiusInput')
+
+// Update the input field when the slider value changes
+radiusSlider.addEventListener('input', function (e) {
+  radiusInput.value = e.target.value
+})
+
+// Update the slider when the input field value changes
+radiusInput.addEventListener('input', function (e) {
+  radiusSlider.value = e.target.value
+})
+
+// Event Listener for rating slider
+const ratingSlider = document.getElementById('ratingSlider')
+const ratingInput = document.getElementById('ratingInput')
+
+// Update the input field when the slider value changes
+ratingSlider.addEventListener('input', function (e) {
+  ratingInput.value = e.target.value
+})
+
+// Update the slider when the input field value changes
+ratingInput.addEventListener('input', function (e) {
+  ratingSlider.value = e.target.value
+})
+
+// functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function clearMarkers () {
+  // lösche Krankenhausmarker im Umkreis
+  for (let i = 0; i < markersHospital.length; i++) {
+    markersHospital[i].remove()
+  }
+
+  // lösche User Position Marker
+  userLocationMarker.remove()
 
 
 
@@ -244,11 +314,13 @@ function set_kh_marker(radius, center, icons) {
 
   var radius = document.getElementById('input_radius').value;
 
+
   // Datei lesen
   fetch(url)
     .then(response => response.text())
     .then(data => {
       // Verarbeiten Sie die Daten hier
+
       data = JSON.parse(data);
       // Angenommen, center ist der Mittelpunkt Ihres Radius		
 
@@ -347,6 +419,7 @@ function decodeType(value) {
       return "Unbekannt";
   }
 }
+
 
 
 
