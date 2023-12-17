@@ -118,10 +118,7 @@ a.navbar-brand {
   background-color: var(--primary-400);
 }
 
-#fixed-li-item {
-  position: sticky;
-  left: 0;
-  width: 100%;
+.dropdown-header {
   background-color: var(--neutral-200);
 }
 
@@ -161,6 +158,18 @@ a.navbar-brand {
   position:relative;
 }
 .ratingLabel { font-weight: normal; }
+
+ul {
+  counter-reset: checked;
+}
+
+li input:checked {
+  counter-increment: checked;
+}
+
+.count:after {
+  content: counter(checked);
+}
 
 /* filter menu ----------------------------------------------------------------*/
 .filter-menu {

@@ -50,25 +50,25 @@ block content
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
-              button.btn.btn-primary.dropdown-toggle#dropdown-krankenhaus-typ(type='button' data-bs-toggle='dropdown')
+              button.btn.btn-primary.dropdown-toggle#dropdown-krankenhaus-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Krankenhaus Typ 
                 span.caret
-              ul.dropdown-menu.overflow-auto 
-                .dropdown-item#fixed-li-item
-                  p 0 ausgewählt
-                li.dropdown-item
+              ul.dropdown-menu.overflow-auto.text-nowrap
+                .dropdown-header 
+                  .count Ausgewählt:
+                li.dropdown-item-text
                   input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
                   label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
-                li.dropdown-item
+                li.dropdown-item-text
                   input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
                   label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
-                li.dropdown-item
+                li.dropdown-item-text
                   input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
                   label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
-                li.dropdown-item
+                li.dropdown-item-text
                   input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
                   label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
-                li.dropdown-item
+                li.dropdown-item-text
                   input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
                   label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
           // Eigentümer-Typ
