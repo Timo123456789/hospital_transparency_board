@@ -84,7 +84,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
       console.error('Fehler beim Abrufen der Position:', error)
     })
   } else {
-    console.log('Geolocation wird von Ihrem Browser nicht unterstützt')
+    console.error('Geolocation wird von Ihrem Browser nicht unterstützt')
   }
 })
 
@@ -120,8 +120,8 @@ ratingInput.addEventListener('input', function (e) {
 
 function clearMarkers() {
   // lösche Krankenhausmarker im Umkreis
-  for (let i = 0; i < markersHospital.length; i++) {
-    markersHospital[i].remove()
+  for (let i = 0; i < markers_hospital.length; i++) {
+    markers_hospital[i].remove()
   }
 
   // lösche User Position Marker
@@ -144,9 +144,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
       //set hospitals markers
       var radius = document.getElementById('input_radius').value;
       var data = await getData()
-      console.log(data);
-      var test = filter_radius(radius, coords, data)
-      console.log(test);
+      var test = filter_radius(radius, coords, data, null)
       set_hospital_marker(radius, coords, icons)
 
       //Zoom to user location
@@ -157,7 +155,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
       console.error('Fehler beim Abrufen der Position:', error);
     });
   } else {
-    console.log('Geolocation wird von Ihrem Browser nicht unterstützt');
+    console.error('Geolocation wird von Ihrem Browser nicht unterstützt');
   }
 });
 
@@ -165,15 +163,28 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
 
 
 
-document.getElementById('button_setMarker').addEventListener('click', function () {
+document.getElementById('button_setMarker').addEventListener('click', async function () {
   clear_markers()
-  map.once('click', function (e) {
+  map.once('click', async function (e) {
     //var marker = L.marker(e.latlng).addTo(map);
-    console.log(e.latlng);
+  
     coords = [e.latlng.lat, e.latlng.lng]
-    console.log(coords);
+    data = await getData()
+    radius = radiusInput.value*1000
+    console.log(radius);
+
+    filtered_marker_range = filter_radius(radius,coords,data,null)
+    console.log(filtered_marker_range);
+
+    array_prov = check_provider()
+    filtered_marker_provider = filter_provider(data, array_prov, filtered_marker_range)
+    console.log(filtered_marker_provider);
+
+    set_filtered_kh_marker(filtered_marker_provider)
+
+
     set_user_marker(coords, icons)
-    set_hospital_marker(10000, coords, icons)
+    //set_hospital_marker(10000, coords, icons)
   });
 
 });
@@ -186,34 +197,33 @@ document.getElementById('button_submit').addEventListener('click', async functio
   var array_prov = check_provider();
   //var temp = document.getElementById('button_providerType');	
   //clear_markers()
-  console.log(array_prov);
-  //console.log(getData());
+
   var data = await getData()
-  console.log("_____________");
-  console.log(data);
-  console.log("_______________");
-  var filtered_markers = filterProvider(data, array_prov);
-  console.log(filtered_markers);
+  var filtered_markers = filter_provider(data, array_prov, null);
   set_filtered_kh_marker(filtered_markers)
   markers_hospital = filtered_markers;
-  console.log(filtered_markers);
   filtered_markers = [];
-  console.log(filtered_markers);
 });
 
 
 //functions ---------------------------------------------------------------------------------------------------------------
-function filter_radius(radius, center, data) {
-  var filtered_data = [];
+function filter_radius(radius, center, data, filtered_markers) {
+  if (filtered_markers != null){
+    var filtered_data = filtered_markers
+  } else {
+    var filtered_data = [];
+  }
+
+  console.log(filtered_data);
+ 
   center = L.latLng(center[0], center[1]);
   for (let i = 0; i < data.features.length; i++) {
     var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
       // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
-      console.log(coords);
-      console.log(center);
+
       var distance = center.distanceTo(coords);
-      //console.log(data.features[i]);
+
       if (distance <= radius) {
 
         var temp = create_marker(data.features[i], coords, hospIcon)
@@ -224,9 +234,7 @@ function filter_radius(radius, center, data) {
   return filtered_data;
 }
 
-function set_filtered_kh_marker(markers_hospital) {
-  console.log("_____________test_____________");
-  console.log(markers_hospital);
+function set_filtered_kh_marker(markers_hospital) {  
   for (let i = 0; i < markers_hospital.length; i++) {
     map.addControl(markers_hospital[i])
   }
@@ -244,33 +252,34 @@ function check_provider() {
         value: checkboxes[i].value
       }
       array_prov.push(temp)
-      // Die Checkbox ist ausgewählt, tun Sie etwas
-      console.log('Checkbox ' + (i + 1) + ' ist ausgewählt.');
+      
     }
   }
-  console.log("array_prov");
-  console.log(array_prov);
+
   return array_prov;
 }
 
-function filterProvider(data, array_prov) {
-  var markers_hospital = new Array();
-  console.log(data);
+function filter_provider(data, array_prov, filtered_markers) {
+  if (filtered_markers != null){
+    var filtered_data = filtered_markers
+  } else {
+    var filtered_data = [];
+  }
+ 
+
   for (let i = 0; i < data.features.length; i++) {
     var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
 
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
       for (let j = 0; j < array_prov.length; j++) {
-        //console.log(data.features[i].properties.Traeger);
-        //console.log(array_prov[j].value);
         if (data.features[i].properties.Traeger == array_prov[j].value) {
           var temp = create_marker(data.features[i], coords, hospIcon)
-          markers_hospital.push(temp)
+          filtered_data.push(temp)
         }
       }
     }
   }
-  return markers_hospital;
+  return filtered_data;
 }
 
 
@@ -290,7 +299,6 @@ async function getData() {
 }
 
 function clear_markers() {
-  console.log("clear");
   //lösche Krankenhausmarker im Umkreis
   for (let i = 0; i < markers_hospital.length; i++) {
     markers_hospital[i].remove()
@@ -334,7 +342,6 @@ function set_hospital_marker(radius, center, icons) {
         if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
           // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
           var distance = center.distanceTo(coords);
-          //console.log(data.features[i]);
           if (distance <= radius) {
 
             var temp = create_marker(data.features[i], coords, hospIcon)
@@ -353,9 +360,6 @@ function set_hospital_marker(radius, center, icons) {
 
 //Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
 function create_marker(data, coords, hospIcon) {
-  //console.log(data);
-  //console.log(data.Feature);
-  //console.log(data.properties);
   text_json = {
     "Name": data.properties.Adresse_Name_Standort,
     "Strasse": data.properties.Adresse_Strasse_Standort,
