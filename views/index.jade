@@ -12,11 +12,9 @@ block content
 
   div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel")
     div.offcanvas-header
-      h5.offcanvas-title(id="offcanvasLabel") Sidebar for filters
+      h5.offcanvas-title(id="offcanvasLabel") Filter
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
     div.offcanvas-body
-      div We will add the filters here
-      br
       input(type='text', name='Post Zip Code', placeholder='Post Zip Code', id="input_PZC")
       button(type='button', id="button_PZC") Submit (not working yet)
       br
@@ -48,14 +46,18 @@ block content
         // Art der Notfallversorgung
         p Art der Notfallversorgung
         input#btn-nv1.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-nv1') Option 1
+        label.btn.btn-outline-primary(for='btn-nv1') Allgemeine stationäre Notfallversorgung
         input#btn-nv2.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-nv2') Option 2
+        label.btn.btn-outline-primary(for='btn-nv2') Schwerverletztenversorgung
         input#btn-nv3.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-nv3') Option 3
+        label.btn.btn-outline-primary(for='btn-nv3') Notfallversorgung Kinder
+        input#btn-nv4.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-nv4') Schlaganfallversorgung
+        input#btn-nv5.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-nv5') Durchblutungsstörungen des Herzens
         hr
         // Eigentümer-Typ
-        p Eigentümer-Typ ?????????
+        p Art des Eigentümers
         input#btn-et-privat.btn-check(type='checkbox' autocomplete='off')
         label.btn.btn-outline-primary(for='btn-et-privat') Privat
         input#btn-et-oeffentlich.btn-check(type='checkbox' autocomplete='off')
@@ -66,11 +68,15 @@ block content
         // Krankenhaus-Typ
         p Krankenhaus-Typ
         input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Option 1
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
         input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Option 2
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
         input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Option 3
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
+        input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
+        input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
+        label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
         hr
         // Spezialisierung
         p Spezialisierung
@@ -89,7 +95,14 @@ block content
           span.input-group-text 
             svg.bi.bi-star(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
               path(d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z')
-
+        hr
+        form select
+        p Filteroption Form Select
+        select.form-select(aria-label='Default select example')
+          option(selected='') Select an option
+          option(value='1') Option 1
+          option(value='2') Option 2
+          option(value='3') Option 3
 
       //
         // buttongroup
