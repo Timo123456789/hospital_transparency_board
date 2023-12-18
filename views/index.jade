@@ -26,8 +26,8 @@ block content
           input(type='text', name='Post Zip Code', placeholder='Post Zip Code', id="input_PZC")
           button(type='button', id="button_PZC") Submit (not working yet)
         br
-        button(type='button', id="button_setMarker", data-bs-dismiss="offcanvas",aria-label="Close") Set Marker on Map
-        button(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") filter Provider
+        button.btn.btn-primary(type='button', id="button_setMarker", data-bs-dismiss="offcanvas",aria-label="Close") Set Marker on Map
+        button.btn.btn-primary(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") filter Provider
         br
         hr
         // Allgemeines
@@ -39,16 +39,6 @@ block content
           .input-group#InputGroup
             input.form-control#radiusInput(type='number', min='0', max='100', value='10')
             span.input-group-text km
-        div 
-        | Radius in km:
-        select(name='input_radius', id='input_radius') 
-          option(value=2000) 2
-          option(value=5000) 5
-          option(value=10000) 10
-          option(value=20000) 20
-          option(value=50000) 50
-        br
-        br
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
