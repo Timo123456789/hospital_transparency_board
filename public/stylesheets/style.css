@@ -114,8 +114,18 @@ a.navbar-brand {
   max-height: 200pt;
 }
 
-#dropdown-krankenhaus-typ, #dropdown-eigentuemer-typ, #dropdown-Notfallversorgungsarten{
+.no-padding {
+  padding: 0;
+}
+
+#dropdown-krankenhaus-typ, #dropdown-eigentuemer-typ, #dropdown-Notfallversorgungsarten, #dropdown-Spezialisierung{
   background-color: var(--primary-400);
+}
+
+#collapse-spezial1, #collapse-spezial2{
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+
 }
 
 .dropdown-header {
