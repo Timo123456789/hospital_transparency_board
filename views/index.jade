@@ -15,6 +15,7 @@ block content
       h3.offcanvas-title(id="offcanvasLabel") Filtern der Krankenhäuser
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
     div.offcanvas-body#offcanvas-body
+
       div.filter-menu
         // Standort
         div.col.d-flex.justify-content-center.mb-3
@@ -26,6 +27,7 @@ block content
           button(type='button', id="button_PZC") Submit (not working yet)
         br
         button(type='button', id="button_setMarker", data-bs-dismiss="offcanvas",aria-label="Close") Set Marker on Map
+        button(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") filter Provider
         br
         hr
         // Allgemeines
@@ -243,8 +245,23 @@ block content
           button#btngroup3.btn-check(type='button' name='btngroup3')
           label.btn.btn-outline-primary(for='btngroup3') Button 3
         hr
+        p Choose provider type
+        div.btn-group(role='group' aria-label='Basic radio toggle button group', id = 'button_providerType')
+          input#btn-check1.btn-check(type='checkbox' autocomplete='off', value=1)
+          label.btn.btn-outline-primary(for='btn-check1') Öffentlich
+          input#btn-check2.btn-check(type='checkbox' autocomplete='off', value=2)
+          label.btn.btn-outline-primary(for='btn-check2') Freigemeinnützig
+          input#btn-check3.btn-check(type='checkbox' autocomplete='off', value=3)
+          label.btn.btn-outline-primary(for='btn-check3') Privat
+        
+        button(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") Submit
+
+        
+
+        hr
         // checkbox toggle buttons
         p Filteroption checkbox toggle buttons
+        
         input#btn-check1.btn-check(type='checkbox' autocomplete='off')
         label.btn.btn-outline-primary(for='btn-check1') Option 1
         input#btn-check2.btn-check(type='checkbox' autocomplete='off')
@@ -252,6 +269,8 @@ block content
         input#btn-check3.btn-check(type='checkbox' autocomplete='off')
         label.btn.btn-outline-primary(for='btn-check3') Option 3
         hr
+
+        
         // radio group
         p Filteroption Radio
         div.btn-group(role='group' aria-label='Basic radio toggle button group')
