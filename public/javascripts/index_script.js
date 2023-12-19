@@ -201,6 +201,18 @@ document.getElementById('button_submit').addEventListener('click', async functio
   console.log(filtered_markers);
 });
 
+function drawRoute() {
+  L.Routing.control({
+    router: new L.Routing.graphHopper('d3394743-1f71-47fb-9667-a74703758df1'),
+    waypoints: [
+      L.latLng(51.9560, 7.6337), // Münster Hauptbahnhof
+      L.latLng(51.9624, 7.6256)  // Prinzipalmarkt
+    ]
+  }).addTo(map);
+}
+
+// Rufen Sie die Funktion auf, nachdem die Karte vollständig geladen ist
+setTimeout(drawRoute, 1000);
 
 //functions ---------------------------------------------------------------------------------------------------------------
 function filter_radius(radius, center, data) {
