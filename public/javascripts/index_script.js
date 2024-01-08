@@ -313,30 +313,51 @@ window.onload = function() {
 
   var user_loc_marker;
 
-  function set_user_marker(coords, icons) {
-    var greenIcon = icons[0]
-    
-    // Remove the user location marker if it exists
-    if (user_loc_marker) {
-        map.removeLayer(user_loc_marker);
-    }
+  var user_location;
 
-    // Create a new user location marker
-    user_loc_marker = L.marker(coords, { icon: greenIcon })
-    user_loc_marker.bindPopup("Your Position");
+  var routingButtonClicked = false; // Add this line at the top of your script
 
-    // Check if routingControl is defined before calling setWaypoints
-    if (routingControl) {
-        routingControl.setWaypoints([
-            L.latLng(coords), // Start point
-            L.latLng(51.9695, 7.5957) // End point
-        ]);
-    }
-
-    // Add the user location marker to the map
-    user_loc_marker.addTo(map); // Use addTo(map) instead of map.addControl
+  // Function to update routing
+  function updateRouting() {
+      // Check if user_location is defined, routingControl exists and routingButton has been clicked
+      if (user_location && routingControl && routingButtonClicked) {
+          routingControl.setWaypoints([
+              L.latLng(user_location), // Start point
+              L.latLng(51.9695, 7.5957) // End point
+          ]);
+      }
   }
+  
+  // In your set_user_marker function, call updateRouting after setting the user_location
+  function set_user_marker(coords, icons) {
+      var greenIcon = icons[0]
+      
+      // Remove the user location marker if it exists
+      if (user_loc_marker) {
+          map.removeLayer(user_loc_marker);
+      }
+  
+      // Create a new user location marker with a high zIndexOffset
+      user_loc_marker = L.marker(coords, { icon: greenIcon, zIndexOffset: 1000 })
+      user_loc_marker.bindPopup("Your Position");
+  
+      // Set the user_location variable
+      user_location = coords;
+  
+      // Add the user location marker to the map
+      user_loc_marker.addTo(map);
+  
+      // Update routing
+      updateRouting();
+  }
+  
+  // Add an event listener for the routing button
+  document.getElementById('button_routing').addEventListener('click', function() {
+      routingButtonClicked = true;
+      updateRouting();
+  });
 
+  
   function set_hospital_marker(radius, center, icons) {
     var hospIcon = icons[1]
     var url = "http://localhost:3000/kh_verzeichnis";
