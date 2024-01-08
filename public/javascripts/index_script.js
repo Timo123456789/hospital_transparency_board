@@ -107,14 +107,14 @@ const ratingSlider = document.getElementById('ratingSlider')
 const ratingInput = document.getElementById('ratingInput')
 
 // Update the input field when the slider value changes
-ratingSlider.addEventListener('input', function (e) {
-  ratingInput.value = e.target.value
-})
+// ratingSlider.addEventListener('input', function (e) {
+//   ratingInput.value = e.target.value
+// })
 
 // Update the slider when the input field value changes
-ratingInput.addEventListener('input', function (e) {
-  ratingSlider.value = e.target.value
-})
+// ratingInput.addEventListener('input', function (e) {
+//   ratingSlider.value = e.target.value
+// })
 
 // functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
       set_user_marker(coords, icons)
 
       //set hospitals markers
-      var radius = document.getElementById('input_radius').value;
+      var radius = document.getElementById('radiusInput').value;
       var data = await getData()
       console.log(data);
       var test = filter_radius(radius, coords, data)
@@ -248,14 +248,13 @@ function check_provider() {
       console.log('Checkbox ' + (i + 1) + ' ist ausgewählt.');
     }
   }
-  console.log("array_prov");
-  console.log(array_prov);
+  console.log("array_prov: " + array_prov);
   return array_prov;
 }
 
 function filterProvider(data, array_prov) {
   var markers_hospital = new Array();
-  console.log(data);
+  console.log("filterProvider - data: " + data);
   for (let i = 0; i < data.features.length; i++) {
     var coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]];
 
@@ -316,7 +315,7 @@ function set_hospital_marker(radius, center, icons) {
   //var markers_hospital = new Array();
   center = L.latLng(center[0], center[1]);
 
-  var radius = document.getElementById('input_radius').value;
+  var radius = document.getElementById('radiusInput').value;
 
 
   // Datei lesen
