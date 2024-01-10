@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 let userLocationMarker = null
+let markersHospital = []
 
 const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
 map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -19,8 +20,6 @@ L.control.scale({
   metric: true,
   position: 'bottomright'
 }).addTo(map)
-
-let markersHospital = []
 
 /**
 *@desc declaration of Green Marker for Leafleat Map
@@ -233,7 +232,10 @@ function clearMarker () {
   // lösche User Position Marker
   userLocationMarker.remove()
 
-  // leere das Array mit den Positionen
+  // lösche Hospital Marker
+  markersHospital.forEach(hospitalMarker => {
+    hospitalMarker.remove()
+  })
   markersHospital = []
 }
 
