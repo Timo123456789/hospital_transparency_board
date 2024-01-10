@@ -84,7 +84,7 @@ a.navbar-brand {
 }
 
 /* offcanvas ----------------------------------------------------------------- */
-#btn_sidebar {
+#button_routing, #btn_sidebar {
   position: absolute;
   top: var(--navbar-height);
   left: 20pt;

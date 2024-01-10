@@ -27,11 +27,22 @@ window.onload = function() {
 
   // Initialize routingControl in the onload event handler
   routingControl = L.Routing.control({
-    waypoints: []
+    waypoints: [],
+    createMarker: function(i, wp, nWps) {
+        // Don't create a marker for the destination
+        if (i === nWps - 1) {
+            return null;
+        } else {
+            // Create a marker for the start point
+            return L.marker(wp.latLng);
+        }
+    },
   }).addTo(map);
+  routingControl.hide();
+  
 
   let markers_hospital = []
-
+  
   /**
   *@desc declaration of Green Marker for Leafleat Map
   *@Source  https://github.com/pointhi/leaflet-color-markers/tree/master/img
@@ -210,6 +221,10 @@ window.onload = function() {
   });
 
 
+  
+
+
+
   //functions ---------------------------------------------------------------------------------------------------------------
   function filter_radius(radius, center, data) {
     var filtered_data = [];
@@ -317,16 +332,52 @@ window.onload = function() {
 
   var routingButtonClicked = false; // Add this line at the top of your script
 
-  // Function to update routing
-  function updateRouting() {
-      // Check if user_location is defined, routingControl exists and routingButton has been clicked
-      if (user_location && routingControl && routingButtonClicked) {
-          routingControl.setWaypoints([
-              L.latLng(user_location), // Start point
-              L.latLng(51.9695, 7.5957) // End point
-          ]);
-      }
+    // Function to update routing
+  function updateRouting(endPoint) {
+    // Check if user_location is defined, routingControl exists and routingButton has been clicked
+    if (user_location && routingControl && routingButtonClicked) {
+        routingControl.setWaypoints([
+            L.latLng(user_location), // Start point
+            endPoint // End point
+        ]);
+    }
   }
+
+  function endRouting() {
+    if (routingControl) {
+        routingControl.setWaypoints([]);
+    }
+  }
+    // Add an event listener for the routing button
+  document.getElementById('button_routing').addEventListener('click', function() {
+    var routingButton = document.getElementById('button_routing');
+    var messageElement = document.getElementById('message');
+    if (routingButtonClicked) {
+        // If routing has already started, end it
+        endRouting();
+        messageElement.textContent = '';  // Clear the message
+        routingButtonClicked = false;
+        routingButton.style.backgroundColor = '';  // Reset the button color
+        routingButton.textContent = 'Routing';  // Change the button text
+        routingControl.hide();  // Hide the directions
+    } else {
+        // Start routing
+        messageElement.textContent = 'Bitte wählen Sie ein Krankenhaus aus, um das Routing zu starten.';
+        messageElement.style.position = 'absolute';
+        var rect = routingButton.getBoundingClientRect();
+        messageElement.style.top = (rect.bottom + window.scrollY) + 'px';
+        messageElement.style.left = rect.left + 'px';
+        messageElement.style.backgroundColor = 'white';
+        messageElement.style.border = '1px solid black';
+        messageElement.style.zIndex = '1000';  // Add a high z-index
+        messageElement.style.fontSize = '10px';  // Change the font size
+        routingButtonClicked = true;
+        routingButton.style.backgroundColor = 'red';  // Make the button red
+        routingButton.textContent = 'Abbrechen';  // Change the button text
+        routingControl.show();  // Show the directions
+    }
+  });
+
   
   // In your set_user_marker function, call updateRouting after setting the user_location
   function set_user_marker(coords, icons) {
@@ -351,11 +402,7 @@ window.onload = function() {
       updateRouting();
   }
   
-  // Add an event listener for the routing button
-  document.getElementById('button_routing').addEventListener('click', function() {
-      routingButtonClicked = true;
-      updateRouting();
-  });
+    
 
   
   function set_hospital_marker(radius, center, icons) {
@@ -387,7 +434,14 @@ window.onload = function() {
 
               var temp = create_marker(data.features[i], coords, hospIcon)
               markers_hospital.push(temp)
-
+              // Save coords in a new variable
+              let markerCoords = coords;
+              // Add an event listener to the marker
+              temp.on('click', function() {
+                updateRouting(L.latLng(markerCoords));
+                var messageElement = document.getElementById('message');
+                messageElement.textContent = '';  // Clear the message
+              });
             }
           }
         }
@@ -472,6 +526,3 @@ window.onload = function() {
     }
   }
 }
-
-
-
