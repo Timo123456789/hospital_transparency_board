@@ -23,6 +23,7 @@
   
 --footer-height: 8%;
 --navbar-height: 8%;
+--sidebar-width: 32%;
 }
 
 
@@ -83,13 +84,22 @@ a.navbar-brand {
   --bs-btn-hover-color: var(--bs-white);
 }
 
-
-/* offcanvas ----------------------------------------------------------------- */
-#btn_sidebar {
+#locationSearchField {
   position: absolute;
   top: var(--navbar-height);
   left: 20pt;
   z-index: 500;
+  color: var(--primary-700);
+  width: var(--sidebar-width);
+}
+
+
+/* offcanvas ----------------------------------------------------------------- */
+#btn_sidebar {
+  background-color: var(--primary-400);
+}
+
+#button_getUserLoc, #button_submit, #button_setMarker {
   background-color: var(--primary-400);
 }
 
@@ -179,6 +189,10 @@ li input:checked {
 
 .count:after {
   content: counter(checked);
+}
+
+#row_oder {
+  height: 30pt;
 }
 
 /* filter menu ----------------------------------------------------------------*/
