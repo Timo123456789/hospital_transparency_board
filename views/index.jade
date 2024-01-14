@@ -46,47 +46,17 @@ block content
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ1.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ2.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ3.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ4.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ5.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-krankenhaus-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-krankenhaus-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Krankenhaus Typ 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_typ_count [0]
           // Eigentümer-Typ
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#btn-eigentuemer-typ1.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ1') Privat
-                li.dropdown-item-text
-                  input#btn-eigentuemer-typ2.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ2') Öffentlich
-                li.dropdown-item-text
-                  input#btn-eigentuemer-typ3.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-eigentuemer-typ3') Freigemeinnützig
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-eigentuemer-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-eigentuemer-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Art des Eigentümers 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_eigentuemer_count [0]
         hr
         // Behandlung
         div.col.d-flex.justify-content-center.mb-3
@@ -94,28 +64,10 @@ block content
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#btn-nv1.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv1') Allgemeine stationäre Notfallversorgung
-                li.dropdown-item-text
-                  input#btn-nv2.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv2') Schwerverletztenversorgung
-                li.dropdown-item-text
-                  input#btn-nv3.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv3') Notfallversorgung Kinder
-                li.dropdown-item-text
-                  input#btn-nv4.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv4') Schlaganfallversorgung
-                li.dropdown-item-text
-                  input#btn-nv5.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv5') Durchblutungsstörungen des Herzens
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-notfall-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-Notfallversorgungsarten(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Art der Notfallversorgung 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_notfall_count [0]
           div.col.d-flex.justify-content-center
             .dropdown
               ul.dropdown-menu.overflow-auto.text-nowrap
@@ -220,16 +172,10 @@ block content
                 label(for='star2') 2 stars
                 input#star1(type='radio' name='rating' value='1')
                 label(for='star1') 1 star
-          //- input#ratingSlider.custom-range(type='range' min='0' max='5' step='0.1' value='0')
-          //- .input-group#InputGroup
-          //-   input.form-control#ratingInput(type='double', min='0', max='5')
-          //-   span.input-group-text 
-          //-     svg.bi.bi-star(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-          //-       path(d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z')
         hr
         div.input-group.mb-3.d-flex.justify-content-center
           br
-          button.btn.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
+          button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
 
       //
         // buttongroup
@@ -289,3 +235,4 @@ block content
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")
   script(src="/javascripts/indexScript_EventListener.js")
+  script(src="/javascripts/indexScript_DomFilterCreation.js")

@@ -76,6 +76,11 @@ a.navbar-brand {
   width: 100%;
 }
 
+#dropdown-krankenhaus-typ, #dropdown-eigentuemer-typ, #dropdown-Notfallversorgungsarten,
+#dropdown-Spezialisierung{
+  border-color: var(--primary-200);
+}
+
 .btn-outline-primary {
   --bs-btn-font-weight: 600;
   --bs-btn-color: var(--bs-white);
@@ -97,10 +102,17 @@ a.navbar-brand {
 /* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
   background-color: var(--primary-400);
+  border-color: var(--primary-200);
 }
 
-#button_getUserLoc, #button_submit, #button_setMarker {
+#button_getUserLoc, #button_setMarker {
   background-color: var(--primary-400);
+  border-color: var(--primary-200);
+}
+
+#button_submit {
+  background-color: var(--primary-500);
+  border-color: var(--primary-200);
 }
 
 #offcanvas-header {

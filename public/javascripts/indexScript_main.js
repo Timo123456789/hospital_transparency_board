@@ -373,16 +373,13 @@ function KhsSearchHandler(selectKhs) {
  */
 async function createAutocomplete(){
   // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
-  const datalist = document.getElementById('allKHS');
   const data = await getData()
   data.features.forEach(khs => {
     allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort);
   })
 
   allKhsAutocompleteArr.forEach(khs => {
-    var option = document.createElement('option');
-    option.value = khs;
-    datalist.appendChild(option);
+    createDatalistOptions(khs)
   })
 }
 
