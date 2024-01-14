@@ -68,6 +68,8 @@ document.getElementById('button_getUserLoc').addEventListener('click', function 
 
       // setze User Position Marker
       const coords = [lat, lng]
+      document.getElementById('userLocationField').value = '{"lat":' + coords[0] + ', "lon":' + coords[1] + '}'
+      console.log(document.getElementById('userLocationField').value)
       setUserMarker(coords, icons)
 
       // set hospitals markers

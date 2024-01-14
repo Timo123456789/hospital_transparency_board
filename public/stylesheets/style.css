@@ -21,8 +21,8 @@
 --neutral-800: #464A4D;
 --neutral-900: #222426;
   
---footer-height: 8%;
---navbar-height: 8%;
+--footer-height: 5%;
+--navbar-height: 7%;
 --sidebar-width: 32%;
 }
 
@@ -55,9 +55,9 @@ a.navbar-brand {
   height: var(--navbar-height);
   width: 100%;
   position: relative;
-  background-color: transparent;
+  background-color: #B8C2F950;
   color: var(--primary-700);
-  text-indent: 10%;
+  text-indent: 20%;
   font-weight: bold;
   z-index: 1;
 }
@@ -91,16 +91,20 @@ a.navbar-brand {
 
 #locationSearchField {
   position: absolute;
-  top: var(--navbar-height);
-  left: 20pt;
+  left: 20px;
+  top: calc(var(--navbar-height) + 2%);
   z-index: 500;
   color: var(--primary-700);
   width: var(--sidebar-width);
 }
 
-
 /* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
+  position: absolute;
+  left: 20px;
+  top: calc(var(--navbar-height) + 2%);
+  z-index: 500;
+  width: var(--sidebar-width);
   background-color: var(--primary-400);
   border-color: var(--primary-200);
 }
@@ -115,19 +119,19 @@ a.navbar-brand {
   border-color: var(--primary-200);
 }
 
-#offcanvas-header {
+#offcanvasLeftHeader {
   background-color: var(--primary-400);
 }
 
-#offcanvasLabel {
+#offcanvasLeftLabel {
   color: var(--primary-100);
 }
 
-#offcanvas-body {
+#offcanvasLeftbody {
   background-color: var(--primary-100);
 }
 
-#offcanvas {
+#offcanvasLeft {
   width: min(95vw, 500px) !important;
   height: calc(100% - var(--footer-height));
 }
@@ -233,19 +237,49 @@ hr {
   text-align: center;
 }
 
+/* offcanvas bottom ---------------------------------------------------------- */
+#sos_button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: var(--footer-height);
+  z-index: 500;
+  background-color: #1B3250;
+  width: 20%;
+}
+
+#offcanvasBottomHeader {
+  background-color: var(--primary-400);
+  
+}
+
+#offcanvasBottomLabel {
+  color: var(--primary-100);
+  text-align: center;
+}
+
+#offcanvasBottomBody {
+  background-color: var(--primary-100);
+}
+
+#offcanvasBottom {
+  width: 70% !important;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
 /* footer--------------------------------------------------------------------- */
 footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: var(--footer-height);
   background-color: var(--primary-400);
   color: var(--primary-800);
   text-align: center;
-  padding: 20px 0;
   z-index: 1;
-  line-height: 0.5;
 }
 
 footer a {
