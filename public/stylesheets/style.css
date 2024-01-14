@@ -23,6 +23,7 @@
   
 --footer-height: 5%;
 --navbar-height: 7%;
+--sidebar-width: 32%;
 }
 
 
@@ -75,6 +76,11 @@ a.navbar-brand {
   width: 100%;
 }
 
+#dropdown-krankenhaus-typ, #dropdown-eigentuemer-typ, #dropdown-Notfallversorgungsarten,
+#dropdown-Spezialisierung{
+  border-color: var(--primary-200);
+}
+
 .btn-outline-primary {
   --bs-btn-font-weight: 600;
   --bs-btn-color: var(--bs-white);
@@ -83,14 +89,34 @@ a.navbar-brand {
   --bs-btn-hover-color: var(--bs-white);
 }
 
+#locationSearchField {
+  position: absolute;
+  left: 20px;
+  top: calc(var(--navbar-height) + 2%);
+  z-index: 500;
+  color: var(--primary-700);
+  width: var(--sidebar-width);
+}
 
-/* offcanvas left ----------------------------------------------------------------- */
+/* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
   position: absolute;
   left: 20px;
   top: calc(var(--navbar-height) + 2%);
   z-index: 500;
+  width: var(--sidebar-width);
   background-color: var(--primary-400);
+  border-color: var(--primary-200);
+}
+
+#button_getUserLoc, #button_setMarker {
+  background-color: var(--primary-400);
+  border-color: var(--primary-200);
+}
+
+#button_submit {
+  background-color: var(--primary-500);
+  border-color: var(--primary-200);
 }
 
 #offcanvasLeftHeader {
@@ -179,6 +205,10 @@ li input:checked {
 
 .count:after {
   content: counter(checked);
+}
+
+#row_oder {
+  height: 30pt;
 }
 
 /* filter menu ----------------------------------------------------------------*/

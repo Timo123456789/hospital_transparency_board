@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 let userLocationMarker = null
 let markersHospital = []
+const allKhsAutocompleteArr = new Array();
+const allKhsDict = new Object();
 
 const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
 map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -345,3 +347,43 @@ function decodeType (value) {
       return 'Unbekannt'
   }
 }
+
+/**
+ * @description creates a dictionary with all the KHS
+ */
+async function createDataDict(){
+  const data = await getData()
+  data.features.forEach(khs => {
+    allKhsDict[khs.properties.Adresse_Name_Standort] = khs
+  })
+}
+
+/**
+ * @description handles the event, when the user selects a KHS from the search bar
+ * @param {string} selectKhs - the name of the selected KHS
+ */
+function KhsSearchHandler(selectKhs) {
+  const coords = [allKhsDict[selectKhs].geometry.coordinates[1], allKhsDict[selectKhs].geometry.coordinates[0]]
+  map.setView(coords, 13)
+  clearMarker()
+  setUserMarker(coords, icons)
+  setHospitalMarker(10000, coords, icons)
+}
+
+/**
+ * @description creates a list of all hospitals for the autocomplete function
+ */
+async function createAutocomplete(){
+  // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
+  const data = await getData()
+  data.features.forEach(khs => {
+    allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort);
+  })
+
+  allKhsAutocompleteArr.forEach(khs => {
+    createDatalistOptions(khs)
+  })
+}
+
+createDataDict()
+createAutocomplete()

@@ -1,6 +1,7 @@
 // Event Listener for radius slider
 const radiusSlider = document.getElementById('radiusSlider')
 const radiusInput = document.getElementById('radiusInput')
+const locationSearch = document.getElementById('locationSearch')
 
 // Update the input field when the slider value changes
 radiusSlider.addEventListener('input', function (e) {
@@ -25,3 +26,8 @@ radiusInput.addEventListener('input', function (e) {
 // ratingInput.addEventListener('input', function (e) {
 //   ratingSlider.value = e.target.value
 // })
+
+locationSearch.addEventListener('change', () => {
+  const khs = locationSearch.value
+  KhsSearchHandler(khs)
+})
