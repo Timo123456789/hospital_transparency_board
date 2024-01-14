@@ -2,6 +2,7 @@
 let userLocationMarker = null
 let markersHospital = []
 const allKhsAutocompleteArr = new Array();
+const allKhsDict = new Object();
 
 const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
 map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -345,9 +346,32 @@ function decodeType (value) {
   }
 }
 
-async function createAutocomplete(){
+/**
+ * @description creates a dictionary with all the KHS
+ */
+async function createDataDict(){
   const data = await getData()
-  var datalist = document.getElementById('allKHS');
+  data.features.forEach(khs => {
+    allKhsDict[khs.properties.Adresse_Name_Standort] = khs
+  })
+}
+
+/**
+ * @description handles the event, when the user selects a KHS from the search bar
+ * @param {string} selectKhs - the name of the selected KHS
+ */
+function KhsSearchHandler(selectKhs) {
+  const coords = [allKhsDict[selectKhs].geometry.coordinates[1], allKhsDict[selectKhs].geometry.coordinates[0]]
+  map.setView(coords, 13)
+  // To-Do: Die gewählte Location soll auch als Marker angezeigt werden
+}
+
+/**
+ * @description creates a list of all hospitals for the autocomplete function
+ */
+async function createAutocomplete(){
+  const datalist = document.getElementById('allKHS');
+  const data = await getData()
   data.features.forEach(khs => {
     allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort);
   })
@@ -359,4 +383,5 @@ async function createAutocomplete(){
   })
 }
 
+createDataDict()
 createAutocomplete()
