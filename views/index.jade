@@ -5,16 +5,18 @@ extends layout
 block content
   div#mapDiv
     div(id="map")
-      button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas") 
+      button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft") 
         | Filter
         svg.bi.bi-filter(xmlns='http://www.w3.org/2000/svg' width='25' height='25' fill='currentColor' viewBox='0 0 16 16')
           path(d='M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5')
+      button.btn.btn-primary#sos_button(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom")
+        | SOS
 
-  div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel")
-    div.offcanvas-header#offcanvas-header
-      h3.offcanvas-title(id="offcanvasLabel") Filtern der Krankenhäuser
+  div.offcanvas.offcanvas-start#offcanvasLeft(tabindex="-1" aria-labelledby="offcanvasLeftLabel")
+    div.offcanvas-header#offcanvasLeftHeader
+      h3.offcanvas-title(id="offcanvasLeftLabel") Filtern der Krankenhäuser
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
-    div.offcanvas-body#offcanvas-body
+    div.offcanvas-body#offcanvasLeftBody
 
       div.filter-menu
         // Standort
@@ -278,6 +280,12 @@ block content
           option(value='1') Option 1
           option(value='2') Option 2
           option(value='3') Option 3
+
+  div.offcanvas.offcanvas-bottom#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
+    div.offcanvas-header#offcanvasBottomHeader
+      h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
+      button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
+    div.offcanvas-body#offcanvasBottomBody
 
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")
