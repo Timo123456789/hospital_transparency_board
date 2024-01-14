@@ -23,6 +23,7 @@
   
 --footer-height: 8%;
 --navbar-height: 8%;
+--sidebar-width: 32%;
 }
 
 
@@ -38,10 +39,12 @@ a {
 
 input {
   color: var(--neutral-800);
+  margin-top: 10px;
 }
 
 button {
   color: var(--neutral-800);
+  margin-top: 10px;
 }
 
 a.navbar-brand {
@@ -81,18 +84,115 @@ a.navbar-brand {
   --bs-btn-hover-color: var(--bs-white);
 }
 
-/* offcanvas ----------------------------------------------------------------- */
-#btn_sidebar {
+#locationSearchField {
   position: absolute;
   top: var(--navbar-height);
   left: 20pt;
   z-index: 500;
+  color: var(--primary-700);
+  width: var(--sidebar-width);
+}
+
+
+/* offcanvas ----------------------------------------------------------------- */
+#btn_sidebar {
   background-color: var(--primary-400);
+}
+
+#button_getUserLoc, #button_submit, #button_setMarker {
+  background-color: var(--primary-400);
+}
+
+#offcanvas-header {
+  background-color: var(--primary-400);
+}
+
+#offcanvasLabel {
+  color: var(--primary-100);
+}
+
+#offcanvas-body {
+  background-color: var(--primary-100);
 }
 
 #offcanvas {
   width: min(95vw, 500px) !important;
   height: calc(100% - var(--footer-height));
+}
+
+.dropdown-menu {
+  max-height: 200pt;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+#dropdown-krankenhaus-typ, #dropdown-eigentuemer-typ, #dropdown-Notfallversorgungsarten, #dropdown-Spezialisierung{
+  background-color: var(--primary-400);
+}
+
+#collapse-spezial1, #collapse-spezial2{
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+
+}
+
+.dropdown-header {
+  background-color: var(--neutral-200);
+}
+
+.rating {
+  float:left;
+  border:none;
+}
+.rating:not(:checked) > input {
+  position:absolute;
+  top:-9999px;
+  clip:rect(0, 0, 0, 0);
+}
+.rating:not(:checked) > label {
+  float:right;
+  width:1em;
+  padding:0 .1em;
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:200%;
+  line-height:1.2;
+  color:#ddd;
+}
+.rating:not(:checked) > label:before {
+  content:'★ ';
+}
+.rating > input:checked ~ label {
+  color: #f70;
+}
+.rating:not(:checked) > label:hover, .rating:not(:checked) > label:hover ~ label {
+  color: gold;
+}
+.rating > input:checked + label:hover, .rating > input:checked + label:hover ~ label, .rating > input:checked ~ label:hover, .rating > input:checked ~ label:hover ~ label, .rating > label:hover ~ input:checked ~ label {
+  color: #ea0;
+}
+.rating > label:active {
+  position:relative;
+}
+.ratingLabel { font-weight: normal; }
+
+ul {
+  counter-reset: checked;
+}
+
+li input:checked {
+  counter-increment: checked;
+}
+
+.count:after {
+  content: counter(checked);
+}
+
+#row_oder {
+  height: 30pt;
 }
 
 /* filter menu ----------------------------------------------------------------*/
@@ -109,6 +209,16 @@ a.navbar-brand {
 hr {
   width: 100%;
   border-top: 1px solid #000;
+}
+
+  
+#InputGroup {
+  margin: 25px;
+  width: 30%;
+}
+
+#radiusInput{
+  text-align: center;
 }
 
 /* footer--------------------------------------------------------------------- */
