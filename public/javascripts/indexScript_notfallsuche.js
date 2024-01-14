@@ -69,9 +69,7 @@ async function queryData (query, search, coords) {
  */
 function orderHospitals (hospitals, coords) {
   const orderedHospitals = hospitals.map(hospital => {
-    console.log(coords)
     const distance = getDistanceFromLatLonInKm(coords.lat, coords.lon, hospital.geometry.coordinates[1], hospital.geometry.coordinates[0])
-    console.log(distance)
     hospital.distance = distance
     return hospital
   })
@@ -148,6 +146,5 @@ document.getElementById('notfallsuche').addEventListener('change', async functio
   }
   const userLocationParsed = JSON.parse(userLocation)
   const result = await queryData(query, search, userLocationParsed)
-  console.log(result)
   writeTable(result)
 })

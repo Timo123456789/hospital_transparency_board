@@ -100,11 +100,6 @@ a.navbar-brand {
 
 /* offcanvas ----------------------------------------------------------------- */
 #btn_sidebar {
-  position: absolute;
-  left: 20px;
-  top: calc(var(--navbar-height) + 2%);
-  z-index: 500;
-  width: var(--sidebar-width);
   background-color: var(--primary-400);
   border-color: var(--primary-200);
 }
