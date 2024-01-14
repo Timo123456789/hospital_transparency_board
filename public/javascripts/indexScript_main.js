@@ -363,13 +363,16 @@ async function createDataDict(){
 function KhsSearchHandler(selectKhs) {
   const coords = [allKhsDict[selectKhs].geometry.coordinates[1], allKhsDict[selectKhs].geometry.coordinates[0]]
   map.setView(coords, 13)
-  // To-Do: Die gewählte Location soll auch als Marker angezeigt werden
+  clearMarker()
+  setUserMarker(coords, icons)
+  setHospitalMarker(10000, coords, icons)
 }
 
 /**
  * @description creates a list of all hospitals for the autocomplete function
  */
 async function createAutocomplete(){
+  // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
   const datalist = document.getElementById('allKHS');
   const data = await getData()
   data.features.forEach(khs => {
