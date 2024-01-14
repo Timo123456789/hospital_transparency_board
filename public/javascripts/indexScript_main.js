@@ -131,16 +131,13 @@ document.getElementById('button_setMarker').addEventListener('click', function (
 // Await muss in Zeile 131 eingesetzt werden damit auf die Rückgabe vom Server gewartet wird (sonst ist die Variable leer/undefined)
 document.getElementById('button_submit').addEventListener('click', async function () {
   clearMarker()
-  const arrayProv = checkProvider()
+  const arrayCheckboxes = checkCheckboxes()
   // var temp = document.getElementById('button_providerType');
   // clearMarker()
-  console.log(arrayProv)
   // console.log(getData());
   const data = await getData()
-  console.log('_____________')
-  console.log(data)
-  console.log('_______________')
-  let filteredMarkers = filterProvider(data, arrayProv)
+
+  let filteredMarkers = filterData(data, arrayCheckboxes)
   console.log(filteredMarkers)
   setFilteredHospitalMarker(filteredMarkers)
   markersHospital = filteredMarkers
@@ -176,41 +173,57 @@ function setFilteredHospitalMarker (markersHospital) {
   }
 }
 
-function checkProvider () {
-  const checkboxes = document.querySelectorAll('.btn-check')
+function checkCheckboxes () {
   const arrayProv = []
-  // Iterieren Sie durch die Checkboxen
-  for (let i = 0; i < checkboxes.length; i++) {
-    // Überprüfen Sie, ob die Checkbox ausgewählt ist
-    if (checkboxes[i].checked) {
-      const temp = {
-        checkbox: i,
-        value: checkboxes[i].value
-      }
-      arrayProv.push(temp)
-      // Die Checkbox ist ausgewählt, tun Sie etwas
-      console.log('Checkbox ' + (i + 1) + ' ist ausgewählt.')
+  const checkboxes2 = document.querySelectorAll('.checkbox-group:checked')
+  const selectedValues = Array.from(checkboxes2).map(cb => cb.id)
+  console.log('selectedValues: ')
+  console.log(selectedValues)
+
+  temp = 0
+  temp2 = 0
+
+  for (let i = 0; i < selectedValues.length; i++) {
+    temp = selectedValues[i] 
+    temp2 = {
+      checkbox: i,
+      value: temp
     }
+    arrayProv.push(temp2)
   }
-  console.log('arrayProv: ' + arrayProv)
+  console.log('arrayProv2:')
+  console.log(arrayProv)
+
   return arrayProv
 }
 
-function filterProvider (data, arrayProv) {
+function filterData (data, arrayCheckboxes) {
   const markersHospital = []
   console.log('filterProvider - data: ' + data)
+  console.log(arrayCheckboxes)
   for (let i = 0; i < data.features.length; i++) {
     const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-      for (let j = 0; j < arrayProv.length; j++) {
+      for (let j = 0; j < arrayCheckboxes.length; j++) {
         // console.log(data.features[i].properties.Traeger);
         // console.log(arrayProv[j].value);
-        if (data.features[i].properties.Traeger === arrayProv[j].value) {
+        // console.log(arrayCheckboxes)
+        // console.log(arrayCheckboxes.length)
+        // console.log(arrayCheckboxes.length - 1)
+        // console.log('i' + i)
+        // console.log(arrayCheckboxes[j])
+        // console.log(arrayCheckboxes[j].value)
+        // console.log((arrayCheckboxes[j].value).match(/\d+/g)[0])
+        traeger = arrayCheckboxes[j].value.match(/\d+/g)[0]
+        if (data.features[i].properties.Traeger === traeger) {
           const temp = createMarker(data.features[i], coords, hospIcon)
           markersHospital.push(temp)
         }
       }
+      // console.log('nach durchlauf')
+      // console.log(arrayCheckboxes)
+      // console.log('__')
     }
   }
   return markersHospital
