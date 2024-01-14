@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 let userLocationMarker = null
 let markersHospital = []
+const allKhsAutocompleteArr = new Array();
 
 const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
 map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -343,3 +344,19 @@ function decodeType (value) {
       return 'Unbekannt'
   }
 }
+
+async function createAutocomplete(){
+  const data = await getData()
+  var datalist = document.getElementById('allKHS');
+  data.features.forEach(khs => {
+    allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort);
+  })
+
+  allKhsAutocompleteArr.forEach(khs => {
+    var option = document.createElement('option');
+    option.value = khs;
+    datalist.appendChild(option);
+  })
+}
+
+createAutocomplete()
