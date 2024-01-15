@@ -153,6 +153,11 @@ a.navbar-brand {
   background-color: var(--neutral-200);
 }
 
+#dropdown_list {
+  width: 350pt;
+  height: 300px;
+}
+
 .rating {
   float:left;
   border:none;
