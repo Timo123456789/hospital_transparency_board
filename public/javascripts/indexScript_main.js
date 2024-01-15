@@ -247,15 +247,6 @@ function valExists (arr, val) {
 
 function filterOneKh (data, arrayCheckboxes) {
   let match = []
-  const objCheck = {}
-  console.log(data.properties);
-  console.log(arrayCheckboxes);
-  temp_checkboxes = []
-  temp_checkboxes2 = []
-
-
-
-
   let sel_typ = []
   let sel_traeger = []
 
@@ -268,13 +259,6 @@ function filterOneKh (data, arrayCheckboxes) {
     }
   }
 
-  console.log("_____________________")
-  console.log("sel_typ")
-  console.log(sel_typ)
-  console.log("sel_traeger")
-  console.log(sel_traeger)
-  console.log("_____________________")
-
   for (let j = 0; j < sel_typ.length; j++) {
     for (let i = 0; i < sel_traeger.length; i++) {
       if (data.properties.EinrichtungsTyp == sel_typ[j] && data.properties.Traeger == sel_traeger[i]) {
@@ -283,11 +267,9 @@ function filterOneKh (data, arrayCheckboxes) {
       else {
         match.push(false)
       }
-      //match.push(false)
+     
     }
   }
-  console.log("match");
-  console.log(match);
 
   for (let m = 0;m < match.length;m++){
     if (match[m] == true){
@@ -295,10 +277,6 @@ function filterOneKh (data, arrayCheckboxes) {
     }
   }
   return false
-
-
- 
-
 }
 
 
