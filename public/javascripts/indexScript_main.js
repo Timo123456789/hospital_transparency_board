@@ -115,15 +115,25 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
   }
 })
 
-document.getElementById('button_setMarker').addEventListener('click', function () {
+document.getElementById('button_setMarker').addEventListener('click', async function () {
   clearMarker()
+  data = await getData()
   map.once('click', function (e) {
     // var marker = L.marker(e.latlng).addTo(map);
     console.log(e.latlng)
     coords = [e.latlng.lat, e.latlng.lng]
     console.log(coords)
+    const arrayCheckboxes = checkCheckboxes()
+
     setUserMarker(coords, icons)
-    setHospitalMarker(10000, coords, icons)
+    radius_filtered_data = filterRadius(coords, data)
+    let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
+    setFilteredHospitalMarker(filteredMarkers)
+    markersHospital = filteredMarkers
+    filteredMarkers = []
+   
+
+    //setHospitalMarker(10000, coords, icons)
   })
 })
 
@@ -138,36 +148,39 @@ document.getElementById('button_submit').addEventListener('click', async functio
   const data = await getData()
 
   let filteredMarkers = filterData(data, arrayCheckboxes)
-  console.log(filteredMarkers)
   setFilteredHospitalMarker(filteredMarkers)
   markersHospital = filteredMarkers
-  console.log(filteredMarkers)
   filteredMarkers = []
-  console.log(filteredMarkers)
 })
 
 // functions ---------------------------------------------------------------------------------------------------------------
-function filterRadius (radius, center, data) {
+function filterRadius (center, data) {
   const filteredData = []
+  radius = (document.getElementById('radiusSlider').value) * 1000
+
+
   center = L.latLng(center[0], center[1])
-  for (let i = 0; i < data.features.length; i++) {
-    const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
-    if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-      // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
-      const distance = center.distanceTo(coords)
-      // console.log(data.features[i]);
-      if (distance <= radius) {
-        const temp = createMarker(data.features[i], coords, hospIcon)
-        filteredData.push(temp)
+    for (let i = 0; i < data.features.length; i++) {
+      const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
+      if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+        const distance = center.distanceTo(coords)
+        if (distance <= radius) {
+          filteredData.push(data.features[i])
+        }
       }
     }
-  }
-  return filteredData
+   
+    FeatureCollection = {
+      type: 'FeatureCollection',
+      features: filteredData
+    }
+    return FeatureCollection
+
 }
 
+
+
 function setFilteredHospitalMarker (markersHospital) {
-  console.log('_____________test_____________')
-  console.log(markersHospital)
   for (let i = 0; i < markersHospital.length; i++) {
     map.addControl(markersHospital[i])
   }
@@ -177,12 +190,8 @@ function checkCheckboxes () {
   const arrayProv = []
   const checkboxes2 = document.querySelectorAll('.checkbox-group:checked')
   const selectedValues = Array.from(checkboxes2).map(cb => cb.id)
-  console.log('selectedValues: ')
-  console.log(selectedValues)
-
   temp = 0
   temp2 = 0
-
   for (let i = 0; i < selectedValues.length; i++) {
     temp = selectedValues[i] 
     temp2 = {
@@ -191,43 +200,107 @@ function checkCheckboxes () {
     }
     arrayProv.push(temp2)
   }
-  console.log('arrayProv2:')
-  console.log(arrayProv)
-
   return arrayProv
 }
 
 function filterData (data, arrayCheckboxes) {
   const markersHospital = []
-  console.log('filterProvider - data: ' + data)
-  console.log(arrayCheckboxes)
+  //console.log('filterProvider - data: ' + data)
+  //console.log(arrayCheckboxes)
   for (let i = 0; i < data.features.length; i++) {
     const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-      for (let j = 0; j < arrayCheckboxes.length; j++) {
-        // console.log(data.features[i].properties.Traeger);
-        // console.log(arrayProv[j].value);
-        // console.log(arrayCheckboxes)
-        // console.log(arrayCheckboxes.length)
-        // console.log(arrayCheckboxes.length - 1)
-        // console.log('i' + i)
-        // console.log(arrayCheckboxes[j])
-        // console.log(arrayCheckboxes[j].value)
-        // console.log((arrayCheckboxes[j].value).match(/\d+/g)[0])
-        traeger = arrayCheckboxes[j].value.match(/\d+/g)[0]
-        if (data.features[i].properties.Traeger === traeger) {
-          const temp = createMarker(data.features[i], coords, hospIcon)
+      if (filterOneKh(data.features[i], arrayCheckboxes) === true) {
+        console.log('true')
+        const temp = createMarker(data.features[i], coords, hospIcon)
+          //console.log(temp)
           markersHospital.push(temp)
-        }
+      } else {
+        console.log('false')
       }
-      // console.log('nach durchlauf')
-      // console.log(arrayCheckboxes)
-      // console.log('__')
+      // for (let j = 0; j < arrayCheckboxes.length; j++) {
+      //   //console.log('i' + i)
+      //   traeger = parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0])
+      //   if (data.features[i].properties.Traeger === traeger) {
+      //     const temp = createMarker(data.features[i], coords, hospIcon)
+      //     //console.log(temp)
+      //     markersHospital.push(temp)
+      //   }
+      // }
     }
   }
+  //console.log(markersHospital)
   return markersHospital
 }
+
+function valExists (arr, val) {
+ //val =  parseInt(val.match(/\d+/g)[0])
+
+ for (let i = 0; i < arr.length; i++) {
+   if (parseInt(arr[i].value.match(/\d+/g)[0]) == parseInt(val)) {
+     return true
+   }
+ }
+
+}
+
+function filterOneKh (data, arrayCheckboxes) {
+  let match = []
+  const objCheck = {}
+  console.log(data.properties);
+  console.log(arrayCheckboxes);
+  temp_checkboxes = []
+  temp_checkboxes2 = []
+
+
+
+
+  let sel_typ = []
+  let sel_traeger = []
+
+  for (let j = 0; j < arrayCheckboxes.length; j++) {
+    if (arrayCheckboxes[j].value.includes('typ')) {
+      sel_typ.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+    }
+    if (arrayCheckboxes[j].value.includes('traeger')) {
+      sel_traeger.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+    }
+  }
+
+  console.log("_____________________")
+  console.log("sel_typ")
+  console.log(sel_typ)
+  console.log("sel_traeger")
+  console.log(sel_traeger)
+  console.log("_____________________")
+
+  for (let j = 0; j < sel_typ.length; j++) {
+    for (let i = 0; i < sel_traeger.length; i++) {
+      if (data.properties.EinrichtungsTyp == sel_typ[j] && data.properties.Traeger == sel_traeger[i]) {
+        match.push(true)
+      }
+      else {
+        match.push(false)
+      }
+      //match.push(false)
+    }
+  }
+  console.log("match");
+  console.log(match);
+
+  for (let m = 0;m < match.length;m++){
+    if (match[m] == true){
+      return true
+    }
+  }
+  return false
+
+
+ 
+
+}
+
 
 // Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
 async function getData () {
@@ -312,7 +385,10 @@ function createMarker (data, coords, hospIcon) {
   }
 
   // Formatierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
-  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
+  let websiteUrl = 'N/A' // Default-Wert, wenn die Website null ist
+  if (textJson.Website) {
+    websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website
+  }
 
   const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
 
