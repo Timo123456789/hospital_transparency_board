@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 let userLocationMarker = null
 let markersHospital = []
+let filtered_khs = []
 const allKhsAutocompleteArr = new Array();
 const allKhsDict = new Object();
 
@@ -52,7 +53,7 @@ const hospIcon = new L.Icon({
 const icons = [greenIcon, hospIcon]
 
 main()
-function main () {
+function main() {
   setUserMarker([51.9607, 7.6261], icons)
   setHospitalMarker(10000, [51.9607, 7.6261], icons)
 }
@@ -124,16 +125,18 @@ document.getElementById('button_setMarker').addEventListener('click', async func
     coords = [e.latlng.lat, e.latlng.lng]
     console.log(coords)
     const arrayCheckboxes = checkCheckboxes()
-
     setUserMarker(coords, icons)
-    radius_filtered_data = filterRadius(coords, data)
-    let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
-    setFilteredHospitalMarker(filteredMarkers)
-    markersHospital = filteredMarkers
-    filteredMarkers = []
-   
 
-    //setHospitalMarker(10000, coords, icons)
+    if (arrayCheckboxes != null) {
+      let radius_filtered_data = filterRadius(coords, data)
+      let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
+      setFilteredHospitalMarker(filteredMarkers)
+      markersHospital = filteredMarkers
+      filteredMarkers = []
+      setHospitalMarker(10000, coords, icons)
+    }
+
+
   })
 })
 
@@ -141,69 +144,85 @@ document.getElementById('button_setMarker').addEventListener('click', async func
 // Await muss in Zeile 131 eingesetzt werden damit auf die Rückgabe vom Server gewartet wird (sonst ist die Variable leer/undefined)
 document.getElementById('button_submit').addEventListener('click', async function () {
   clearMarker()
+  data = await getData()
+  if (userLocationMarker != null) {
+    coords = userLocationMarker.getLatLng()
+    coords = [coords.lat, coords.lng]
+    setUserMarker(coords, icons)
+  }
   const arrayCheckboxes = checkCheckboxes()
+  filtered_khs = filterRadius(coords, data)
   // var temp = document.getElementById('button_providerType');
   // clearMarker()
   // console.log(getData());
-  const data = await getData()
+  //const data = await getData()
 
-  let filteredMarkers = filterData(data, arrayCheckboxes)
+  let filteredMarkers = filterData(filtered_khs, arrayCheckboxes)
   setFilteredHospitalMarker(filteredMarkers)
   markersHospital = filteredMarkers
   filteredMarkers = []
 })
 
 // functions ---------------------------------------------------------------------------------------------------------------
-function filterRadius (center, data) {
+function filterRadius(center, data) {
   const filteredData = []
   radius = (document.getElementById('radiusSlider').value) * 1000
 
 
   center = L.latLng(center[0], center[1])
-    for (let i = 0; i < data.features.length; i++) {
-      const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
-      if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-        const distance = center.distanceTo(coords)
-        if (distance <= radius) {
-          filteredData.push(data.features[i])
-        }
+  for (let i = 0; i < data.features.length; i++) {
+    const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
+    if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+      const distance = center.distanceTo(coords)
+      if (distance <= radius) {
+        filteredData.push(data.features[i])
       }
     }
-   
-    FeatureCollection = {
-      type: 'FeatureCollection',
-      features: filteredData
-    }
-    return FeatureCollection
+  }
+
+  FeatureCollection = {
+    type: 'FeatureCollection',
+    features: filteredData
+  }
+  return FeatureCollection
 
 }
 
 
 
-function setFilteredHospitalMarker (markersHospital) {
+function setFilteredHospitalMarker(markersHospital) {
   for (let i = 0; i < markersHospital.length; i++) {
     map.addControl(markersHospital[i])
   }
 }
 
-function checkCheckboxes () {
+function checkCheckboxes() {
   const arrayProv = []
-  const checkboxes2 = document.querySelectorAll('.checkbox-group:checked')
-  const selectedValues = Array.from(checkboxes2).map(cb => cb.id)
-  temp = 0
-  temp2 = 0
-  for (let i = 0; i < selectedValues.length; i++) {
-    temp = selectedValues[i] 
-    temp2 = {
-      checkbox: i,
-      value: temp
-    }
-    arrayProv.push(temp2)
+  const checkboxes = document.querySelectorAll('.checkbox-group:checked')
+  console.log(checkboxes);
+  if (checkboxes.length == 0) {
+    return null
   }
-  return arrayProv
+  else {
+    const selectedValues = Array.from(checkboxes).map(cb => cb.id)
+    temp = 0
+    temp2 = 0
+    for (let i = 0; i < selectedValues.length; i++) {
+      temp = selectedValues[i]
+      temp2 = {
+        checkbox: i,
+        value: temp
+      }
+      arrayProv.push(temp2)
+    }
+    return arrayProv
+  }
+
+
+
 }
 
-function filterData (data, arrayCheckboxes) {
+function filterData(data, arrayCheckboxes) {
   const markersHospital = []
   //console.log('filterProvider - data: ' + data)
   //console.log(arrayCheckboxes)
@@ -214,38 +233,21 @@ function filterData (data, arrayCheckboxes) {
       if (filterOneKh(data.features[i], arrayCheckboxes) === true) {
         console.log('true')
         const temp = createMarker(data.features[i], coords, hospIcon)
-          //console.log(temp)
-          markersHospital.push(temp)
+        //console.log(temp)
+        markersHospital.push(temp)
       } else {
         console.log('false')
       }
-      // for (let j = 0; j < arrayCheckboxes.length; j++) {
-      //   //console.log('i' + i)
-      //   traeger = parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0])
-      //   if (data.features[i].properties.Traeger === traeger) {
-      //     const temp = createMarker(data.features[i], coords, hospIcon)
-      //     //console.log(temp)
-      //     markersHospital.push(temp)
-      //   }
-      // }
+
     }
   }
-  //console.log(markersHospital)
+
   return markersHospital
 }
 
-function valExists (arr, val) {
- //val =  parseInt(val.match(/\d+/g)[0])
 
- for (let i = 0; i < arr.length; i++) {
-   if (parseInt(arr[i].value.match(/\d+/g)[0]) == parseInt(val)) {
-     return true
-   }
- }
 
-}
-
-function filterOneKh (data, arrayCheckboxes) {
+function filterOneKh(data, arrayCheckboxes) {
   let match = []
   let sel_typ = []
   let sel_traeger = []
@@ -267,12 +269,12 @@ function filterOneKh (data, arrayCheckboxes) {
       else {
         match.push(false)
       }
-     
+
     }
   }
 
-  for (let m = 0;m < match.length;m++){
-    if (match[m] == true){
+  for (let m = 0; m < match.length; m++) {
+    if (match[m] == true) {
       return true
     }
   }
@@ -281,7 +283,7 @@ function filterOneKh (data, arrayCheckboxes) {
 
 
 // Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
-async function getData () {
+async function getData() {
   const url = 'http://localhost:3000/kh_verzeichnis'
   try {
     // Datei lesen
@@ -294,7 +296,7 @@ async function getData () {
   }
 }
 
-function clearMarker () {
+function clearMarker() {
   // lösche User Position Marker
   userLocationMarker.remove()
 
@@ -305,14 +307,14 @@ function clearMarker () {
   markersHospital = []
 }
 
-function setUserMarker (coords, icons) {
+function setUserMarker(coords, icons) {
   const greenIcon = icons[0]
   userLocationMarker = L.marker(coords, { icon: greenIcon })
   userLocationMarker.bindPopup('Your Position')
   map.addControl(userLocationMarker)
 }
 
-function setHospitalMarker (radius, center, icons) {
+function setHospitalMarker(radius, center, icons) {
   const hospIcon = icons[1]
   const url = 'http://localhost:3000/kh_verzeichnis'
   center = L.latLng(center[0], center[1])
@@ -348,7 +350,7 @@ function setHospitalMarker (radius, center, icons) {
 }
 
 // Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
-function createMarker (data, coords, hospIcon) {
+function createMarker(data, coords, hospIcon) {
   textJson = {
     Name: data.properties.Adresse_Name_Standort,
     Strasse: data.properties.Adresse_Strasse_Standort,
@@ -383,7 +385,7 @@ function createMarker (data, coords, hospIcon) {
   return tempMarker
 }
 
-function decodeTraeger (value) {
+function decodeTraeger(value) {
   switch (value) {
     case 1:
       return 'Öffentlich'
@@ -396,7 +398,7 @@ function decodeTraeger (value) {
   }
 }
 
-function decodeType (value) {
+function decodeType(value) {
   switch (value) {
     case 1:
       return 'Hochschulklinik'
@@ -416,7 +418,7 @@ function decodeType (value) {
 /**
  * @description creates a dictionary with all the KHS
  */
-async function createDataDict(){
+async function createDataDict() {
   const data = await getData()
   data.features.forEach(khs => {
     allKhsDict[khs.properties.Adresse_Name_Standort] = khs
@@ -438,7 +440,7 @@ function KhsSearchHandler(selectKhs) {
 /**
  * @description creates a list of all hospitals for the autocomplete function
  */
-async function createAutocomplete(){
+async function createAutocomplete() {
   // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
   const datalist = document.getElementById('allKHS');
   const data = await getData()
