@@ -2,6 +2,7 @@
 let userLocationMarker = null
 let markersHospital = []
 let filtered_khs = []
+let filtered_hosp_spez = []
 const allKhsAutocompleteArr = new Array();
 const allKhsDict = new Object();
 
@@ -60,50 +61,27 @@ function main() {
 
 // event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Event Listener für den Button
-document.getElementById('button_getUserLoc').addEventListener('click', function () {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      const lat = position.coords.latitude
-      const lng = position.coords.longitude
-      clearMarker()
-
-      // setze User Position Marker
-      const coords = [lat, lng]
-      setUserMarker(coords, icons)
-
-      // set hospitals markers
-      const radius = document.getElementById('radiusInput').value
-      setHospitalMarker(radius, coords, icons)
-
-      // Zoom to user location
-      map.flyTo(coords, 13)
-    }, function (error) {
-      console.error('Fehler beim Abrufen der Position:', error)
-    })
-  } else {
-    console.log('Geolocation wird von Ihrem Browser nicht unterstützt')
-  }
-})
-
-// functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 document.getElementById('button_getUserLoc').addEventListener('click', async function () {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(async function (position) {
       const lat = position.coords.latitude
       const lng = position.coords.longitude
       clearMarker()
+      data = await getData()
+      dataSpez = await getDataSpez()
 
       // setze User Position Marker
       coords = [lat, lng]
       setUserMarker(coords, icons)
+      arrayCheckboxes = checkCheckboxes()
+      if (arrayCheckboxes != null) {
+        let radius_filtered_data = filterRadius(coords, data, dataSpez)
+        let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
+        setFilteredHospitalMarker(filteredMarkers)
+        markersHospital = filteredMarkers
+        filteredMarkers = []
 
-      // set hospitals markers
-      const radius = document.getElementById('radiusInput').value
-      const data = await getData()
-      console.log(data)
-      const test = filterRadius(radius, coords, data)
-      console.log(test)
-      setHospitalMarker(radius, coords, icons)
+      }
 
       // Zoom to user location
       // var markerBounds = L.latLngBounds(coords);
@@ -119,21 +97,20 @@ document.getElementById('button_getUserLoc').addEventListener('click', async fun
 document.getElementById('button_setMarker').addEventListener('click', async function () {
   clearMarker()
   data = await getData()
+  dataSpez = await getDataSpez()
   map.once('click', function (e) {
     // var marker = L.marker(e.latlng).addTo(map);
-    console.log(e.latlng)
     coords = [e.latlng.lat, e.latlng.lng]
-    console.log(coords)
     const arrayCheckboxes = checkCheckboxes()
     setUserMarker(coords, icons)
 
     if (arrayCheckboxes != null) {
-      let radius_filtered_data = filterRadius(coords, data)
+      let radius_filtered_data = filterRadius(coords, data, dataSpez)
       let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
       setFilteredHospitalMarker(filteredMarkers)
       markersHospital = filteredMarkers
       filteredMarkers = []
-      setHospitalMarker(10000, coords, icons)
+
     }
 
 
@@ -145,17 +122,15 @@ document.getElementById('button_setMarker').addEventListener('click', async func
 document.getElementById('button_submit').addEventListener('click', async function () {
   clearMarker()
   data = await getData()
+  dataSpez = await getDataSpez()
   if (userLocationMarker != null) {
     coords = userLocationMarker.getLatLng()
     coords = [coords.lat, coords.lng]
     setUserMarker(coords, icons)
   }
   const arrayCheckboxes = checkCheckboxes()
-  filtered_khs = filterRadius(coords, data)
-  // var temp = document.getElementById('button_providerType');
-  // clearMarker()
-  // console.log(getData());
-  //const data = await getData()
+  filtered_khs = filterRadius(coords, data, dataSpez)
+
 
   let filteredMarkers = filterData(filtered_khs, arrayCheckboxes)
   setFilteredHospitalMarker(filteredMarkers)
@@ -163,9 +138,19 @@ document.getElementById('button_submit').addEventListener('click', async functio
   filteredMarkers = []
 })
 
-// functions ---------------------------------------------------------------------------------------------------------------
-function filterRadius(center, data) {
+// functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+function filterRadius(center, data, dataspez) {
   const filteredData = []
+  const hospIDs = []
+
+  console.log(dataspez);
+
+
+
+
+
   radius = (document.getElementById('radiusSlider').value) * 1000
 
 
@@ -176,9 +161,29 @@ function filterRadius(center, data) {
       const distance = center.distanceTo(coords)
       if (distance <= radius) {
         filteredData.push(data.features[i])
+        hospIDs.push(data.features[i].properties.Hospital_ID)
       }
     }
   }
+
+
+
+
+  let start = Date.now()
+  for (let i = 0; i < filteredData.length; i++) {
+    for (let j = 0; j < dataspez.length; j++) {
+      if (filteredData[i].properties.Hospital_ID == dataspez[j][2]) {
+        filtered_hosp_spez.push(dataspez[j])
+      }
+    }
+  }
+
+  let end = Date.now()
+  let executionTime = end - start;
+  console.log(`Execution time: ${executionTime} ms`);
+  console.log("gefilterte Hospital IDs Spez");
+  console.log(filtered_hosp_spez);
+
 
   FeatureCollection = {
     type: 'FeatureCollection',
@@ -199,7 +204,6 @@ function setFilteredHospitalMarker(markersHospital) {
 function checkCheckboxes() {
   const arrayProv = []
   const checkboxes = document.querySelectorAll('.checkbox-group:checked')
-  console.log(checkboxes);
   if (checkboxes.length == 0) {
     return null
   }
@@ -224,21 +228,14 @@ function checkCheckboxes() {
 
 function filterData(data, arrayCheckboxes) {
   const markersHospital = []
-  //console.log('filterProvider - data: ' + data)
-  //console.log(arrayCheckboxes)
   for (let i = 0; i < data.features.length; i++) {
     const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 
     if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
       if (filterOneKh(data.features[i], arrayCheckboxes) === true) {
-        console.log('true')
         const temp = createMarker(data.features[i], coords, hospIcon)
-        //console.log(temp)
         markersHospital.push(temp)
-      } else {
-        console.log('false')
       }
-
     }
   }
 
@@ -251,6 +248,9 @@ function filterOneKh(data, arrayCheckboxes) {
   let match = []
   let sel_typ = []
   let sel_traeger = []
+  let sel_nv = []
+  let sel_spez = []
+  console.log(data);
 
   for (let j = 0; j < arrayCheckboxes.length; j++) {
     if (arrayCheckboxes[j].value.includes('typ')) {
@@ -259,17 +259,40 @@ function filterOneKh(data, arrayCheckboxes) {
     if (arrayCheckboxes[j].value.includes('traeger')) {
       sel_traeger.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
     }
+    if (arrayCheckboxes[j].value.includes('nv')) {
+      sel_nv.push([parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0])])
+    }
+    if (arrayCheckboxes[j].value.includes('sp')) {
+      sel_spez.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+    }
   }
 
-  for (let j = 0; j < sel_typ.length; j++) {
-    for (let i = 0; i < sel_traeger.length; i++) {
-      if (data.properties.EinrichtungsTyp == sel_typ[j] && data.properties.Traeger == sel_traeger[i]) {
-        match.push(true)
-      }
-      else {
-        match.push(false)
-      }
+ 
+  //console.log(sel_nv);
 
+  for (let ty = 0; ty < sel_typ.length; ty++) {
+    for (let tr = 0; tr < sel_traeger.length; tr++) {
+      for (let nv = 0; nv < sel_nv.length; nv++) {
+        //for (let sp = 0; sp < sel_spez.length; sp++) {
+          if (data.properties.EinrichtungsTyp == sel_typ[ty] &&
+            data.properties.Traeger == sel_traeger[tr] &&
+
+            check_nv(data.properties, sel_nv[nv]) &&
+
+            check_sp(data.properties.Hospital_ID, sel_spez, filtered_hosp_spez)
+            
+            
+
+
+          ) {
+            match.push(true)
+          }
+          else {
+            match.push(false)
+          }
+        }
+
+    //  }
     }
   }
 
@@ -281,10 +304,76 @@ function filterOneKh(data, arrayCheckboxes) {
   return false
 }
 
+function check_sp(hosp_id, sel_spez, filtered_hosp_spez) {
+  console.log("_________________________________");
+  console.log("hosp_id")
+  console.log(hosp_id)
+  console.log("sel_spez")
+  console.log(sel_spez)
+  console.log("filtered_hosp_spez")
+  fil_spez_one_hosp = []
+
+  //For Schleife die über alle spezialisierungen iteriert
+  for (let i = 0; i < filtered_hosp_spez.length; i++) {
+    //Wenn die Hospital ID der Spezialisierung mit der Hospital ID der Klinik übereinstimmt, wird die Spezialisierung in ein Array gepusht
+    if (filtered_hosp_spez[i][2] == hosp_id) {
+      fil_spez_one_hosp.push(filtered_hosp_spez[i])
+    }
+  }
+  console.log(fil_spez_one_hosp)
+
+
+  
+  
+  return true
+}
+
+function check_nv(data, sel_nv) {
+  if(sel_nv == 1){
+    if (data.Allgemeine_Notfallversorgung == 1 || data.Allgemeine_Notfallversorgung == 2 || data.Allgemeine_Notfallversorgung == 3) {
+      return true
+    }
+  }
+  if(sel_nv == 2){
+    if (data.Spezielle_Notfallversorgung_schwerverletzte == 2) {
+      return true
+    }
+  }
+  if(sel_nv == 3){
+    if (data.Spezielle_Notfallversorgung_kinder == 2) {
+      return true
+    }
+  }
+  if(sel_nv == 4){
+    if (data.Spezielle_Notfallversorgung_schlaganfall == 2) {
+      return true
+    }
+  }
+  if(sel_nv == 5){
+    if (data.Spezielle_Notfallversorgung_Herz == 2) {
+      return true
+    }
+  }
+  return false
+
+}
 
 // Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
 async function getData() {
   const url = 'http://localhost:3000/kh_verzeichnis'
+  try {
+    // Datei lesen
+    const response = await fetch(url)
+    const data = await response.text()
+    // Verarbeiten Sie die Daten hier
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('Fehler beim Lesen der Datei:', error)
+  }
+}
+
+async function getDataSpez() {
+  const url = 'http://localhost:3000/kh_verzeichnis/spezialisierung'
   try {
     // Datei lesen
     const response = await fetch(url)
@@ -305,6 +394,9 @@ function clearMarker() {
     hospitalMarker.remove()
   })
   markersHospital = []
+  filtered_khs = []
+  filtered_hosp_spez = []
+
 }
 
 function setUserMarker(coords, icons) {
@@ -334,7 +426,6 @@ function setHospitalMarker(radius, center, icons) {
         if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
           // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
           const distance = center.distanceTo(coords)
-          // console.log(data.features[i]);
           if (distance <= radius) {
             const temp = createMarker(data.features[i], coords, hospIcon)
             markersHospital.push(temp)
