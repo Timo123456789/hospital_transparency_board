@@ -143,18 +143,17 @@ a.navbar-brand {
   background-color: var(--primary-400);
 }
 
-#collapse-spezial1, #collapse-spezial2{
+.collapse-color{
   background-color: var(--primary-100);
   color: var(--primary-700);
-
 }
 
 .dropdown-header {
   background-color: var(--neutral-200);
 }
 
-#dropdown_list {
-  width: 350pt;
+#dropdown-menu-eigentuemer-typ {
+  width: 350px;
   height: 300px;
 }
 
