@@ -4,53 +4,68 @@ window.onload = function () {
   let markersHospital = []
   let filtered_khs = []
   let filtered_hosp_spez = []
+  let routingControl
+  let routingButtonClicked = false
   const allKhsAutocompleteArr = new Array();
   const allKhsDict = new Object();
-  
+
   const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
   map.panTo(new L.LatLng(51.9607, 7.6261))
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     minZoom: 0,
     maxZoom: 20,
-  
+
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
   }).addTo(map)
-  
+
   // controls
   L.control.zoom({
     position: 'bottomright'
-  
+
   }).addTo(map)
   L.control.scale({
     metric: true,
     position: 'bottomright'
   }).addTo(map)
-  
+
+  routingControl = L.Routing.control({
+    waypoints: [],
+    createMarker: function(i, wp, nWps) {
+        // Don't create a marker for the destination
+        if (i === nWps - 1) {
+            return null;
+        } else {
+            // Create a marker for the start point
+            return L.marker(wp.latLng);
+        }
+    },
+  }).addTo(map);
+  routingControl.hide();
+
   /**
   *@desc declaration of Green Marker for Leafleat Map
   *@Source  https://github.com/pointhi/leaflet-color-markers/tree/master/img
   */
-  
   const greenIcon = new L.Icon({
-  
+
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
-  
+
   })
-  
+
   const hospIcon = new L.Icon({
-  
+
     iconUrl: 'https://icons.veryicon.com/png/o/healthcate-medical/medical-icon-library/hospital-9.png',
-  
+
     iconSize: [25, 25],
     iconAnchor: [6, 20],
     popupAnchor: [5, -10],
     shadowSize: [41, 41]
-  
+
   })
   const icons = [greenIcon, hospIcon]
 
@@ -395,6 +410,7 @@ window.onload = function () {
   
   // Hier kommt alles für routing 
   
+
 
     // Function to update routing
     function updateRouting(endPoint) {
