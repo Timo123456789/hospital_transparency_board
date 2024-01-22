@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+
 let userLocationMarker = null
 let markersHospital = []
 let filtered_khs = []
@@ -176,6 +177,7 @@ function filterRadius(center, data, dataspez) {
         filtered_hosp_spez.push(dataspez[j])
       }
     }
+    return filteredData
   }
 
   let end = Date.now()
@@ -199,7 +201,7 @@ function setFilteredHospitalMarker(markersHospital) {
   for (let i = 0; i < markersHospital.length; i++) {
     map.addControl(markersHospital[i])
   }
-}
+
 
 function checkCheckboxes() {
   const arrayProv = []
@@ -237,6 +239,7 @@ function filterData(data, arrayCheckboxes) {
         markersHospital.push(temp)
       }
     }
+    return markersHospital
   }
 
   return markersHospital
@@ -370,7 +373,6 @@ async function getData() {
   } catch (error) {
     console.error('Fehler beim Lesen der Datei:', error)
   }
-}
 
 async function getDataSpez() {
   const url = 'http://localhost:3000/kh_verzeichnis/spezialisierung'
@@ -410,141 +412,225 @@ function setHospitalMarker(radius, center, icons) {
   const hospIcon = icons[1]
   const url = 'http://localhost:3000/kh_verzeichnis'
   center = L.latLng(center[0], center[1])
+  
+  // Hier kommt alles für routing 
+  
 
-  // Datei lesen
-  fetch(url)
-    .then(response => response.text())
-    .then(data => {
-      // Verarbeiten Sie die Daten hier
+    // Function to update routing
+    function updateRouting(endPoint) {
+      // Check if user_location is defined, routingControl exists and routingButton has been clicked
+      if (userLocation && routingControl && routingButtonClicked) {
+          routingControl.setWaypoints([
+              L.latLng(userLocation), // Start point
+              endPoint // End point
+          ]);
+      }
+    }
+  
+    function endRouting() {
+      if (routingControl) {
+          routingControl.setWaypoints([]);
+      }
+    }
+      // Add an event listener for the routing button
+    document.getElementById('button_routing').addEventListener('click', function() {
+      var routingButton = document.getElementById('button_routing');
+      var messageElement = document.getElementById('message');
+      if (routingButtonClicked) {
+          // If routing has already started, end it
+          endRouting();
+          messageElement.textContent = '';  // Clear the message
+          routingButtonClicked = false;
+          routingButton.style.backgroundColor = '';  // Reset the button color
+          routingButton.textContent = 'Routing';  // Change the button text
+          routingControl.hide();  // Hide the directions
+      } else {
+          // Start routing
+          messageElement.textContent = 'Bitte wählen Sie ein Krankenhaus aus, um das Routing zu starten.';
+          messageElement.style.position = 'absolute';
+          var rect = routingButton.getBoundingClientRect();
+          messageElement.style.top = (rect.bottom + window.scrollY) + 'px';
+          messageElement.style.left = rect.left + 'px';
+          messageElement.style.backgroundColor = 'white';
+          messageElement.style.border = '1px solid black';
+          messageElement.style.zIndex = '1000';  // Add a high z-index
+          messageElement.style.fontSize = '10px';  // Change the font size
+          routingButtonClicked = true;
+          routingButton.style.backgroundColor = 'red';  // Make the button red
+          routingButton.textContent = 'Abbrechen';  // Change the button text
+          routingControl.show();  // Show the directions
+      }
+    });
 
-      data = JSON.parse(data)
-      // Angenommen, center ist der Mittelpunkt Ihres Radius
 
-      for (let i = 0; i < data.features.length; i++) {
-        const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
 
-        if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-          // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
-          const distance = center.distanceTo(coords)
-          if (distance <= radius) {
-            const temp = createMarker(data.features[i], coords, hospIcon)
-            markersHospital.push(temp)
+  function setUserMarker (coords, icons) {
+    const greenIcon = icons[0]
+    userLocationMarker = L.marker(coords, { icon: greenIcon })
+    userLocationMarker.bindPopup('Your Position')
+    map.addControl(userLocationMarker)
+    userLocation = coords;
+    updateRouting()
+  }
+
+
+  function setHospitalMarker (radius, center, icons) {
+    const hospIcon = icons[1]
+    const url = 'http://localhost:3000/kh_verzeichnis'
+    center = L.latLng(center[0], center[1])
+
+    // Datei lesen
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        // Verarbeiten Sie die Daten hier
+
+        data = JSON.parse(data)
+        // Angenommen, center ist der Mittelpunkt Ihres Radius
+
+        for (let i = 0; i < data.features.length; i++) {
+          const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
+
+          if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+            // Berechnen Sie die Entfernung zwischen dem Mittelpunkt und dem Marker
+            const distance = center.distanceTo(coords)
+            // console.log(data.features[i]);
+            if (distance <= radius) {
+              const temp = createMarker(data.features[i], coords, hospIcon)
+              markersHospital.push(temp)
+
+              let markerCoords = coords;
+              // Add an event listener to the marker
+              temp.on('click', function() {
+                updateRouting(L.latLng(markerCoords));
+                var messageElement = document.getElementById('message');
+                messageElement.textContent = '';  // Clear the message
+              });
+            }
           }
         }
-      }
 
-      for (let i = 0; i < markersHospital.length; i++) {
-        map.addControl(markersHospital[i])
-      }
+        for (let i = 0; i < markersHospital.length; i++) {
+          map.addControl(markersHospital[i])
+        }
+      })
+      .catch(error => console.error('Fehler beim Lesen der Datei:', error))
+  }
+
+  // Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
+  function createMarker (data, coords, hospIcon) {
+    textJson = {
+      Name: data.properties.Adresse_Name_Standort,
+      Strasse: data.properties.Adresse_Strasse_Standort,
+      HNR: data.properties['Adresse_Haus-Nr._Standort'],
+      Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
+      Ort: data.properties.Adresse_Ort_Standort,
+      Telefon: data.properties['Telefonvorwahl/-nummer'],
+      Website: data.properties['Internet-Adresse'],
+      Email: data.properties['E-Mail Adresse'],
+      Traeger: decodeTraeger(data.properties.Traeger),
+      Typ: decodeType(data.properties.EinrichtungsTyp)
+    }
+
+    // Formatierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
+    const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
+
+    const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
+
+    tempMarker = L.marker(coords, { icon: hospIcon }).bindPopup(`
+        <div style="font-size: 1.2em; font-weight: bold;">${textJson.Name}</div>
+        <hr>
+        <b>Address:</b> ${textJson.Strasse} ${textJson.HNR}, ${textJson.Postleitzahl} ${textJson.Ort}<br>
+        <b>Phone Number:</b> ${textJson.Telefon}<br>
+        <b>Website:</b> <a href="${websiteUrl}" target="_blank">${textJson.Website}</a><br>
+        <b>E-mail:</b> ${mailtoLink}<br>
+        <b>provider:</b> ${textJson.Traeger}<br>
+        <b>Type:</b> ${textJson.Typ}<br>
+        `)
+    return tempMarker
+  }
+
+  function decodeTraeger (value) {
+    switch (value) {
+      case 1:
+        return 'Öffentlich'
+      case 2:
+        return 'Freigemeinnützig'
+      case 3:
+        return 'Privat'
+      default:
+        return 'Unbekannter Träger'
+    }
+  }
+
+  function decodeType (value) {
+    switch (value) {
+      case 1:
+        return 'Hochschulklinik'
+      case 2:
+        return 'Plankrankenhaus'
+      case 3:
+        return 'Krankenhaus mit Versorgungsvertrag'
+      case 4:
+        return 'Krankenhaus ohne Versorgungsvertrag'
+      case 5:
+        return 'Bundeswehrkrankenhaus'
+      default:
+        return 'Unbekannt'
+    }
+
+  }
+
+  /**
+   * @description creates a dictionary with all the KHS
+   */
+  async function createDataDict () {
+    const data = await getData()
+    data.features.forEach(khs => {
+      allKhsDict[khs.properties.Adresse_Name_Standort] = khs
     })
-    .catch(error => console.error('Fehler beim Lesen der Datei:', error))
-}
 
-// Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
-function createMarker(data, coords, hospIcon) {
-  textJson = {
-    Name: data.properties.Adresse_Name_Standort,
-    Strasse: data.properties.Adresse_Strasse_Standort,
-    HNR: data.properties['Adresse_Haus-Nr._Standort'],
-    Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
-    Ort: data.properties.Adresse_Ort_Standort,
-    Telefon: data.properties['Telefonvorwahl/-nummer'],
-    Website: data.properties['Internet-Adresse'],
-    Email: data.properties['E-Mail Adresse'],
-    Traeger: decodeTraeger(data.properties.Traeger),
-    Typ: decodeType(data.properties.EinrichtungsTyp)
+
+  /**
+   * @description handles the event, when the user selects a KHS from the search bar
+   * @param {string} selectKhs - the name of the selected KHS
+   */
+  function khsSearchHandler (selectKhs) {
+    const coords = [allKhsDict[selectKhs].geometry.coordinates[1], allKhsDict[selectKhs].geometry.coordinates[0]]
+    map.setView(coords, 13)
+    clearMarker()
+    setUserMarker(coords, icons)
+    setHospitalMarker(10000, coords, icons)
   }
 
-  // Formatierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
-  let websiteUrl = 'N/A' // Default-Wert, wenn die Website null ist
-  if (textJson.Website) {
-    websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website
+
+  /**
+   * @description creates a list of all hospitals for the autocomplete function
+   */
+  async function createAutocomplete () {
+    // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
+    const data = await getData()
+    data.features.forEach(khs => {
+      allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort)
+    })
+
+    allKhsAutocompleteArr.forEach(khs => {
+      createDatalistOptions(khs)
+    })
   }
 
-  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
 
-  tempMarker = L.marker(coords, { icon: hospIcon }).bindPopup(`
-      <div style="font-size: 1.2em; font-weight: bold;">${textJson.Name}</div>
-      <hr>
-      <b>Address:</b> ${textJson.Strasse} ${textJson.HNR}, ${textJson.Postleitzahl} ${textJson.Ort}<br>
-      <b>Phone Number:</b> ${textJson.Telefon}<br>
-      <b>Website:</b> <a href="${websiteUrl}" target="_blank">${textJson.Website}</a><br>
-      <b>E-mail:</b> ${mailtoLink}<br>
-      <b>provider:</b> ${textJson.Traeger}<br>
-      <b>Type:</b> ${textJson.Typ}<br>
-      `)
-  return tempMarker
-}
-
-function decodeTraeger(value) {
-  switch (value) {
-    case 1:
-      return 'Öffentlich'
-    case 2:
-      return 'Freigemeinnützig'
-    case 3:
-      return 'Privat'
-    default:
-      return 'Unbekannter Träger'
-  }
-}
-
-function decodeType(value) {
-  switch (value) {
-    case 1:
-      return 'Hochschulklinik'
-    case 2:
-      return 'Plankrankenhaus'
-    case 3:
-      return 'Krankenhaus mit Versorgungsvertrag'
-    case 4:
-      return 'Krankenhaus ohne Versorgungsvertrag'
-    case 5:
-      return 'Bundeswehrkrankenhaus'
-    default:
-      return 'Unbekannt'
-  }
-}
-
-/**
- * @description creates a dictionary with all the KHS
- */
-async function createDataDict() {
-  const data = await getData()
-  data.features.forEach(khs => {
-    allKhsDict[khs.properties.Adresse_Name_Standort] = khs
-  })
-}
-
-/**
- * @description handles the event, when the user selects a KHS from the search bar
- * @param {string} selectKhs - the name of the selected KHS
- */
-function KhsSearchHandler(selectKhs) {
-  const coords = [allKhsDict[selectKhs].geometry.coordinates[1], allKhsDict[selectKhs].geometry.coordinates[0]]
-  map.setView(coords, 13)
-  clearMarker()
-  setUserMarker(coords, icons)
-  setHospitalMarker(10000, coords, icons)
-}
-
-/**
- * @description creates a list of all hospitals for the autocomplete function
- */
-async function createAutocomplete() {
-  // eventuell kann noch der Ort als sucherweiterung hinzugefügt werden
-  const datalist = document.getElementById('allKHS');
-  const data = await getData()
-  data.features.forEach(khs => {
-    allKhsAutocompleteArr.push(khs.properties.Adresse_Name_Standort);
+  const locationSearch = document.getElementById('locationSearch')
+  locationSearch.addEventListener('change', () => {
+    const khs = locationSearch.value
+    khsSearchHandler(khs)
   })
 
-  allKhsAutocompleteArr.forEach(khs => {
-    var option = document.createElement('option');
-    option.value = khs;
-    datalist.appendChild(option);
-  })
-}
+  createDataDict()
+  createAutocomplete()
 
-createDataDict()
-createAutocomplete()
+
+
+
+  
+}

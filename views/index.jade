@@ -7,18 +7,24 @@ block content
     div(id="map")
       .input-group.mb-3#locationSearchField
         .input-group-prepend
-          button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas") 
+          button.btn.btn-primary#btn_sidebar(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft" aria-controls="offcanvasLeft") 
             | Filter 
             svg.bi.bi-filter(xmlns='http://www.w3.org/2000/svg' width='25' height='25' fill='currentColor' viewBox='0 0 16 16')
               path(d='M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5')
         input.form-control#locationSearch(type='search', placeholder="Nach Krankenhaus suchen" list="allKHS")
         datalist#allKHS
+        input#userLocationField(type='hidden' name='userLocationField')
+      button.btn.btn-primary#button_routing(type="button", style="position: absolute; top: 110px; left: 10px; z-index: 1000; width: 100px; height: 35px;")
+        | Routing
+      div#message
+      button.btn.btn-primary#sos_button(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom")
+          | SOS
 
-  div.offcanvas.offcanvas-start(tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel")
-    div.offcanvas-header#offcanvas-header
-      h3.offcanvas-title(id="offcanvasLabel") Filtern der Krankenhäuser
+  div.offcanvas.offcanvas-start#offcanvasLeft(tabindex="-1" aria-labelledby="offcanvasLeftLabel")
+    div.offcanvas-header#offcanvasLeftHeader
+      h3.offcanvas-title(id="offcanvasLeftLabel") Filtern der Krankenhäuser
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
-    div.offcanvas-body#offcanvas-body
+    div.offcanvas-body#offcanvasLeftBody
 
       div.filter-menu
         // Standort
@@ -46,47 +52,17 @@ block content
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ1.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ1') Hochschulklinik
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ2.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ2') Plankrankenhaus
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ3.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ3') Krankenhaus mit Versorgungsvertrag
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ4.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ4') Krankenhaus ohne Versorgungsvertrag
-                li.dropdown-item-text
-                  input#btn-krankenhaus-typ5.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-krankenhaus-typ5') Bundeswehrkrankenhaus
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-krankenhaus-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-krankenhaus-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Krankenhaus Typ 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_typ_count [0]
           // Eigentümer-Typ
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#oeffentlich1_traeger.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='oeffentlich1_traeger') Öffentlich
-                li.dropdown-item-text
-                  input#freigemeinnuetzig2_traeger.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='freigemeinnuetzig2_traeger') Freigemeinnützig
-                li.dropdown-item-text
-                  input#privat3_traeger.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='privat3_traeger') Privat
-              button.btn.btn-primary.dropdown-toggle#dropdown-eigentuemer-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-eigentuemer-typ
+on.btn.btn-primary.dropdown-toggle#dropdown-eigentuemer-typ(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Art des Eigentümers 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_eigentuemer_count [0]
         hr
         // Behandlung
         div.col.d-flex.justify-content-center.mb-3
@@ -94,31 +70,13 @@ block content
         div.row
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
-                li.dropdown-item-text
-                  input#btn-nv1.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv1') Allgemeine stationäre Notfallversorgung
-                li.dropdown-item-text
-                  input#btn-nv2.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv2') Schwerverletztenversorgung
-                li.dropdown-item-text
-                  input#btn-nv3.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv3') Notfallversorgung Kinder
-                li.dropdown-item-text
-                  input#btn-nv4.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv4') Schlaganfallversorgung
-                li.dropdown-item-text
-                  input#btn-nv5.btn-check.checkbox-group(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-nv5') Durchblutungsstörungen des Herzens
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-notfall-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-Notfallversorgungsarten(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Art der Notfallversorgung 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_notfall_count [0]
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown_list 
                 li.dropdown-item-text 
                   button.btn.btn-primary#collapse-spezial1(type='button' data-bs-toggle='collapse' data-bs-target='#collapse1' aria-expanded='false' aria-controls='collapse1')
                     | 1. Innere Medizin
@@ -220,16 +178,10 @@ block content
                 label(for='star2') 2 stars
                 input#star1(type='radio' name='rating' value='1')
                 label(for='star1') 1 star
-          //- input#ratingSlider.custom-range(type='range' min='0' max='5' step='0.1' value='0')
-          //- .input-group#InputGroup
-          //-   input.form-control#ratingInput(type='double', min='0', max='5')
-          //-   span.input-group-text 
-          //-     svg.bi.bi-star(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-          //-       path(d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z')
         hr
         div.input-group.mb-3.d-flex.justify-content-center
           br
-          button.btn.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
+          button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
 
       //
         // buttongroup
@@ -286,6 +238,35 @@ block content
           option(value='2') Option 2
           option(value='3') Option 3
 
+  div.offcanvas.offcanvas-bottom#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
+    div.offcanvas-header#offcanvasBottomHeader
+      h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
+      button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
+    div.offcanvas-body#offcanvasBottomBody
+      .row
+        h5 Wählen Sie eine Notfallversorgungsart aus:
+      .row
+        .col.d-flex.justify-content-center
+          .btn-group.btn-group-sm#notfallsuche(role='group' aria-label='Basic radio toggle button group')
+            input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-primary(for='btnradio1') Allgemeine stationäre Notfallversorgung
+            input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-primary(for='btnradio2') Schwerverletztenversorgung
+            input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-primary(for='btnradio3') Notfallversorgung Kinder
+            input#btnradio4.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-primary(for='btnradio4') Schlaganfallversorgung
+            input#btnradio5.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-primary(for='btnradio5') Durchblutungsstörungen des Herzens
+      .row
+        .col.d-flex.justify-content-center
+          p Hier werden die nächstgelegenden Krankenhäuser angezeigt, die die ausgewählte Notfallversorgung anbieten:
+      .row 
+        .col.d-flex.justify-content-center#notfallsucheTable
+
+
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")
   script(src="/javascripts/indexScript_EventListener.js")
+  script(src="/javascripts/indexScript_notfallsuche.js")
+  script(src="/javascripts/indexScript_DomFilterCreation.js")
