@@ -76,91 +76,10 @@ block content
                 span#khs_notfall_count [0]
           div.col.d-flex.justify-content-center
             .dropdown
-              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown_list 
-                li.dropdown-item-text 
-                  button.btn.btn-primary#collapse-spezial1(type='button' data-bs-toggle='collapse' data-bs-target='#collapse1' aria-expanded='false' aria-controls='collapse1')
-                    | 1. Innere Medizin
-                  #collapse1.collapse
-                    .card.card-body
-                      ul.no-padding
-                        li.dropdown-item-text
-                          input#btn-sp0100.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0100') Innere Medizin
-                        li.dropdown-item-text
-                          input#btn-sp0102.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0102') Schwerpunkt Geriatrie
-                        li.dropdown-item-text
-                          input#btn-sp0103.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0103') Schwerpunkt Kardiologie
-                        li.dropdown-item-text
-                          input#btn-sp0104.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0104') Schwerpunkt Nephrologie 
-                        li.dropdown-item-text
-                          input#btn-sp0105.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0105') Schwerpunkt Hämatologie und Onkologie
-                        li.dropdown-item-text
-                          input#btn-sp0106.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0106') Schwerpunkt Endokrinologie
-                        li.dropdown-item-text
-                          input#btn-sp0107.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0107') Schwerpunkt Gastroeentologie
-                        li.dropdown-item-text
-                          input#btn-sp0108.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0108') Schwerpunkt Pneumologie
-                        li.dropdown-item-text
-                          input#btn-sp0109.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0109') Schwerpunkt Rheumatologie
-                        li.dropdown-item-text
-                          input#btn-sp0114.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0114') Schwerpunkt Lungen- und Bronchialheilkunde
-                        li.dropdown-item-text
-                          input#btn-sp0150.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0150') Schwerpunkt Tumorforschung
-                        li.dropdown-item-text
-                          input#btn-sp0151.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0151') Schwerpunkt Coloproktologie
-                        li.dropdown-item-text
-                          input#btn-sp0152.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0152') Schwerpunkt Infektionskrankheiten
-                        li.dropdown-item-text
-                          input#btn-sp0153.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0153') Schwerpunkt Diabetes
-                        li.dropdown-item-text
-                          input#btn-sp0154.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0154') Schwerpunkt Naturheilkunde
-                        li.dropdown-item-text
-                          input#btn-sp0156.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0156') Schwerpunkt Schlaganfall
-                li.dropdown-item-text 
-                  button.btn.btn-primary#collapse-spezial2(type='button' data-bs-toggle='collapse' data-bs-target='#collapse2' aria-expanded='false' aria-controls='collapse2')
-                    | 2. Geriatrie
-                  #collapse2.collapse
-                    .card.card-body
-                      ul.no-padding
-                        li.dropdown-item-text
-                          input#btn-sp0200.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0200') Geriatrie
-                        li.dropdown-item-text
-                          input#btn-sp0224.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0224') Schwerpunkt Frauenheilkunde
-                        li.dropdown-item-text
-                          input#btn-sp0260.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0260') Tagesklinik
-                        li.dropdown-item-text
-                          input#btn-sp0261.btn-check(type='checkbox' autocomplete='off')
-                          label.btn.btn-outline-primary(for='btn-sp0261') Nachtklinik
-                li.dropdown-item-text
-                  input#btn-sp0300.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-sp0300') 3. Kardiologie
-                li.dropdown-item-text
-                  input#btn-sp0400.btn-check(type='checkbox' autocomplete='off')
-                  label.btn.btn-outline-primary(for='btn-sp0400') 4. Nephrologie
+              ul.dropdown-menu.overflow-auto.text-nowrap#dropdown-menu-spezialisierung-typ
               button.btn.btn-primary.dropdown-toggle#dropdown-Spezialisierung(type='button' data-bs-toggle='dropdown' data-bs-auto-close="false")
                 | Spezialisierungen 
-                span [
-                span.count
-                span ]
-                span.caret
+                span#khs_spezialisierung_count [0]
               br
               br
           .row 
