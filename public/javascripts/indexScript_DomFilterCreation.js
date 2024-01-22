@@ -124,10 +124,22 @@ function createDropdown(inputID, types, parentElement, countElement, countElemen
         });
       
         const label = document.createElement('label');
+        label.id = "dropdown-filter-button"
         label.className = 'btn btn-outline-primary';
         label.htmlFor = inputID + (i + 1);
         if(typeof types[i] == "number"){
-            label.textContent =  khsSpezialisierung["Schwerpunkte"][types[i]];
+            if(types[i] < 100){
+                label.textContent =  khsSpezialisierung["Schwerpunkte"][types[i]];
+            }
+            else{
+                for (key in khsSpezialisierung) {
+                    if(key != "Schwerpunkte"){
+                        if(khsSpezialisierung[key].includes(types[i])){
+                            label.textContent = key;
+                        }
+                    }
+                }
+            }
         }
         else{
             label.textContent = types[i];
@@ -149,6 +161,7 @@ function createDropdown(inputID, types, parentElement, countElement, countElemen
  * @param {String} countElementCounter 
  */
 function createInterlacedDropdown(inputID, types, parentElement, countElement, countElementCounter) {
+    let counter = 0;
     for (var key in types) {
         if(key != "Schwerpunkte"){
             if(types[key].length != 1){
@@ -159,7 +172,7 @@ function createInterlacedDropdown(inputID, types, parentElement, countElement, c
                 const liParent = document.getElementById(li.id);
 
                 const button = document.createElement('button');
-                button.className = 'btn btn-primary';
+                button.className = 'btn btn-primary dropdown-toggle interlacedDropwdown';
                 button.id = 'collapse-special' + (types[key][0] / 100);
                 button.type = 'button';
                 button.setAttribute('data-bs-toggle', 'collapse');
@@ -188,7 +201,7 @@ function createInterlacedDropdown(inputID, types, parentElement, countElement, c
                 const ulParent = document.getElementById('dropdown-menu-spezialisierung-typ' + (types[key][0] / 100));
 
                 // const parent = document.getElementById('dropdown-menu-spezialisierung-typ' + (types[key] / 100))
-                createDropdown("btn-new-dropdown", types[key], ulParent, countElement, countElementCounter);
+                createDropdown(("btn-new-dropdown" + counter), types[key], ulParent, countElement, countElementCounter);
             }
             else{
                 const li = document.createElement('li');
@@ -205,6 +218,7 @@ function createInterlacedDropdown(inputID, types, parentElement, countElement, c
                 });
               
                 const label = document.createElement('label');
+                label.id = "dropdown-filter-button"
                 label.className = 'btn btn-outline-primary';
                 label.htmlFor = inputID + (key);
                 label.textContent = (types[key] / 100) + ". " + key;
@@ -215,6 +229,7 @@ function createInterlacedDropdown(inputID, types, parentElement, countElement, c
                 parentElement.appendChild(li);
             }
         }
+        counter++;
     }
 }
 

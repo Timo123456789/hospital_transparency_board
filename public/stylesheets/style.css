@@ -127,7 +127,7 @@ a.navbar-brand {
 }
 
 #offcanvasLeft {
-  width: min(95vw, 500px) !important;
+  width: min(95vw, 510px) !important;
   height: calc(100% - var(--footer-height));
 }
 
@@ -143,6 +143,28 @@ a.navbar-brand {
   background-color: var(--primary-400);
 }
 
+#collapse-special1,
+#collapse-special2, #collapse-special4, #collapse-special5, #collapse-special6, #collapse-special7, #collapse-special9,
+#collapse-special9, #collapse-special10, #collapse-special11, #collapse-special14, #collapse-special15, #collapse-special20,
+#collapse-special21, #collapse-special23, #collapse-special24, #collapse-special28, #collapse-special29, #collapse-special30,
+#collapse-special31, #collapse-special32, #collapse-special33, #collapse-special34, #collapse-special36, #collapse-special37{
+  background-color: var(--primary-200);
+  color: var(--primary-700);
+}
+
+#dropdown-filter-button{
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+}
+#dropdown-filter-button:hover{
+  background-color: var(--primary-600);
+  color: var(--primary-100);
+}
+input:checked ~ #dropdown-filter-button{
+  background-color: var(--primary-600);
+  color: var(--primary-100);
+}
+
 .collapse-color{
   background-color: var(--primary-100);
   color: var(--primary-700);
@@ -152,8 +174,8 @@ a.navbar-brand {
   background-color: var(--neutral-200);
 }
 
-#dropdown-menu-eigentuemer-typ {
-  width: 350px;
+#dropdown-menu-spezialisierung-typ {
+  width: 420px;
   height: 300px;
 }
 
