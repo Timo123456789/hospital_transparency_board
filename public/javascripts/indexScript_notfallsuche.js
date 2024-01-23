@@ -114,18 +114,35 @@ function writeTable (result) {
   const notfallsucheTable = document.getElementById('notfallsucheTable')
   notfallsucheTable.innerHTML = ''
   const table = document.createElement('table')
+  const thead = document.createElement('thead') // Create thead element
   const tbody = document.createElement('tbody')
+  // Create header row
+  const headerRow = document.createElement('tr')
+  // Create header name
+  const headerCell1 = document.createElement('th')
+  const headerCellText1 = document.createTextNode('Krankenhaus')
+  headerCell1.appendChild(headerCellText1)
+  headerRow.appendChild(headerCell1)
+  // Create header distance
+  const headerCell2 = document.createElement('th')
+  const headerCellText2 = document.createTextNode('Entfernung')
+  headerCell2.appendChild(headerCellText2)
+  headerRow.appendChild(headerCell2)
+  thead.appendChild(headerRow) // Append header row to thead
+  table.appendChild(thead) // Append thead to table
   result.forEach(hospital => {
     const row = document.createElement('tr')
     // name
     const cell = document.createElement('td')
     const cellText = document.createTextNode(hospital.properties.Adresse_Name_Standort)
     cell.appendChild(cellText)
-    // distance
-    const cellText2 = document.createTextNode(hospital.distance.toFixed(2) + ' km')
-    cell.appendChild(cellText2)
-    // add cells to row
     row.appendChild(cell)
+    // distance
+    const cell2 = document.createElement('td')
+    const cellText2 = document.createTextNode(hospital.distance.toFixed(2) + ' km')
+    cell2.appendChild(cellText2)
+    row.appendChild(cell2)
+    // append row to table
     tbody.appendChild(row)
   })
   table.appendChild(tbody)
