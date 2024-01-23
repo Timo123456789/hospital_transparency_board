@@ -2,12 +2,33 @@
 window.onload = function () {
   let userLocationMarker = null
   let markersHospital = []
-  let filtered_khs = []
-  let filtered_hosp_spez = []
-  let routingControl
+  let filteredKhs = []
+  let filteredHospSpez = []
   let routingButtonClicked = false
-  const allKhsAutocompleteArr = new Array();
-  const allKhsDict = new Object();
+  const allKhsAutocompleteArr = []
+  const allKhsDict = {}
+  const nvObj = {
+    1: {
+      Name: 'Allgemeine_Notfallversorgung',
+      Value: [1, 2, 3]
+    },
+    2: {
+      Name: 'Spezielle_Notfallversorgung_schwerverletzte',
+      Value: [2]
+    },
+    3: {
+      Name: 'Spezielle_Notfallversorgung_kinder',
+      Value: [2]
+    },
+    4: {
+      Name: 'Spezielle_Notfallversorgung_schlaganfall',
+      Value: [2]
+    },
+    5: {
+      Name: 'Spezielle_Notfallversorgung_Herz',
+      Value: [2]
+    }
+  }
 
   const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
   map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -28,19 +49,19 @@ window.onload = function () {
     position: 'bottomright'
   }).addTo(map)
 
-  routingControl = L.Routing.control({
+  const routingControl = L.Routing.control({
     waypoints: [],
-    createMarker: function(i, wp, nWps) {
-        // Don't create a marker for the destination
-        if (i === nWps - 1) {
-            return null;
-        } else {
-            // Create a marker for the start point
-            return L.marker(wp.latLng);
-        }
-    },
-  }).addTo(map);
-  routingControl.hide();
+    createMarker: function (i, wp, nWps) {
+      // Don't create a marker for the destination
+      if (i === nWps - 1) {
+        return null
+      } else {
+        // Create a marker for the start point
+        return L.marker(wp.latLng)
+      }
+    }
+  }).addTo(map)
+  routingControl.hide()
 
   /**
   *@desc declaration of Green Marker for Leafleat Map
@@ -70,7 +91,7 @@ window.onload = function () {
   const icons = [greenIcon, hospIcon]
 
   main()
-  function main() {
+  function main () {
     setUserMarker([51.9607, 7.6261], icons)
     setHospitalMarker(10000, [51.9607, 7.6261], icons)
   }
@@ -93,12 +114,11 @@ window.onload = function () {
         setUserMarker(coords, icons)
         arrayCheckboxes = checkCheckboxes()
         if (arrayCheckboxes != null) {
-          let radius_filtered_data = filterRadius(coords, data, dataSpez)
-          let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
+          const radiusFilteredData = filterRadius(coords, data, dataSpez)
+          let filteredMarkers = filterData(radiusFilteredData, arrayCheckboxes)
           setFilteredHospitalMarker(filteredMarkers)
           markersHospital = filteredMarkers
           filteredMarkers = []
-
         }
 
         // Zoom to user location
@@ -125,15 +145,12 @@ window.onload = function () {
       setUserMarker(coords, icons)
 
       if (arrayCheckboxes != null) {
-        let radius_filtered_data = filterRadius(coords, data, dataSpez)
-        let filteredMarkers = filterData(radius_filtered_data, arrayCheckboxes)
+        const radiusFilteredData = filterRadius(coords, data, dataSpez)
+        let filteredMarkers = filterData(radiusFilteredData, arrayCheckboxes)
         setFilteredHospitalMarker(filteredMarkers)
         markersHospital = filteredMarkers
         filteredMarkers = []
-
       }
-
-
     })
   })
 
@@ -149,23 +166,21 @@ window.onload = function () {
       setUserMarker(coords, icons)
     }
     const arrayCheckboxes = checkCheckboxes()
-    filtered_khs = filterRadius(coords, data, dataSpez)
+    filteredKhs = filterRadius(coords, data, dataSpez)
 
-
-    let filteredMarkers = filterData(filtered_khs, arrayCheckboxes)
+    let filteredMarkers = filterData(filteredKhs, arrayCheckboxes)
     setFilteredHospitalMarker(filteredMarkers)
     markersHospital = filteredMarkers
     filteredMarkers = []
   })
 
-// functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-  function filterRadius(center, data, dataspez) {
+  function filterRadius (center, data, dataspez) {
     const filteredData = []
     const hospIDs = []
 
-    console.log(dataspez);
+    console.log(dataspez)
     radius = (document.getElementById('radiusSlider').value) * 1000
 
     center = L.latLng(center[0], center[1])
@@ -180,47 +195,41 @@ window.onload = function () {
       }
     }
 
-    let start = Date.now()
+    const start = Date.now()
     for (let i = 0; i < filteredData.length; i++) {
       for (let j = 0; j < dataspez.length; j++) {
-        if (filteredData[i].properties.Hospital_ID == dataspez[j][2]) {
-          filtered_hosp_spez.push(dataspez[j])
+        if (filteredData[i].properties.Hospital_ID === dataspez[j][2]) {
+          filteredHospSpez.push(dataspez[j])
         }
       }
-      return filteredData
+      // return filteredData
     }
 
-    let end = Date.now()
-    let executionTime = end - start;
-    console.log(`Execution time: ${executionTime} ms`);
-    console.log("gefilterte Hospital IDs Spez");
-    console.log(filtered_hosp_spez);
-
+    const end = Date.now()
+    const executionTime = end - start
+    console.log(`Execution time: ${executionTime} ms`)
+    console.log('gefilterte Hospital IDs Spez')
+    console.log(filteredHospSpez)
 
     FeatureCollection = {
       type: 'FeatureCollection',
       features: filteredData
     }
     return FeatureCollection
-
   }
 
-
-
-  function setFilteredHospitalMarker(markersHospital) {
+  function setFilteredHospitalMarker (markersHospital) {
     for (let i = 0; i < markersHospital.length; i++) {
       map.addControl(markersHospital[i])
     }
   }
 
-
-  function checkCheckboxes() {
+  function checkCheckboxes () {
     const arrayProv = []
     const checkboxes = document.querySelectorAll('.checkbox-group:checked')
-    if (checkboxes.length == 0) {
+    if (checkboxes.length === 0) {
       return null
-    }
-    else {
+    } else {
       const selectedValues = Array.from(checkboxes).map(cb => cb.id)
       temp = 0
       temp2 = 0
@@ -236,7 +245,7 @@ window.onload = function () {
     }
   }
 
-  function filterData(data, arrayCheckboxes) {
+  function filterData (data, arrayCheckboxes) {
     const markersHospital = []
     for (let i = 0; i < data.features.length; i++) {
       const coords = [data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]
@@ -246,120 +255,125 @@ window.onload = function () {
           markersHospital.push(temp)
         }
       }
-      return markersHospital
+      // return markersHospital
     }
     return markersHospital
   }
 
-
-
-  function filterOneKh(data, arrayCheckboxes) {
-    let match = []
-    let sel_typ = []
-    let sel_traeger = []
-    let sel_nv = []
-    let sel_spez = []
-    console.log(data);
+  function filterOneKh (data, arrayCheckboxes) {
+    const match = []
+    const selTyp = []
+    const selTraeger = []
+    const selNv = []
+    const selSpez = []
+    console.log(data)
 
     for (let j = 0; j < arrayCheckboxes.length; j++) {
       if (arrayCheckboxes[j].value.includes('typ')) {
-        sel_typ.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+        selTyp.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
       }
       if (arrayCheckboxes[j].value.includes('traeger')) {
-        sel_traeger.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+        selTraeger.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
       }
       if (arrayCheckboxes[j].value.includes('nv')) {
-        sel_nv.push([parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0])])
+        selNv.push([parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0])])
       }
       if (arrayCheckboxes[j].value.includes('sp')) {
-        sel_spez.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
+        selSpez.push(parseInt(arrayCheckboxes[j].value.match(/\d+/g)[0]))
       }
     }
 
-  
-    //console.log(sel_nv);
-
-    for (let ty = 0; ty < sel_typ.length; ty++) {
-      for (let tr = 0; tr < sel_traeger.length; tr++) {
-        for (let nv = 0; nv < sel_nv.length; nv++) {
-          //for (let sp = 0; sp < sel_spez.length; sp++) {
-            if (data.properties.EinrichtungsTyp == sel_typ[ty] &&
-              data.properties.Traeger == sel_traeger[tr] &&
-
-              check_nv(data.properties, sel_nv[nv]) &&
-
-              check_sp(data.properties.Hospital_ID, sel_spez, filtered_hosp_spez)
-
-            ) {
-              match.push(true)
-            }
-            else {
-              match.push(false)
-            }
+    for (let ty = 0; ty < selTyp.length; ty++) {
+      for (let tr = 0; tr < selTraeger.length; tr++) {
+        for (let nv = 0; nv < selNv.length; nv++) {
+          if (data.properties.EinrichtungsTyp === selTyp[ty] &&
+            data.properties.Traeger === selTraeger[tr] &&
+            checkNv(data.properties, selNv[nv]) &&
+            checkSp(data.properties.Hospital_ID, selSpez, filteredHospSpez)
+          ) {
+            match.push(true)
+          } else {
+            match.push(false)
           }
-      //  }
+        }
       }
     }
 
     for (let m = 0; m < match.length; m++) {
-      if (match[m] == true) {
+      if (match[m] === true) {
         return true
       }
     }
     return false
   }
 
-  function check_sp(hosp_id, sel_spez, filtered_hosp_spez) {
-    console.log("_________________________________");
-    console.log("hosp_id")
-    console.log(hosp_id)
-    console.log("sel_spez")
-    console.log(sel_spez)
-    console.log("filtered_hosp_spez")
-    fil_spez_one_hosp = []
+  function checkSp (hospId, selSpez, filteredHospSpez) {
+    console.log('_________________________________')
+    console.log('hospId')
+    console.log(hospId)
+    console.log('selSpez')
+    console.log(selSpez)
+    console.log('filteredHospSpez')
+    filSpezOneHosp = []
 
-    //For Schleife die über alle spezialisierungen iteriert
-    for (let i = 0; i < filtered_hosp_spez.length; i++) {
-      //Wenn die Hospital ID der Spezialisierung mit der Hospital ID der Klinik übereinstimmt, wird die Spezialisierung in ein Array gepusht
-      if (filtered_hosp_spez[i][2] == hosp_id) {
-        fil_spez_one_hosp.push(filtered_hosp_spez[i])
+    // For Schleife die über alle spezialisierungen iteriert
+    for (let i = 0; i < filteredHospSpez.length; i++) {
+      // Wenn die Hospital ID der Spezialisierung mit der Hospital ID der Klinik übereinstimmt, wird die Spezialisierung in ein Array gepusht
+      if (filteredHospSpez[i][2] === hospId) {
+        filSpezOneHosp.push(filteredHospSpez[i])
       }
     }
-    console.log(fil_spez_one_hosp)
+    console.log(filSpezOneHosp)
     return true
   }
 
-  function check_nv(data, sel_nv) {
-    if(sel_nv == 1){
-      if (data.Allgemeine_Notfallversorgung == 1 || data.Allgemeine_Notfallversorgung == 2 || data.Allgemeine_Notfallversorgung == 3) {
+  function checkNv (data, selNv) {
+    const nvName = nvObj[selNv].Name
+    const nvValue = nvObj[selNv].Value
+    if (nvValue.length === 1) {
+      if (data[nvName] === nvValue[0]) {
         return true
+      } else {
+        return false
       }
-    }
-    if(sel_nv == 2){
-      if (data.Spezielle_Notfallversorgung_schwerverletzte == 2) {
-        return true
+    } else {
+      for (let i = 0; i < nvValue.length; i++) {
+        if (data[nvName] === nvValue[i]) {
+          return true
+        }
       }
+      return false
     }
-    if(sel_nv == 3){
-      if (data.Spezielle_Notfallversorgung_kinder == 2) {
-        return true
-      }
-    }
-    if(sel_nv == 4){
-      if (data.Spezielle_Notfallversorgung_schlaganfall == 2) {
-        return true
-      }
-    }
-    if(sel_nv == 5){
-      if (data.Spezielle_Notfallversorgung_Herz == 2) {
-        return true
-      }
-    }
-    return false
+    // if (selNv === 1) {
+    //   if (data.Allgemeine_Notfallversorgung === 1 || data.Allgemeine_Notfallversorgung === 2 || data.Allgemeine_Notfallversorgung === 3) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 2) {
+    //   if (data.Spezielle_Notfallversorgung_schwerverletzte === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 3) {
+    //   if (data.Spezielle_Notfallversorgung_kinder === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 4) {
+    //   if (data.Spezielle_Notfallversorgung_schlaganfall === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 5) {
+    //   if (data.Spezielle_Notfallversorgung_Herz === 2) {
+    //     return true
+    //   }
+    // }
+    // return false
   }
 
   // Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
-  async function getData() {
+  async function getData () {
     const url = 'http://localhost:3000/kh_verzeichnis'
     try {
       // Datei lesen
@@ -372,7 +386,7 @@ window.onload = function () {
     }
   }
 
-  async function getDataSpez() {
+  async function getDataSpez () {
     const url = 'http://localhost:3000/kh_verzeichnis/spezialisierung'
     try {
       // Datei lesen
@@ -385,7 +399,7 @@ window.onload = function () {
     }
   }
 
-  function clearMarker() {
+  function clearMarker () {
     // lösche User Position Marker
     userLocationMarker.remove()
 
@@ -394,84 +408,80 @@ window.onload = function () {
       hospitalMarker.remove()
     })
     markersHospital = []
-    filtered_khs = []
-    filtered_hosp_spez = []
-
+    filteredKhs = []
+    filteredHospSpez = []
   }
 
-  function setUserMarker(coords, icons) {
-    const greenIcon = icons[0]
-    userLocationMarker = L.marker(coords, { icon: greenIcon })
-    userLocationMarker.bindPopup('Your Position')
-    map.addControl(userLocationMarker)
-  }
+  // function setUserMarker (coords, icons) {
+  //   const greenIcon = icons[0]
+  //   userLocationMarker = L.marker(coords, { icon: greenIcon })
+  //   userLocationMarker.bindPopup('Your Position')
+  //   map.addControl(userLocationMarker)
+  // }
 
-  function setHospitalMarker(radius, center, icons) {
-    const hospIcon = icons[1]
-    const url = 'http://localhost:3000/kh_verzeichnis'
-    center = L.latLng(center[0], center[1])
-  }
-  
-  // Hier kommt alles für routing 
-  
+  // function setHospitalMarker (radius, center, icons) {
+  //   // const hospIcon = icons[1]
+  //   // const url = 'http://localhost:3000/kh_verzeichnis'
+  //   center = L.latLng(center[0], center[1])
+  // }
 
+  // --- Hier kommt alles für routing --- //
 
-    // Function to update routing
-    function updateRouting(endPoint) {
-      // Check if user_location is defined, routingControl exists and routingButton has been clicked
-      if (userLocation && routingControl && routingButtonClicked) {
-          routingControl.setWaypoints([
-              L.latLng(userLocation), // Start point
-              endPoint // End point
-          ]);
-      }
+  // Function to update routing
+  function updateRouting (endPoint) {
+    // Check if user_location is defined, routingControl exists and routingButton has been clicked
+    if (userLocation && routingControl && routingButtonClicked) {
+      routingControl.setWaypoints([
+        L.latLng(userLocation), // Start point
+        endPoint // End point
+      ])
     }
-  
-    function endRouting() {
-      if (routingControl) {
-          routingControl.setWaypoints([]);
-      }
-    }
-      // Add an event listener for the routing button
-    document.getElementById('button_routing').addEventListener('click', function() {
-      var routingButton = document.getElementById('button_routing');
-      var messageElement = document.getElementById('message');
-      if (routingButtonClicked) {
-          // If routing has already started, end it
-          endRouting();
-          messageElement.textContent = '';  // Clear the message
-          routingButtonClicked = false;
-          routingButton.style.backgroundColor = '';  // Reset the button color
-          routingButton.textContent = 'Routing';  // Change the button text
-          routingControl.hide();  // Hide the directions
-      } else {
-          // Start routing
-          messageElement.textContent = 'Bitte wählen Sie ein Krankenhaus aus, um das Routing zu starten.';
-          messageElement.style.position = 'absolute';
-          var rect = routingButton.getBoundingClientRect();
-          messageElement.style.top = (rect.bottom + window.scrollY) + 'px';
-          messageElement.style.left = rect.left + 'px';
-          messageElement.style.backgroundColor = 'white';
-          messageElement.style.border = '1px solid black';
-          messageElement.style.zIndex = '1000';  // Add a high z-index
-          messageElement.style.fontSize = '10px';  // Change the font size
-          routingButtonClicked = true;
-          routingButton.style.backgroundColor = 'red';  // Make the button red
-          routingButton.textContent = 'Abbrechen';  // Change the button text
-          routingControl.show();  // Show the directions
-      }
-    });
+  }
 
+  function endRouting () {
+    if (routingControl) {
+      routingControl.setWaypoints([])
+    }
+  }
+
+  // Add an event listener for the routing button
+  document.getElementById('button_routing').addEventListener('click', () => {
+    const routingButton = document.getElementById('button_routing')
+    const messageElement = document.getElementById('message')
+    if (routingButtonClicked) {
+      // If routing has already started, end it
+      endRouting()
+      messageElement.textContent = '' // Clear the message
+      routingButtonClicked = false
+      routingButton.style.backgroundColor = '' // Reset the button color
+      routingButton.textContent = 'Routing' // Change the button text
+      routingControl.hide() // Hide the directions
+    } else {
+      // Start routing
+      messageElement.textContent = 'Bitte wählen Sie ein Krankenhaus aus, um das Routing zu starten.'
+      messageElement.style.position = 'absolute'
+      const rect = routingButton.getBoundingClientRect()
+      messageElement.style.top = (rect.bottom + window.scrollY) + 'px'
+      messageElement.style.left = rect.left + 'px'
+      messageElement.style.backgroundColor = 'white'
+      messageElement.style.border = '1px solid black'
+      messageElement.style.zIndex = '1000' // Add a high z-index
+      messageElement.style.fontSize = '10px' // Change the font size
+      routingButtonClicked = true
+      routingButton.style.backgroundColor = 'red' // Make the button red
+      routingButton.textContent = 'Abbrechen' // Change the button text
+      routingControl.show() // Show the directions
+    }
+  })
 
   function setUserMarker (coords, icons) {
     const greenIcon = icons[0]
     userLocationMarker = L.marker(coords, { icon: greenIcon })
     userLocationMarker.bindPopup('Your Position')
     map.addControl(userLocationMarker)
-    userLocation = coords;
+    userLocation = coords
     updateRouting()
   }
-
 
   function setHospitalMarker (radius, center, icons) {
     const hospIcon = icons[1]
@@ -498,13 +508,13 @@ window.onload = function () {
               const temp = createMarker(data.features[i], coords, hospIcon)
               markersHospital.push(temp)
 
-              let markerCoords = coords;
+              const markerCoords = coords
               // Add an event listener to the marker
-              temp.on('click', function() {
-                updateRouting(L.latLng(markerCoords));
-                var messageElement = document.getElementById('message');
-                messageElement.textContent = '';  // Clear the message
-              });
+              temp.on('click', function () {
+                updateRouting(L.latLng(markerCoords))
+                const messageElement = document.getElementById('message')
+                messageElement.textContent = '' // Clear the message
+              })
             }
           }
         }
@@ -514,7 +524,7 @@ window.onload = function () {
         }
       })
       .catch(error => console.error('Fehler beim Lesen der Datei:', error))
-  } 
+  }
 
   // Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
   function createMarker (data, coords, hospIcon) {
@@ -589,7 +599,6 @@ window.onload = function () {
     })
   }
 
-
   /**
    * @description handles the event, when the user selects a KHS from the search bar
    * @param {string} selectKhs - the name of the selected KHS
@@ -601,7 +610,6 @@ window.onload = function () {
     setUserMarker(coords, icons)
     setHospitalMarker(10000, coords, icons)
   }
-
 
   /**
    * @description creates a list of all hospitals for the autocomplete function
@@ -618,7 +626,6 @@ window.onload = function () {
     })
   }
 
-
   const locationSearch = document.getElementById('locationSearch')
   locationSearch.addEventListener('change', () => {
     const khs = locationSearch.value
@@ -627,5 +634,4 @@ window.onload = function () {
 
   createDataDict()
   createAutocomplete()
- 
 }
