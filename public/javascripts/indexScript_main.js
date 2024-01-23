@@ -185,22 +185,27 @@ window.onload = function () {
       messageElement.textContent = '' // Clear the message
       routingButtonClicked = false
       routingButton.style.backgroundColor = '' // Reset the button color
-      routingButton.textContent = 'Routing' // Change the button text
+      routingButton.innerHTML = '<i class="fas fa-route"></i>' // Change the button text to an icon
       routingControl.hide() // Hide the directions
     } else {
       // Start routing
-      messageElement.textContent = 'Bitte wählen Sie ein Krankenhaus aus, um das Routing zu starten.'
-      messageElement.style.position = 'absolute'
-      const rect = routingButton.getBoundingClientRect()
-      messageElement.style.top = (rect.bottom + window.scrollY) + 'px'
-      messageElement.style.left = rect.left + 'px'
-      messageElement.style.backgroundColor = 'white'
-      messageElement.style.border = '1px solid black'
-      messageElement.style.zIndex = '1000' // Add a high z-index
-      messageElement.style.fontSize = '10px' // Change the font size
+      messageElement.innerHTML = `
+      <span style="font-size: 20px;"><strong>Route</strong></span><br>
+      Startpunkt: Standort<br>
+      Zielpunkt: <span style="color: red;">Wählen Sie ein Krankenhaus auf der Karte aus!</span>
+      `;
+      messageElement.style.position = 'fixed'; // Verwenden Sie 'fixed', um es relativ zum Fenster zu positionieren
+      messageElement.style.top = '70px'; // Positionieren Sie es 10px von der Oberseite
+      messageElement.style.right = '10px'; // Positionieren Sie es 10px von der rechten Seite
+      messageElement.style.backgroundColor = 'white';
+      messageElement.style.border = '1px solid black';
+      messageElement.style.zIndex = '1000'; // Add a high z-index
+      messageElement.style.fontSize = '15px'; // Change the font size
       routingButtonClicked = true
       routingButton.style.backgroundColor = 'red' // Make the button red
-      routingButton.textContent = 'Abbrechen' // Change the button text
+      routingButton.innerHTML = '<i class="fas fa-stop"></i>'; // Change the button text to a "Stop" icon
+      messageElement.style.zIndex = '2000'; // Set a higher z-index
+      messageElement.style.borderRadius = '10px'; // Round the corners
       routingControl.show() // Show the directions
     }
   })

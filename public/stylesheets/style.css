@@ -108,6 +108,12 @@ a.navbar-brand {
   border-color: var(--primary-200);
 }
 
+#button_routing {
+  background-color: var(--primary-400);
+  border-color: var(--primary-200);
+  margin-top: 10px;
+}
+
 #button_getUserLoc, #button_setMarker {
   background-color: var(--primary-400);
   border-color: var(--primary-200);
