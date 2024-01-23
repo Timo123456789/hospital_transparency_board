@@ -142,6 +142,22 @@ function writeTable (result) {
     const cellText2 = document.createTextNode(hospital.distance.toFixed(2) + ' km')
     cell2.appendChild(cellText2)
     row.appendChild(cell2)
+    // button
+    const cell3 = document.createElement('td')
+    const button = document.createElement('button')
+    button.textContent = 'Auf Karte anzeigen'
+    button.setAttribute('class', 'btn btn-primary')
+    button.setAttribute('data-bs-dismiss', 'offcanvas')
+    button.setAttribute('aria-label', 'Close')
+    button.onclick = function () {
+      const offcanvas = document.getElementById('offcanvasBottom')
+      offcanvas.classList.remove('open')
+      // function from indexScript_main.js
+      // eslint-disable-next-line no-undef
+      showHospitalOnMap(hospital)
+    }
+    cell3.appendChild(button)
+    row.appendChild(cell3)
     // append row to table
     tbody.appendChild(row)
   })
