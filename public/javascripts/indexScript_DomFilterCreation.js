@@ -116,7 +116,7 @@ function createDropdown (inputID, types, parentElement, countElement, countEleme
 
     const input = document.createElement('input')
     input.id = inputID + (i + 1)
-    input.className = 'btn-check'
+    input.className = 'btn-check checkbox-group'
     input.type = 'checkbox'
     input.autocomplete = 'off'
 

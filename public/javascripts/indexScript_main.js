@@ -7,6 +7,28 @@ window.onload = function () {
   let routingButtonClicked = false
   const allKhsAutocompleteArr = []
   const allKhsDict = {}
+  const nvObj = {
+    1: {
+      Name: 'Allgemeine_Notfallversorgung',
+      Value: [1, 2, 3]
+    },
+    2: {
+      Name: 'Spezielle_Notfallversorgung_schwerverletzte',
+      Value: [2]
+    },
+    3: {
+      Name: 'Spezielle_Notfallversorgung_kinder',
+      Value: [2]
+    },
+    4: {
+      Name: 'Spezielle_Notfallversorgung_schlaganfall',
+      Value: [2]
+    },
+    5: {
+      Name: 'Spezielle_Notfallversorgung_Herz',
+      Value: [2]
+    }
+  }
 
   const map = L.map('map', { zoomControl: false }).setView([51.505, -0.09], 13)
   map.panTo(new L.LatLng(51.9607, 7.6261))
@@ -302,32 +324,48 @@ window.onload = function () {
   }
 
   function checkNv (data, selNv) {
-    if (selNv === 1) {
-      if (data.Allgemeine_Notfallversorgung === 1 || data.Allgemeine_Notfallversorgung === 2 || data.Allgemeine_Notfallversorgung === 3) {
+    const nvName = nvObj[selNv].Name
+    const nvValue = nvObj[selNv].Value
+    if (nvValue.length === 1) {
+      if (data[nvName] === nvValue[0]) {
         return true
+      } else {
+        return false
       }
-    }
-    if (selNv === 2) {
-      if (data.Spezielle_Notfallversorgung_schwerverletzte === 2) {
-        return true
+    } else {
+      for (let i = 0; i < nvValue.length; i++) {
+        if (data[nvName] === nvValue[i]) {
+          return true
+        }
       }
+      return false
     }
-    if (selNv === 3) {
-      if (data.Spezielle_Notfallversorgung_kinder === 2) {
-        return true
-      }
-    }
-    if (selNv === 4) {
-      if (data.Spezielle_Notfallversorgung_schlaganfall === 2) {
-        return true
-      }
-    }
-    if (selNv === 5) {
-      if (data.Spezielle_Notfallversorgung_Herz === 2) {
-        return true
-      }
-    }
-    return false
+    // if (selNv === 1) {
+    //   if (data.Allgemeine_Notfallversorgung === 1 || data.Allgemeine_Notfallversorgung === 2 || data.Allgemeine_Notfallversorgung === 3) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 2) {
+    //   if (data.Spezielle_Notfallversorgung_schwerverletzte === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 3) {
+    //   if (data.Spezielle_Notfallversorgung_kinder === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 4) {
+    //   if (data.Spezielle_Notfallversorgung_schlaganfall === 2) {
+    //     return true
+    //   }
+    // }
+    // if (selNv === 5) {
+    //   if (data.Spezielle_Notfallversorgung_Herz === 2) {
+    //     return true
+    //   }
+    // }
+    // return false
   }
 
   // Funktion muss insgesamt Async sein, da sonst die Daten nicht rechtzeitig geladen werden; wird mit try catch Anweisung ausgeführt (er probiert mit nem response Befehl (Z.173), der den Fetch Teil ansteuert, die Daten zu laden, wenn das nicht klappt, wird der Fehler (Z.178) ausgegeben). Zeile 174 ist nur für die Verarbeitung der Daten zuständig, die in Zeile 173 geladen werden. (Dieser Satz wurde von Copilot vorgeschlagen, so richtig verstehe ich Zeile 173-174 nicht)
