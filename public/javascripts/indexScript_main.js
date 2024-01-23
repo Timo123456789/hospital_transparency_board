@@ -88,6 +88,8 @@ window.onload = function () {
 
         // setze User Position Marker
         coords = [lat, lng]
+        // safe user location in hidden field for notfall search
+        document.getElementById('userLocationField').value = '{"lat":' + coords[0] + ', "lon":' + coords[1] + '}'
         setUserMarker(coords, icons)
         arrayCheckboxes = checkCheckboxes()
         if (arrayCheckboxes != null) {
@@ -117,6 +119,8 @@ window.onload = function () {
     map.once('click', function (e) {
       // var marker = L.marker(e.latlng).addTo(map);
       coords = [e.latlng.lat, e.latlng.lng]
+      // safe user location in hidden field for notfall search
+      document.getElementById('userLocationField').value = '{"lat":' + coords[0] + ', "lon":' + coords[1] + '}'
       const arrayCheckboxes = checkCheckboxes()
       setUserMarker(coords, icons)
 
