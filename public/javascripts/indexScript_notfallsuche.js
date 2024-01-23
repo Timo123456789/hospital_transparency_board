@@ -118,37 +118,42 @@ function writeTable (result) {
   const tbody = document.createElement('tbody')
   // Create header row
   const headerRow = document.createElement('tr')
+  // Create header show
+  const headerCellShow = document.createElement('th')
+  const headerCellShowText = document.createTextNode('          ')
+  headerCellShow.appendChild(headerCellShowText)
+  headerRow.appendChild(headerCellShow)
   // Create header name
-  const headerCell1 = document.createElement('th')
-  const headerCellText1 = document.createTextNode('Krankenhaus')
-  headerCell1.appendChild(headerCellText1)
-  headerRow.appendChild(headerCell1)
+  const headerCellName = document.createElement('th')
+  const headerCellNameText = document.createTextNode('Krankenhaus')
+  headerCellName.appendChild(headerCellNameText)
+  headerRow.appendChild(headerCellName)
   // Create header distance
-  const headerCell2 = document.createElement('th')
-  const headerCellText2 = document.createTextNode('Entfernung')
-  headerCell2.appendChild(headerCellText2)
-  headerRow.appendChild(headerCell2)
-  thead.appendChild(headerRow) // Append header row to thead
-  table.appendChild(thead) // Append thead to table
+  const headerCellDistance = document.createElement('th')
+  const headerCellDistanceText = document.createTextNode('Entfernung')
+  headerCellDistance.appendChild(headerCellDistanceText)
+  headerRow.appendChild(headerCellDistance)
+  // Append header row to thead
+  thead.appendChild(headerRow)
+  // Append thead to table
+  table.appendChild(thead)
   result.forEach(hospital => {
     const row = document.createElement('tr')
-    // name
-    const cell = document.createElement('td')
-    const cellText = document.createTextNode(hospital.properties.Adresse_Name_Standort)
-    cell.appendChild(cellText)
-    row.appendChild(cell)
-    // distance
-    const cell2 = document.createElement('td')
-    const cellText2 = document.createTextNode(hospital.distance.toFixed(2) + ' km')
-    cell2.appendChild(cellText2)
-    row.appendChild(cell2)
     // button
-    const cell3 = document.createElement('td')
+    const cellButton = document.createElement('td')
     const button = document.createElement('button')
-    button.textContent = 'Auf Karte anzeigen'
     button.setAttribute('class', 'btn btn-primary')
     button.setAttribute('data-bs-dismiss', 'offcanvas')
     button.setAttribute('aria-label', 'Close')
+    const svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svgIcon.setAttribute('width', '16')
+    svgIcon.setAttribute('height', '16')
+    svgIcon.setAttribute('fill', 'currentColor')
+    svgIcon.setAttribute('viewBox', '0 0 16 16')
+    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+    path1.setAttribute('d', 'M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411')
+    svgIcon.appendChild(path1)
+    button.appendChild(svgIcon)
     button.onclick = function () {
       const offcanvas = document.getElementById('offcanvasBottom')
       offcanvas.classList.remove('open')
@@ -156,14 +161,23 @@ function writeTable (result) {
       // eslint-disable-next-line no-undef
       showHospitalOnMap(hospital)
     }
-    cell3.appendChild(button)
-    row.appendChild(cell3)
+    cellButton.appendChild(button)
+    row.appendChild(cellButton)
+    // name
+    const cellName = document.createElement('td')
+    const cellNameText = document.createTextNode(hospital.properties.Adresse_Name_Standort)
+    cellName.appendChild(cellNameText)
+    row.appendChild(cellName)
+    // distance
+    const cellDistance = document.createElement('td')
+    const cellDistanceText = document.createTextNode(hospital.distance.toFixed(2) + ' km')
+    cellDistance.appendChild(cellDistanceText)
+    row.appendChild(cellDistance)
     // append row to table
     tbody.appendChild(row)
   })
   table.appendChild(tbody)
   notfallsucheTable.appendChild(table)
-  notfallsucheTable.setAttribute('border', '2')
 }
 
 // -------------------- Event Listener --------------------
