@@ -206,7 +206,7 @@ function createInterlacedDropdown (inputID, types, parentElement, countElement, 
 
         const input = document.createElement('input')
         input.id = inputID + (key)
-        input.className = 'btn-check'
+        input.className = 'btn-check checkbox-group'
         input.type = 'checkbox'
         input.autocomplete = 'off'
 
