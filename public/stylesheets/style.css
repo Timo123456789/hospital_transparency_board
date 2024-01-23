@@ -62,6 +62,10 @@ a.navbar-brand {
   z-index: 1;
 }
 
+.leaflet-routing-container {
+  top: 70px !important; /* Ersetzen Sie 50px durch den gewünschten Wert */
+}
+
 #mapDiv {
   top: 0;
   height: calc(100% - var(--footer-height));
