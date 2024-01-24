@@ -200,7 +200,28 @@ window.onload = function () {
       messageElement.style.zIndex = '2000' // Set a higher z-index
       messageElement.style.borderRadius = '10px' // Round the corners
       routingControl.show()
-      document.querySelector('.leaflet-routing-container').style.visibility = 'visible'; // Show the directions
+      document.querySelector('.leaflet-routing-container').style.visibility = 'visible' // Show the directions
+    }
+  })
+
+  document.getElementById('useActiveFilterSwitch').addEventListener('change', () => {
+    const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
+    const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
+    removeHeatMap(map)
+    activeHeatmapSwitch.checked = true
+    if (!useActiveFilterSwitch.checked) {
+      completeDataHeatmap()
+    } else {
+      partialDataHeatmap()
+    }
+  })
+
+  document.getElementById('activeHeatmapSwitch').addEventListener('change', () => {
+    const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
+    if (activeHeatmapSwitch.checked) {
+      createHeatmap()
+    } else {
+      removeHeatMap(map)
     }
   })
 
@@ -220,13 +241,14 @@ window.onload = function () {
       }
     })
   })
-
-  createHeatmap()
 }
 
 // functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-async function createHeatmap () {
+/**
+ * @description adds a heatmap to the map that includes the complete hospital dataset
+ */
+async function completeDataHeatmap () {
   const heatmapData = []
   const completeData = await getData()
   completeData.features.forEach(feat => {
@@ -235,6 +257,20 @@ async function createHeatmap () {
     }
   })
   addHeatMap(heatmapData, map)
+}
+
+/**
+ * @description adds a heatmap to the map that includes the filtered hospital dataset
+ */
+function partialDataHeatmap () {
+  console.log('Funktion ist nicht implementiert')
+}
+
+/**
+ * @description creates a heatmap with the default settings
+ */
+function createHeatmap () {
+  console.log('Funktion ist nicht implementiert')
 }
 
 function filterRadius (center, data, dataspez) {

@@ -18,12 +18,15 @@ block content
           button.btn.btn-primary#button_routing(type="button")
             i.fas.fa-route
       div#message
+      button.btn.btn-primary#btn_analysis(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd")
+        | Analyse 
+        img(src="/images/analysis.png", alt="Icon" width='25' height='25')
       button.btn.btn-primary#sos_button(type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom")
           | SOS
 
   div.offcanvas.offcanvas-start#offcanvasLeft(tabindex="-1" aria-labelledby="offcanvasLeftLabel")
     div.offcanvas-header#offcanvasLeftHeader
-      h3.offcanvas-title(id="offcanvasLeftLabel") Filtern der Krankenhäuser
+      h4.offcanvas-title(id="offcanvasLeftLabel") Filtern der Krankenhäuser
       button.btn-close(type="button" data-bs-dismiss="offcanvas" aria-label="Close")
     div.offcanvas-body#offcanvasLeftBody
 
@@ -102,7 +105,7 @@ block content
         div.input-group.mb-3.d-flex.justify-content-center
           br
           button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
-  div.offcanvas.offcanvas-bottom.offcanvas-start#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
+  div.offcanvas.offcanvas-bottom#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
     div.offcanvas-header#offcanvasBottomHeader
       h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
       button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
@@ -128,6 +131,29 @@ block content
       .row 
         .col.d-flex.justify-content-center#notfallsucheTable
 
+  div.offcanvas.offcanvas-end#offcanvasEnd(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
+    div.offcanvas-header#offcanvasBottomHeader
+      h4#offcanvasBottomLabel.offcanvas-title Heatmap Analyse
+      button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
+    div.offcanvas-body#offcanvasEndBody
+      .row.d-flex.justify-content-end.text-center
+        h6 In diesem Abschnitt kann die Verteilung der Krankenhäuser auf der Karte als Heatmap dargestellt werden.
+        .d-flex.justify-content-center
+          .form-check.form-switch
+            input.form-check-input(type='checkbox', id='activeHeatmapSwitch')
+            label.form-check-label(for='activeHeatmapSwitch') Heatmap erstellen
+          br
+          br
+        p Im folgenden können Sie verschiedene Möglichkeiten auswählen, welche Krankenhäuser in die Analyse einbezogen werden sollen:
+      br
+      br
+      .row
+        .d-flex.justify-content-center
+          .form-check.form-switch
+            input.form-check-input(type='checkbox', id='useActiveFilterSwitch')
+            label.form-check-label(for='useActiveFilterSwitch') Verwende aktive Filter
+        .d-flex.justify-content-center 
+          p Wird dies aktiviert so werden nur die Krankenhäuser verwendet, die durch die Filter ausgewählt wurden. Bei deaktivierung werden alle Krankenhäuser aus dem Datensatz verwendet.
 
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")
