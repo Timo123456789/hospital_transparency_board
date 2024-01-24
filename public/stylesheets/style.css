@@ -63,7 +63,8 @@ a.navbar-brand {
 }
 
 .leaflet-routing-container {
-  top: 70px !important; /* Ersetzen Sie 50px durch den gewünschten Wert */
+  top: 70px !important;
+  visibility: hidden; 
 }
 
 #mapDiv {
@@ -117,7 +118,7 @@ a.navbar-brand {
   position: fixed;
   top: 80px;
   right: 10px;
-  background-color: #B8C2F950;
+  background-color: var(--primary-400);
   z-index: 1000;
   font-size: 15px;
   width: 500px;

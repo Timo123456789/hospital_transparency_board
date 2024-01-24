@@ -199,7 +199,8 @@ window.onload = function () {
       routingButton.innerHTML = '<i class="fas fa-stop"></i>' // Change the button text to a "Stop" icon
       messageElement.style.zIndex = '2000' // Set a higher z-index
       messageElement.style.borderRadius = '10px' // Round the corners
-      routingControl.show() // Show the directions
+      routingControl.show()
+      document.querySelector('.leaflet-routing-container').style.visibility = 'visible'; // Show the directions
     }
   })
 
