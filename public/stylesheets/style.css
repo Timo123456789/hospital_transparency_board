@@ -63,7 +63,8 @@ a.navbar-brand {
 }
 
 .leaflet-routing-container {
-  top: 70px !important; /* Ersetzen Sie 50px durch den gewünschten Wert */
+  top: 70px !important;
+  visibility: hidden; 
 }
 
 #mapDiv {
@@ -111,6 +112,18 @@ a.navbar-brand {
 #button_routing {
   background-color: var(--primary-400);
   border-color: var(--primary-200);
+}
+
+#message {
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  background-color: var(--primary-400);
+  z-index: 1000;
+  font-size: 15px;
+  width: 500px;
+  padding-left: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); 
 }
 
 #button_getUserLoc, #button_setMarker {
