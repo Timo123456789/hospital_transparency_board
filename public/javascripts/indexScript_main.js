@@ -193,21 +193,38 @@ window.onload = function () {
       <span style="font-size: 20px;"><strong>Route</strong></span><br>
       Startpunkt: Standort<br>
       Zielpunkt: <span style="color: red;">Wählen Sie ein Krankenhaus auf der Karte aus!</span>
-      `;
-      messageElement.style.position = 'fixed'; // Verwenden Sie 'fixed', um es relativ zum Fenster zu positionieren
-      messageElement.style.top = '70px'; // Positionieren Sie es 10px von der Oberseite
-      messageElement.style.right = '10px'; // Positionieren Sie es 10px von der rechten Seite
-      messageElement.style.backgroundColor = 'white';
-      messageElement.style.border = '1px solid black';
-      messageElement.style.zIndex = '1000'; // Add a high z-index
-      messageElement.style.fontSize = '15px'; // Change the font size
+      `
+      messageElement.style.position = 'fixed' // Verwenden Sie 'fixed', um es relativ zum Fenster zu positionieren
+      messageElement.style.top = '70px' // Positionieren Sie es 10px von der Oberseite
+      messageElement.style.right = '10px' // Positionieren Sie es 10px von der rechten Seite
+      messageElement.style.backgroundColor = 'white'
+      messageElement.style.border = '1px solid black'
+      messageElement.style.zIndex = '1000' // Add a high z-index
+      messageElement.style.fontSize = '15px' // Change the font size
       routingButtonClicked = true
       routingButton.style.backgroundColor = 'red' // Make the button red
-      routingButton.innerHTML = '<i class="fas fa-stop"></i>'; // Change the button text to a "Stop" icon
-      messageElement.style.zIndex = '2000'; // Set a higher z-index
-      messageElement.style.borderRadius = '10px'; // Round the corners
+      routingButton.innerHTML = '<i class="fas fa-stop"></i>' // Change the button text to a "Stop" icon
+      messageElement.style.zIndex = '2000' // Set a higher z-index
+      messageElement.style.borderRadius = '10px' // Round the corners
       routingControl.show() // Show the directions
     }
+  })
+
+  $(document).ready(function () {
+    $('.dropdown-toggle').on('click', function (e) {
+      const currentDropdown = $(this).parent()
+      if (!currentDropdown[0].classList.contains('dropdown-item-text')) {
+        $('.dropdown').not(currentDropdown).removeClass('show')
+        $('.dropdown .dropdown-menu').not(currentDropdown.find('.dropdown-menu')).removeClass('show')
+      }
+    })
+
+    $(document).on('click', function (e) {
+      if (!$(e.target).closest('.dropdown').length) {
+        $('.dropdown').removeClass('show')
+        $('.dropdown .dropdown-menu').removeClass('show')
+      }
+    })
   })
 }
 
