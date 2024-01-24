@@ -113,6 +113,18 @@ a.navbar-brand {
   border-color: var(--primary-200);
 }
 
+#message {
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  background-color: #B8C2F950;
+  z-index: 1000;
+  font-size: 15px;
+  width: 500px;
+  padding-left: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); 
+}
+
 #button_getUserLoc, #button_setMarker {
   background-color: var(--primary-400);
   border-color: var(--primary-200);

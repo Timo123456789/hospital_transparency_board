@@ -194,13 +194,6 @@ window.onload = function () {
       Startpunkt: Standort<br>
       Zielpunkt: <span style="color: red;">Wählen Sie ein Krankenhaus auf der Karte aus!</span>
       `
-      messageElement.style.position = 'fixed' // Verwenden Sie 'fixed', um es relativ zum Fenster zu positionieren
-      messageElement.style.top = '70px' // Positionieren Sie es 10px von der Oberseite
-      messageElement.style.right = '10px' // Positionieren Sie es 10px von der rechten Seite
-      messageElement.style.backgroundColor = 'white'
-      messageElement.style.border = '1px solid black'
-      messageElement.style.zIndex = '1000' // Add a high z-index
-      messageElement.style.fontSize = '15px' // Change the font size
       routingButtonClicked = true
       routingButton.style.backgroundColor = 'red' // Make the button red
       routingButton.innerHTML = '<i class="fas fa-stop"></i>' // Change the button text to a "Stop" icon
@@ -547,37 +540,45 @@ function setHospitalMarker (radius, center) {
 }
 
 // Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
-function createMarker (data, coords, hospIcon) {
+function createMarker(data, coords, hospIcon) {
   textJson = {
-    Name: data.properties.Adresse_Name_Standort,
-    Strasse: data.properties.Adresse_Strasse_Standort,
-    HNR: data.properties['Adresse_Haus-Nr._Standort'],
-    Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
-    Ort: data.properties.Adresse_Ort_Standort,
-    Telefon: data.properties['Telefonvorwahl/-nummer'],
-    Website: data.properties['Internet-Adresse'],
-    Email: data.properties['E-Mail Adresse'],
-    Traeger: decodeTraeger(data.properties.Traeger),
-    Typ: decodeType(data.properties.EinrichtungsTyp)
-  }
+      Name: data.properties.Adresse_Name_Standort,
+      Strasse: data.properties.Adresse_Strasse_Standort,
+      HNR: data.properties['Adresse_Haus-Nr._Standort'],
+      Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
+      Ort: data.properties.Adresse_Ort_Standort,
+      Telefon: data.properties['Telefonvorwahl/-nummer'],
+      Website: data.properties['Internet-Adresse'],
+      Email: data.properties['E-Mail Adresse'],
+      Traeger: decodeTraeger(data.properties.Traeger),
+      Typ: decodeType(data.properties.EinrichtungsTyp)
+  };
 
-  // Formatierung der URL zur Webseite sodass nicht mehr auf Local Host verwiesen wird
-  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
+  // Formatierung der URL zur Webseite
+  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A';
+  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A';
 
-  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
+  // Erstellen des Markers mit einem Click-Event
+  tempMarker = L.marker(coords, { icon: hospIcon }).on('click', function(e) {
+    //console.log("Marker geklickt. Routing aktiviert: ", routingButtonClicked);
+    if (routingButtonClicked) {
+        this.openPopup();
+      }
+      // Wenn das Routing aktiv ist, passiert nichts (das Popup wird nicht geöffnet).
+  }).bindPopup(`
+      <div style="font-size: 1.2em; font-weight: bold;">${textJson.Name}</div>
+      <hr>
+      <b>Address:</b> ${textJson.Strasse} ${textJson.HNR}, ${textJson.Postleitzahl} ${textJson.Ort}<br>
+      <b>Phone Number:</b> ${textJson.Telefon}<br>
+      <b>Website:</b> <a href="${websiteUrl}" target="_blank">${textJson.Website}</a><br>
+      <b>E-mail:</b> ${mailtoLink}<br>
+      <b>provider:</b> ${textJson.Traeger}<br>
+      <b>Type:</b> ${textJson.Typ}<br>
+  `);
 
-  tempMarker = L.marker(coords, { icon: hospIcon }).bindPopup(`
-        <div style="font-size: 1.2em; font-weight: bold;">${textJson.Name}</div>
-        <hr>
-        <b>Address:</b> ${textJson.Strasse} ${textJson.HNR}, ${textJson.Postleitzahl} ${textJson.Ort}<br>
-        <b>Phone Number:</b> ${textJson.Telefon}<br>
-        <b>Website:</b> <a href="${websiteUrl}" target="_blank">${textJson.Website}</a><br>
-        <b>E-mail:</b> ${mailtoLink}<br>
-        <b>provider:</b> ${textJson.Traeger}<br>
-        <b>Type:</b> ${textJson.Typ}<br>
-        `)
-  return tempMarker
+  return tempMarker;
 }
+
 
 function decodeTraeger (value) {
   switch (value) {
