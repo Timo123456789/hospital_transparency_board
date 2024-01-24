@@ -295,8 +295,8 @@ hr {
 #offcanvasBottom {
   width: 70% !important;
   height: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 20%;
+  left: 15%;
 }
 
 

@@ -102,63 +102,7 @@ block content
         div.input-group.mb-3.d-flex.justify-content-center
           br
           button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
-
-      //
-        // buttongroup
-        p Filteroption Buttongroup
-        div.btn-group(role="group" aria-label="Basic example")
-          button#btngroup1.btn-check(type='button' name='btngroup1')
-          label.btn.btn-outline-primary(for='btngroup1') Button 1
-          button#btngroup2.btn-check(type='button' name='btngroup2')
-          label.btn.btn-outline-primary(for='btngroup2') Button 2
-          button#btngroup3.btn-check(type='button' name='btngroup3')
-          label.btn.btn-outline-primary(for='btngroup3') Button 3
-        hr
-        p Choose provider type
-        div.btn-group(role='group' aria-label='Basic radio toggle button group', id = 'button_providerType')
-          input#btn-check1.btn-check(type='checkbox' autocomplete='off', value=1)
-          label.btn.btn-outline-primary(for='btn-check1') Öffentlich
-          input#btn-check2.btn-check(type='checkbox' autocomplete='off', value=2)
-          label.btn.btn-outline-primary(for='btn-check2') Freigemeinnützig
-          input#btn-check3.btn-check(type='checkbox' autocomplete='off', value=3)
-          label.btn.btn-outline-primary(for='btn-check3') Privat
-        
-        button(type='button', id="button_submit", data-bs-dismiss="offcanvas",aria-label="Close") Submit
-
-        
-
-        hr
-        // checkbox toggle buttons
-        p Filteroption checkbox toggle buttons
-        
-        input#btn-check1.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-check1') Option 1
-        input#btn-check2.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-check2') Option 2
-        input#btn-check3.btn-check(type='checkbox' autocomplete='off')
-        label.btn.btn-outline-primary(for='btn-check3') Option 3
-        hr
-
-        
-        // radio group
-        p Filteroption Radio
-        div.btn-group(role='group' aria-label='Basic radio toggle button group')
-          input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off' checked='')
-          label.btn.btn-outline-primary(for='btnradio1') Radio 1
-          input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
-          label.btn.btn-outline-primary(for='btnradio2') Radio 2
-          input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
-          label.btn.btn-outline-primary(for='btnradio3') Radio 3
-        hr
-        // form select
-        p Filteroption Form Select
-        select.form-select(aria-label='Default select example')
-          option(selected='') Select an option
-          option(value='1') Option 1
-          option(value='2') Option 2
-          option(value='3') Option 3
-
-  div.offcanvas.offcanvas-bottom#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
+  div.offcanvas.offcanvas-bottom.offcanvas-start#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
     div.offcanvas-header#offcanvasBottomHeader
       h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
       button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
@@ -190,6 +134,7 @@ block content
   script(src="/javascripts/indexScript_EventListener.js")
   script(src="/javascripts/indexScript_notfallsuche.js")
   script(src="/javascripts/indexScript_DomFilterCreation.js")
+  script(src="/javascripts/indexScript_Heatmap.js")
   script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
   

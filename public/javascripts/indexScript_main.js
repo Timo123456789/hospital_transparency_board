@@ -226,9 +226,22 @@ window.onload = function () {
       }
     })
   })
+
+  createHeatmap()
 }
 
 // functions ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+async function createHeatmap () {
+  const heatmapData = []
+  const completeData = await getData()
+  completeData.features.forEach(feat => {
+    if (feat.geometry.coordinates[0] !== undefined && feat.geometry.coordinates[1] !== undefined) {
+      heatmapData.push([feat.geometry.coordinates[1], feat.geometry.coordinates[0], 1])
+    }
+  })
+  addHeatMap(heatmapData, map)
+}
 
 function filterRadius (center, data, dataspez) {
   const filteredData = []
