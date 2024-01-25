@@ -224,6 +224,9 @@ window.onload = function () {
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
     const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
     if (activeHeatmapSwitch.checked) {
+      markersHospital.forEach(hospitalMarker => {
+        map.removeControl(hospitalMarker)
+      })
       if (useActiveFilterSwitch.checked) {
         partialDataHeatmap(markersHospital)
       } else {
