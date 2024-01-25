@@ -208,20 +208,33 @@ window.onload = function () {
     const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
     removeHeatMap(map)
+    map.removeControl(userLocationMarker)
+    markersHospital.forEach(hospitalMarker => {
+      map.removeControl(hospitalMarker)
+    })
     activeHeatmapSwitch.checked = true
     if (!useActiveFilterSwitch.checked) {
       completeDataHeatmap()
     } else {
-      partialDataHeatmap()
+      partialDataHeatmap(markersHospital)
     }
   })
 
   document.getElementById('activeHeatmapSwitch').addEventListener('change', () => {
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
+    const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
     if (activeHeatmapSwitch.checked) {
-      createHeatmap()
+      if (useActiveFilterSwitch.checked) {
+        partialDataHeatmap(markersHospital)
+      } else {
+        completeDataHeatmap()
+      }
     } else {
       removeHeatMap(map)
+      map.addControl(userLocationMarker)
+      markersHospital.forEach(hospitalMarker => {
+        map.addControl(hospitalMarker)
+      })
     }
   })
 
@@ -262,15 +275,15 @@ async function completeDataHeatmap () {
 /**
  * @description adds a heatmap to the map that includes the filtered hospital dataset
  */
-function partialDataHeatmap () {
-  console.log('Funktion ist nicht implementiert')
-}
-
-/**
- * @description creates a heatmap with the default settings
- */
-function createHeatmap () {
-  console.log('Funktion ist nicht implementiert')
+function partialDataHeatmap (data) {
+  const heatmapData = []
+  data.forEach(feat => {
+    if (feat.getLatLng().lng !== undefined && feat.getLatLng().lat !== undefined) {
+      heatmapData.push([feat.getLatLng().lat, feat.getLatLng().lng, 1])
+    }
+  })
+  const radiusHeatmap = (document.getElementById('radiusSlider').value)
+  addHeatMap(heatmapData, map, radiusHeatmap)
 }
 
 function filterRadius (center, data, dataspez) {
