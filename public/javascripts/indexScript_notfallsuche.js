@@ -152,6 +152,11 @@ function writeTable (result) {
   const headerCellNameText = document.createTextNode('Krankenhaus')
   headerCellName.appendChild(headerCellNameText)
   headerRow.appendChild(headerCellName)
+  // Create header location
+  const headerCellLocation = document.createElement('th')
+  const headerCellLocationText = document.createTextNode('Ort')
+  headerCellLocation.appendChild(headerCellLocationText)
+  headerRow.appendChild(headerCellLocation)
   // Create header distance
   const headerCellDistance = document.createElement('th')
   const headerCellDistanceText = document.createTextNode('Entfernung')
@@ -178,6 +183,11 @@ function writeTable (result) {
     const cellNameText = document.createTextNode(hospital.properties.Adresse_Name_Standort)
     cellName.appendChild(cellNameText)
     row.appendChild(cellName)
+    // location
+    const cellLocation = document.createElement('td')
+    const cellLocationText = document.createTextNode(hospital.properties.Adresse_Ort_Standort)
+    cellLocation.appendChild(cellLocationText)
+    row.appendChild(cellLocation)
     // distance
     const cellDistance = document.createElement('td')
     const cellDistanceText = document.createTextNode(hospital.distance.toFixed(2) + ' km')
