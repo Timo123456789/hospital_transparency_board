@@ -90,7 +90,7 @@ a.navbar-brand {
   --bs-btn-font-weight: 600;
   --bs-btn-color: var(--bs-white);
   --bs-btn-bg: var(--bd-violet-bg);
-  --bs-btn-border-color: var(--bd-violet-bg);
+  --bs-btn-border-color: var(--primary-200);
   --bs-btn-hover-color: var(--bs-white);
 }
 
@@ -353,6 +353,26 @@ hr {
   height: 100%;
   top: 20%;
   left: 15%;
+}
+
+table tbody:hover {
+  cursor: pointer;
+}
+
+#radiobutton {
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+  border-color: var(--primary-200);
+}
+
+#radiobutton:hover {
+  background-color: var(--primary-600);
+  color: var(--primary-100);
+}
+
+input[type="radio"]:checked + #radiobutton {
+  background-color: var(--primary-600);
+  color: var(--primary-100);
 }
 
 /* offcanvas right ----------------------------------------------------------- */
