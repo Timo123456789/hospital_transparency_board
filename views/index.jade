@@ -116,20 +116,28 @@ block content
         h5 Wählen Sie eine Notfallversorgungsart aus:
       .row
         .col.d-flex.justify-content-center
-          .btn-group.btn-group-sm#notfallsuche(role='group' aria-label='Basic radio toggle button group')
+          .btn-group.btn-group-sm.d-none.d-md-flex#notfallsuche(role='group' aria-label='Basic radio toggle button group')
             input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn.btn-outline-primary(for='btnradio1') Allgemeine stationäre Notfallversorgung
+            label.btn.btn-outline-dark(for='btnradio1') Allgemeine stationäre Notfallversorgung
             input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn.btn-outline-primary(for='btnradio2') Schwerverletztenversorgung
+            label.btn.btn-outline-dark(for='btnradio2') Schwerverletztenversorgung
             input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn.btn-outline-primary(for='btnradio3') Notfallversorgung Kinder
+            label.btn.btn-outline-dark(for='btnradio3') Notfallversorgung Kinder
             input#btnradio4.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn.btn-outline-primary(for='btnradio4') Schlaganfallversorgung
+            label.btn.btn-outline-dark(for='btnradio4') Schlaganfallversorgung
             input#btnradio5.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn.btn-outline-primary(for='btnradio5') Durchblutungsstörungen des Herzens
-      .row
-        .col.d-flex.justify-content-center
-          p Hier werden die nächstgelegenden Krankenhäuser angezeigt, die die ausgewählte Notfallversorgung anbieten:
+            label.btn.btn-outline-dark(for='btnradio5') Durchblutungsstörungen des Herzens
+          .btn-group-vertical.btn-group-sm.d-block.d-md-none#notfallsuchev(role='group' aria-label='Basic radio toggle button group')
+            input#btnradio1v.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-dark(for='btnradio1v') Allgemeine stationäre Notfallversorgung
+            input#btnradio2v.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-dark(for='btnradio2v') Schwerverletztenversorgung
+            input#btnradio3v.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-dark(for='btnradio3v') Notfallversorgung Kinder
+            input#btnradio4v.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-dark(for='btnradio4v') Schlaganfallversorgung
+            input#btnradio5v.btn-check(type='radio' name='btnradio' autocomplete='off')
+            label.btn.btn-outline-dark(for='btnradio5v') Durchblutungsstörungen des Herzens
       .row 
         .col.d-flex.justify-content-center#notfallsucheTable
 

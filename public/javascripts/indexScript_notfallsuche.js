@@ -20,26 +20,53 @@ async function getData () {
 function getQueryString () {
   let query = ''
   let search = ''
-  // Allgemeine stationäre Notfallversorgung
-  if (document.getElementById('btnradio1').checked) {
-    query = 'Allgemeine_Notfallversorgung'
-    search = 1
-  } else if (document.getElementById('btnradio2').checked) {
+  // Get the computed styles
+  const horizontalDisplayStyle = window.getComputedStyle(document.getElementById('notfallsuche')).display
+  const verticalDisplayStyle = window.getComputedStyle(document.getElementById('notfallsuchev')).display
+  // Check which group is visible
+  if (horizontalDisplayStyle !== 'none') {
     // Allgemeine stationäre Notfallversorgung
-    query = 'Spezielle_Notfallversorgung_schwerverletzte'
-    search = 1
-  } else if (document.getElementById('btnradio3').checked) {
-    // Allgemeine stationäre Notfallversorgung
-    query = 'Spezielle_Notfallversorgung_kinder'
-    search = 1
-  } else if (document.getElementById('btnradio4').checked) {
-    // Allgemeine stationäre Notfallversorgung
-    query = 'Spezielle_Notfallversorgung_schlaganfall'
-    search = 1
-  } else if (document.getElementById('btnradio5').checked) {
-    // Allgemeine stationäre Notfallversorgung
-    query = 'Spezielle_Notfallversorgung_Herz'
-    search = 1
+    if (document.getElementById('btnradio1').checked) {
+      query = 'Allgemeine_Notfallversorgung'
+      search = 1
+    } else if (document.getElementById('btnradio2').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_schwerverletzte'
+      search = 1
+    } else if (document.getElementById('btnradio3').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_kinder'
+      search = 1
+    } else if (document.getElementById('btnradio4').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_schlaganfall'
+      search = 1
+    } else if (document.getElementById('btnradio5').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_Herz'
+      search = 1
+    }
+  } else if (verticalDisplayStyle !== 'none') {
+    if (document.getElementById('btnradio1v').checked) {
+      query = 'Allgemeine_Notfallversorgung'
+      search = 1
+    } else if (document.getElementById('btnradio2v').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_schwerverletzte'
+      search = 1
+    } else if (document.getElementById('btnradio3v').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_kinder'
+      search = 1
+    } else if (document.getElementById('btnradio4v').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_schlaganfall'
+      search = 1
+    } else if (document.getElementById('btnradio5v').checked) {
+      // Allgemeine stationäre Notfallversorgung
+      query = 'Spezielle_Notfallversorgung_Herz'
+      search = 1
+    }
   }
   return { query, search }
 }
@@ -114,15 +141,12 @@ function writeTable (result) {
   const notfallsucheTable = document.getElementById('notfallsucheTable')
   notfallsucheTable.innerHTML = ''
   const table = document.createElement('table')
+  table.setAttribute('class', 'table table-striped table-hover')
   const thead = document.createElement('thead') // Create thead element
   const tbody = document.createElement('tbody')
   // Create header row
   const headerRow = document.createElement('tr')
-  // Create header show
-  const headerCellShow = document.createElement('th')
-  const headerCellShowText = document.createTextNode('          ')
-  headerCellShow.appendChild(headerCellShowText)
-  headerRow.appendChild(headerCellShow)
+  headerRow.setAttribute('class', '')
   // Create header name
   const headerCellName = document.createElement('th')
   const headerCellNameText = document.createTextNode('Krankenhaus')
@@ -139,30 +163,16 @@ function writeTable (result) {
   table.appendChild(thead)
   result.forEach(hospital => {
     const row = document.createElement('tr')
-    // button
-    const cellButton = document.createElement('td')
-    const button = document.createElement('button')
-    button.setAttribute('class', 'btn btn-primary')
-    button.setAttribute('data-bs-dismiss', 'offcanvas')
-    button.setAttribute('aria-label', 'Close')
-    const svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svgIcon.setAttribute('width', '16')
-    svgIcon.setAttribute('height', '16')
-    svgIcon.setAttribute('fill', 'currentColor')
-    svgIcon.setAttribute('viewBox', '0 0 16 16')
-    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    path1.setAttribute('d', 'M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411')
-    svgIcon.appendChild(path1)
-    button.appendChild(svgIcon)
-    button.onclick = function () {
+    row.setAttribute('class', '')
+    row.setAttribute('data-bs-dismiss', 'offcanvas')
+    row.setAttribute('aria-label', 'Close')
+    row.onclick = function () {
       const offcanvas = document.getElementById('offcanvasBottom')
       offcanvas.classList.remove('open')
       // function from indexScript_main.js
       // eslint-disable-next-line no-undef
       showHospitalOnMap(hospital)
     }
-    cellButton.appendChild(button)
-    row.appendChild(cellButton)
     // name
     const cellName = document.createElement('td')
     const cellNameText = document.createTextNode(hospital.properties.Adresse_Name_Standort)
@@ -180,11 +190,7 @@ function writeTable (result) {
   notfallsucheTable.appendChild(table)
 }
 
-// -------------------- Event Listener --------------------
-/**
- * Event Listener for radio buttons
- */
-document.getElementById('notfallsuche').addEventListener('change', async function () {
+async function notfallsuche () {
   const { query, search } = getQueryString()
   const userLocation = document.getElementById('userLocationField').value
   if (userLocation === '') {
@@ -194,4 +200,16 @@ document.getElementById('notfallsuche').addEventListener('change', async functio
   const userLocationParsed = JSON.parse(userLocation)
   const result = await queryData(query, search, userLocationParsed)
   writeTable(result)
+}
+
+// -------------------- Event Listener --------------------
+/**
+ * Event Listener for radio buttons
+ */
+document.getElementById('notfallsuche').addEventListener('change', function () {
+  notfallsuche()
+})
+
+document.getElementById('notfallsuchev').addEventListener('change', async function () {
+  notfallsuche()
 })
