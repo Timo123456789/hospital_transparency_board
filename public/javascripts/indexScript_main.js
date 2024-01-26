@@ -622,31 +622,31 @@ function setHospitalMarker (radius, center) {
 }
 
 // Es muss abgefragt werden ob das entsprechende Property Argument vorhanden ist ( != null) sonst wirft er beim Erstellen Fehler, Lösungvorschlag s. Z. 285
-function createMarker(data, coords, hospIcon) {
+function createMarker (data, coords, hospIcon) {
   textJson = {
-      Name: data.properties.Adresse_Name_Standort,
-      Strasse: data.properties.Adresse_Strasse_Standort,
-      HNR: data.properties['Adresse_Haus-Nr._Standort'],
-      Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
-      Ort: data.properties.Adresse_Ort_Standort,
-      Telefon: data.properties['Telefonvorwahl/-nummer'],
-      Website: data.properties['Internet-Adresse'],
-      Email: data.properties['E-Mail Adresse'],
-      Traeger: decodeTraeger(data.properties.Traeger),
-      Typ: decodeType(data.properties.EinrichtungsTyp)
-  };
+    Name: data.properties.Adresse_Name_Standort,
+    Strasse: data.properties.Adresse_Strasse_Standort,
+    HNR: data.properties['Adresse_Haus-Nr._Standort'],
+    Postleitzahl: data.properties.Adresse_Postleitzahl_Standort,
+    Ort: data.properties.Adresse_Ort_Standort,
+    Telefon: data.properties['Telefonvorwahl/-nummer'],
+    Website: data.properties['Internet-Adresse'],
+    Email: data.properties['E-Mail Adresse'],
+    Traeger: decodeTraeger(data.properties.Traeger),
+    Typ: decodeType(data.properties.EinrichtungsTyp)
+  }
 
   // Formatierung der URL zur Webseite
-  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A';
-  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A';
+  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
+  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
 
   // Erstellen des Markers mit einem Click-Event
-  tempMarker = L.marker(coords, { icon: hospIcon }).on('click', function(e) {
-    //console.log("Marker geklickt. Routing aktiviert: ", routingButtonClicked);
+  tempMarker = L.marker(coords, { icon: hospIcon }).on('click', function (e) {
+    // console.log("Marker geklickt. Routing aktiviert: ", routingButtonClicked);
     if (routingButtonClicked) {
-        this.openPopup();
-      }
-      // Wenn das Routing aktiv ist, passiert nichts (das Popup wird nicht geöffnet).
+      this.openPopup()
+    }
+    // Wenn das Routing aktiv ist, passiert nichts (das Popup wird nicht geöffnet).
   }).bindPopup(`
       <div style="font-size: 1.2em; font-weight: bold;">${textJson.Name}</div>
       <hr>
@@ -656,11 +656,10 @@ function createMarker(data, coords, hospIcon) {
       <b>E-mail:</b> ${mailtoLink}<br>
       <b>provider:</b> ${textJson.Traeger}<br>
       <b>Type:</b> ${textJson.Typ}<br>
-  `);
+  `)
 
-  return tempMarker;
+  return tempMarker
 }
-
 
 function decodeTraeger (value) {
   switch (value) {
