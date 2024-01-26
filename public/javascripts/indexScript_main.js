@@ -30,6 +30,8 @@ const nvObj = {
 }
 let map = null
 let routingControl = null
+const loader = document.getElementById('loader')
+const mapContainer = document.getElementById('map')
 
 /**
   *@desc declaration of Green Marker for Leafleat Map
@@ -100,6 +102,9 @@ window.onload = function () {
   // event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Event Listener für den Button
   document.getElementById('button_getUserLoc').addEventListener('click', async function () {
+    loader.classList.remove('visually-hidden')
+    mapContainer.style.opacity = '0.5'
+    endHeatmap()
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async function (position) {
         const lat = position.coords.latitude
@@ -125,6 +130,8 @@ window.onload = function () {
         // Zoom to user location
         // var markerBounds = L.latLngBounds(coords);
         map.flyTo(coords, 13)
+        loader.classList.add('visually-hidden')
+        mapContainer.style.opacity = '1'
       }, function (error) {
         console.error('Fehler beim Abrufen der Position:', error)
       })
@@ -134,6 +141,7 @@ window.onload = function () {
   })
 
   document.getElementById('button_setMarker').addEventListener('click', async function () {
+    endHeatmap()
     clearMarker()
     data = await getData()
     dataSpez = await getDataSpez()
@@ -158,6 +166,7 @@ window.onload = function () {
   // Funktion muss Async sein, da sonst die Daten nicht rechtzeitig geladen werden (s. Z. 109, Col 68 )
   // Await muss in Zeile 131 eingesetzt werden damit auf die Rückgabe vom Server gewartet wird (sonst ist die Variable leer/undefined)
   document.getElementById('button_submit').addEventListener('click', async function () {
+    endHeatmap()
     clearMarker()
     data = await getData()
     dataSpez = await getDataSpez()
@@ -177,6 +186,7 @@ window.onload = function () {
 
   // Add an event listener for the routing button
   document.getElementById('button_routing').addEventListener('click', () => {
+    endHeatmap()
     const routingButton = document.getElementById('button_routing')
     const messageElement = document.getElementById('message')
     if (routingButtonClicked) {
@@ -223,6 +233,7 @@ window.onload = function () {
   document.getElementById('activeHeatmapSwitch').addEventListener('change', () => {
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
     const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
+    map.removeControl(userLocationMarker)
     if (activeHeatmapSwitch.checked) {
       markersHospital.forEach(hospitalMarker => {
         map.removeControl(hospitalMarker)
@@ -233,11 +244,7 @@ window.onload = function () {
         completeDataHeatmap()
       }
     } else {
-      removeHeatMap(map)
-      map.addControl(userLocationMarker)
-      markersHospital.forEach(hospitalMarker => {
-        map.addControl(hospitalMarker)
-      })
+      endHeatmap()
     }
   })
 
@@ -287,6 +294,15 @@ function partialDataHeatmap (data) {
   })
   const radiusHeatmap = (document.getElementById('radiusSlider').value)
   addHeatMap(heatmapData, map, radiusHeatmap)
+}
+
+function endHeatmap () {
+  document.getElementById('activeHeatmapSwitch').checked = false
+  removeHeatMap(map)
+  map.addControl(userLocationMarker)
+  markersHospital.forEach(hospitalMarker => {
+    map.addControl(hospitalMarker)
+  })
 }
 
 function filterRadius (center, data, dataspez) {
