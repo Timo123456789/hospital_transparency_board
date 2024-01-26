@@ -1,6 +1,6 @@
 // Arrays for the dropdown menus
 const khsTypes = ['Hochschulklinik', 'Plankrankenhaus', 'Krankenhaus mit Versorgungsvertrag', 'Krankenhaus ohne Versorgungsvertrag', 'Bundeswehrkrankenhaus']
-const khsOwner = ['Privat', 'Öffentlich', 'Freigemeinnützig']
+const khsOwner = ['Öffentlich', 'Freigemeinnützig', 'Privat']
 const khsNotfall = ['Allgemeine stationäre Notfallversorgung', 'Schwerverletztenversorgung', 'Notfallversorgung Kinder', 'Schlaganfallversorgung', 'Durchblutungsstörungen des Herzens']
 const khsSpezialisierung = {
   Schwerpunkte: {
@@ -12,39 +12,39 @@ const khsSpezialisierung = {
     7: 'Schwerpunkt Gastroenterologie',
     8: 'Schwerpunkt Pneumologie',
     9: 'Schwerpunkt Rheumatologie',
-    10: ' Schwerpunkt Pädriatrie',
-    11: ' Schwerpunkt Kinderkardiologie',
-    12: ' Schwerpunkt Neonatologie',
-    13: ' Schwerpunkt Kinderchirurgie',
-    14: ' Schwerpunkt Lungen- und Bronchialheilkunde',
-    15: ' Schwerpunkt Chirurgie',
-    16: ' Schwerpunkt Allgemeine Unfallchirurgie',
-    17: ' Schwerpunkt Neurochirurgie',
-    18: ' Schwerpunkt Gefäßchirurgie',
-    19: ' Schwerpunkt Plastische Chirurgie',
-    20: ' Schwerpunkt Thoraxchirurgie',
-    21: ' Schwerpunkt Herzchirurgie',
-    22: ' Schwerpunkt Urologie',
-    23: ' Schwerpunkt Orthopädie',
-    24: ' Schwerpunkt Frauenheilkunde',
-    25: ' Frauenheilkunde',
-    26: ' Schwerpunkt Hals-Nasen-Ohrenheilkunde',
-    28: ' Schwerpunkt Kinderneurologie',
-    30: ' Schwerpunkt Kinder- und Jugendpsychiatrie',
-    31: ' Schwerpunkt Psychosomatik',
-    33: ' Schwerpunkt Strahlenheilkunde',
-    36: ' Intensivmedizin',
-    50: ' Schwerpunkt Tumorforschung',
-    51: ' Schwerpunkt Coloproktologie',
-    52: ' Schwerpunkt Infektionskrankheiten',
-    53: ' Schwerpunkt Diabetes',
-    54: ' Schwerpunkt Naturheilkunde',
-    55: ' Schwerpunkt Gerontopsychiatrie',
-    56: ' Schwerpunkt Schlaganfallpatienten',
-    57: ' Viszeralmedizin',
-    58: ' Weaningeinheit',
-    60: ' Tagesklinik',
-    61: ' Nachtklinik'
+    10: 'Schwerpunkt Pädriatrie',
+    11: 'Schwerpunkt Kinderkardiologie',
+    12: 'Schwerpunkt Neonatologie',
+    13: 'Schwerpunkt Kinderchirurgie',
+    14: 'Schwerpunkt Lungen- und Bronchialheilkunde',
+    15: 'Schwerpunkt Chirurgie',
+    16: 'Schwerpunkt Allgemeine Unfallchirurgie',
+    17: 'Schwerpunkt Neurochirurgie',
+    18: 'Schwerpunkt Gefäßchirurgie',
+    19: 'Schwerpunkt Plastische Chirurgie',
+    20: 'Schwerpunkt Thoraxchirurgie',
+    21: 'Schwerpunkt Herzchirurgie',
+    22: 'Schwerpunkt Urologie',
+    23: 'Schwerpunkt Orthopädie',
+    24: 'Schwerpunkt Frauenheilkunde',
+    25: 'Frauenheilkunde',
+    26: 'Schwerpunkt Hals-Nasen-Ohrenheilkunde',
+    28: 'Schwerpunkt Kinderneurologie',
+    30: 'Schwerpunkt Kinder- und Jugendpsychiatrie',
+    31: 'Schwerpunkt Psychosomatik',
+    33: 'Schwerpunkt Strahlenheilkunde',
+    36: 'Intensivmedizin',
+    50: 'Schwerpunkt Tumorforschung',
+    51: 'Schwerpunkt Coloproktologie',
+    52: 'Schwerpunkt Infektionskrankheiten',
+    53: 'Schwerpunkt Diabetes',
+    54: 'Schwerpunkt Naturheilkunde',
+    55: 'Schwerpunkt Gerontopsychiatrie',
+    56: 'Schwerpunkt Schlaganfallpatienten',
+    57: 'Viszeralmedizin',
+    58: 'Weaningeinheit',
+    60: 'Tagesklinik',
+    61: 'Nachtklinik'
   },
   'Innere Medizin': [100, 2, 3, 4, 5, 6, 7, 8, 9, 14, 50, 51, 52, 53, 54, 56],
   Geriatrie: [200, 24, 60, 61],
@@ -199,13 +199,13 @@ function createInterlacedDropdown (inputID, types, parentElement, countElement, 
         divLowerParent.appendChild(ul)
         const ulParent = document.getElementById('dropdown-menu-spezialisierung-typ' + (types[key][0] / 100))
 
-        createDropdown(('btn-new-dropdown' + counter), types[key], ulParent, countElement, countElementCounter)
+        createDropdown(('btn-spezailisierung-dropdown' + (parseInt(types[key][0]))), types[key], ulParent, countElement, countElementCounter)
       } else {
         const li = document.createElement('li')
         li.className = 'dropdown-item-text'
 
         const input = document.createElement('input')
-        input.id = inputID + (key)
+        input.id = inputID + types[key]
         input.className = 'btn-check checkbox-group'
         input.type = 'checkbox'
         input.autocomplete = 'off'
@@ -217,7 +217,7 @@ function createInterlacedDropdown (inputID, types, parentElement, countElement, 
         const label = document.createElement('label')
         label.id = 'dropdown-filter-button'
         label.className = 'btn btn-outline-primary'
-        label.htmlFor = inputID + (key)
+        label.htmlFor = inputID + types[key]
         label.textContent = (types[key] / 100) + '. ' + key
 
         li.appendChild(input)
@@ -244,4 +244,4 @@ function createDatalistOptions (khs) {
 createDropdown('btn-krankenhaus-typ', khsTypes, dropdownKhsTyp, khsTypCount, 'dropdown-menu-krankenhaus-typ')
 createDropdown('btn-eigentuemer-typ', khsOwner, dropdownKhsEigentuemer, khsEigentuemerCount, 'dropdown-menu-eigentuemer-typ')
 createDropdown('btn-nv', khsNotfall, dropdownKhsNotfall, khsNotfallCount, 'dropdown-menu-notfall-typ')
-createInterlacedDropdown('btn-spezialisierung', khsSpezialisierung, dropdownKhsSpezialisierung, khsSpezialisierungCount, 'dropdown-menu-spezialisierung-typ')
+createInterlacedDropdown('btn-spezialisierung-', khsSpezialisierung, dropdownKhsSpezialisierung, khsSpezialisierungCount, 'dropdown-menu-spezialisierung-typ')
