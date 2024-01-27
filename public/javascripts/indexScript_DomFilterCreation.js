@@ -159,7 +159,6 @@ function createDropdown (inputID, types, parentElement, countElement, countEleme
  * @param {String} countElementCounter
  */
 function createInterlacedDropdown (inputID, types, parentElement, countElement, countElementCounter) {
-  let counter = 0
   let key
   for (key in types) {
     if (key !== 'Schwerpunkte') {
@@ -225,7 +224,6 @@ function createInterlacedDropdown (inputID, types, parentElement, countElement, 
         parentElement.appendChild(li)
       }
     }
-    counter++
   }
 }
 
