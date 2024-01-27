@@ -308,10 +308,10 @@ async function completeDataHeatmap () {
       } else if (filterIds[key].length !== 0 && key === 'filterNvIds') {
         console.log('NV with all data')
         currentFilteredData = filterNv(filterIds[key], khsWithSpezArray)
-      } // else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
-      // console.log('Spez with all data')
-      // currentFilteredData = await filteredSpez(filterIds[key], khsWithSpezArray)
-      // }
+      } else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
+        console.log('Spez with all data')
+        currentFilteredData = await filteredSpez(filterIds[key], khsWithSpezArray)
+      }
     } else {
       if (filterIds[key].length !== 0 && key === 'filterTypIds') {
         console.log('typ with spezial data')
@@ -322,10 +322,10 @@ async function completeDataHeatmap () {
       } else if (filterIds[key].length !== 0 && key === 'filterNvIds') {
         console.log('Nv with spezial data')
         currentFilteredData = filterNv(filterIds[key], currentFilteredData)
-      } // else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
-      //   console.log('Spez with spezial data')
-      //   currentFilteredData = await filteredSpez(filterIds[key], currentFilteredData)
-      // }
+      } else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
+        console.log('Spez with spezial data')
+        currentFilteredData = await filteredSpez(filterIds[key], currentFilteredData)
+      }
     }
   }
   console.log(currentFilteredData)
@@ -585,6 +585,19 @@ async function getDataSpez () {
   }
 }
 
+async function getDataSpezNumber () {
+  const url = 'http://localhost:3000/kh_verzeichnis/spezialisierungWithNumbers'
+  try {
+    // Datei lesen
+    const response = await fetch(url)
+    const data = await response.text()
+    // Verarbeiten Sie die Daten hier
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('Fehler beim Lesen der Datei:', error)
+  }
+}
+
 function clearMarker () {
   // lösche User Position Marker
   userLocationMarker.remove()
@@ -829,17 +842,19 @@ function showHospitalOnMap (hospital) {
  */
 async function createCompleteKhsDataset () {
   khs = await getData()
-  khsSpez = await getDataSpez()
+  khsSpez = await getDataSpezNumber()
   khsSpez.forEach(spez => {
-    const spezId = parseInt(spez[2].substring(2))
-    if (khs.features[spezId]) {
-      if (spezId === (khs.features[spezId].properties.ObjectID - 1)) {
-        if (spez[3] !== 'Aufgestellte_Betten_insgesamt') {
-          const spezName = spez[3].replace(/_/g, ' ')
-          if (khs.features[spezId].specialisation) {
-            khs.features[spezId].specialisation.push(spezName)
-          } else {
-            khs.features[spezId].specialisation = [spezName]
+    if (typeof spez.ID === 'string') {
+      const spezId = parseInt(spez.ID.substring(2))
+      if (khs.features[spezId]) {
+        if (spezId === (khs.features[spezId].properties.ObjectID - 1)) {
+          if (spez.Spezialisierung !== 'INSG') {
+            // const spezName = spez[3].replace(/_/g, ' ')
+            if (khs.features[spezId].specialisation) {
+              khs.features[spezId].specialisation.push(spez.Spezialisierung)
+            } else {
+              khs.features[spezId].specialisation = [spez.Spezialisierung]
+            }
           }
         }
       }
@@ -896,31 +911,32 @@ function filterNv (selectedFilter, data) {
 }
 
 async function filteredSpez (selectedFilter, data) {
-  const khsSchwerpunkteReverse = await reverseSchwerpunkte()
-  // selectedFilter.forEach((filter, index) => {
-  //   if (String(filter).length === 4) {
-  //     const firstPart = String(filter).substring(0, 2)
-  //     const secondPart = String(filter).substring(3, 4)
-  //     selectedFilter[index] = parseInt(firstPart + secondPart)
-  //   }
-  // })
-  data.forEach(khs => {
-    if (khs.specialisation) {
-      console.log(khs.specialisation)
-      khs.specialisation.forEach(spez => {
-        selectedFilter.forEach(filter => {
-          // console.log(filter)
-          // console.log(spez)
-          if (khsSchwerpunkteReverse[spez]) {
-            // console.log(khsSchwerpunkteReverse[spez])
-            if (filter === khsSchwerpunkteReverse[spez]) {
-              console.log('klappt')
-            }
-          }
-        })
-      })
+  const selectedSpez = []
+  selectedFilter.forEach((filter, index) => {
+    selectedFilter[index] = String(filter)
+    if (selectedFilter[index].length === 3) {
+      selectedFilter[index] = '0' + selectedFilter[index]
+    } else if (selectedFilter[index].length === 5) {
+      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 5)
+    } else if (selectedFilter[index].length === 4 && selectedFilter[index][1] === '0') {
+      selectedFilter[index] = '0' + selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 4)
     }
   })
+  data.forEach(khs => {
+    if (khs.specialisation) {
+      for (let i = 0; i < khs.specialisation.length; i++) {
+        selectedFilter.forEach(filter => {
+          if (filter === khs.specialisation[i]) {
+            selectedSpez.push(khs)
+            i = khs.specialisation.length
+            console.log('Hinzugefügt')
+          }
+        })
+      }
+    }
+  })
+  console.log(selectedSpez)
+  return selectedSpez
 }
 
 function turnObjectIntoArray () {
