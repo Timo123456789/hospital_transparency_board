@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+let khsWithSpez
+let khsWithSpezFiltered
 let userLocationMarker = null
 let markersHospital = []
 let filteredKhs = []
@@ -274,6 +276,61 @@ window.onload = function () {
 async function completeDataHeatmap () {
   const heatmapData = []
   const completeData = await getData()
+  await createCompleteKhsDataset()
+  const filter = checkCheckboxes()
+  filterIds = {
+    filterTypIds: [],
+    filterEigentuemerIds: [],
+    filterNvIds: [],
+    filterSpezIds: []
+  }
+  filter.forEach(filt => {
+    if (filt.value[4] === 'k') {
+      filterIds.filterTypIds.push(parseInt(filt.value.match(/\d+/g)[0]))
+    } else if (filt.value[4] === 'e') {
+      filterIds.filterEigentuemerIds.push(parseInt(filt.value.match(/\d+/g)[0]))
+    } else if (filt.value[4] === 'n') {
+      filterIds.filterNvIds.push(parseInt(filt.value.match(/\d+/g)[0]))
+    } else if (filt.value[4] === 's') {
+      filterIds.filterSpezIds.push(parseInt(filt.value.match(/\d+/g)[0]))
+    }
+  })
+  const khsWithSpezArray = turnObjectIntoArray()
+  let currentFilteredData
+  for (key in filterIds) {
+    if (currentFilteredData === undefined) {
+      if (filterIds[key].length !== 0 && key === 'filterTypIds') {
+        console.log('Typ with all data')
+        currentFilteredData = filterTyp(filterIds[key], khsWithSpezArray)
+      } else if (filterIds[key].length !== 0 && key === 'filterEigentuemerIds') {
+        console.log('Eigentuemer with all data')
+        currentFilteredData = filterEigentuemer(filterIds[key], khsWithSpezArray)
+      } else if (filterIds[key].length !== 0 && key === 'filterNvIds') {
+        console.log('NV with all data')
+        currentFilteredData = filterNv(filterIds[key], khsWithSpezArray)
+      } else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
+        console.log('Spez with all data')
+        currentFilteredData = await filteredSpez(filterIds[key], khsWithSpezArray)
+      }
+    } else {
+      if (filterIds[key].length !== 0 && key === 'filterTypIds') {
+        console.log('typ with spezial data')
+        currentFilteredData = filterTyp(filterIds[key], currentFilteredData)
+      } else if (filterIds[key].length !== 0 && key === 'filterEigentuemerIds') {
+        console.log('Eigentuemer with spezial data')
+        currentFilteredData = filterEigentuemer(filterIds[key], currentFilteredData)
+      } else if (filterIds[key].length !== 0 && key === 'filterNvIds') {
+        console.log('Nv with spezial data')
+        currentFilteredData = filterNv(filterIds[key], currentFilteredData)
+      } else if (filterIds[key].length !== 0 && key === 'filterSpezIds') {
+        console.log('Spez with spezial data')
+        currentFilteredData = await filteredSpez(filterIds[key], currentFilteredData)
+      }
+    }
+  }
+  console.log(currentFilteredData)
+  loadKhsMarkerOnMap(currentFilteredData)
+
   completeData.features.forEach(feat => {
     if (feat.geometry.coordinates[0] !== undefined && feat.geometry.coordinates[1] !== undefined) {
       heatmapData.push([feat.geometry.coordinates[1], feat.geometry.coordinates[0], 1])
@@ -528,6 +585,19 @@ async function getDataSpez () {
   }
 }
 
+async function getDataSpezNumber () {
+  const url = 'http://localhost:3000/kh_verzeichnis/spezialisierungWithNumbers'
+  try {
+    // Datei lesen
+    const response = await fetch(url)
+    const data = await response.text()
+    // Verarbeiten Sie die Daten hier
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('Fehler beim Lesen der Datei:', error)
+  }
+}
+
 function clearMarker () {
   // lösche User Position Marker
   userLocationMarker.remove()
@@ -765,4 +835,156 @@ function showHospitalOnMap (hospital) {
   temp.openPopup()
   map.setView(coords, 13)
   // TODO: add routing
+}
+
+/**
+ * @description creates a dictionary with all the Hospitals
+ */
+async function createCompleteKhsDataset () {
+  khs = await getData()
+  khsSpez = await getDataSpezNumber()
+  khsSpez.forEach(spez => {
+    if (typeof spez.ID === 'string') {
+      const spezId = parseInt(spez.ID.substring(2))
+      if (khs.features[spezId]) {
+        if (spezId === (khs.features[spezId].properties.ObjectID - 1)) {
+          if (spez.Spezialisierung !== 'INSG') {
+            // const spezName = spez[3].replace(/_/g, ' ')
+            if (khs.features[spezId].specialisation) {
+              khs.features[spezId].specialisation.push(spez.Spezialisierung)
+            } else {
+              khs.features[spezId].specialisation = [spez.Spezialisierung]
+            }
+          }
+        }
+      }
+    }
+  })
+  khsWithSpez = khs
+}
+
+function filterTyp (selectedFilter, data) {
+  const selectedKhsTyp = []
+  data.forEach(khs => {
+    selectedFilter.forEach(filter => {
+      if (khs.properties.EinrichtungsTyp === filter) {
+        selectedKhsTyp.push(khs)
+      }
+    })
+  })
+  return selectedKhsTyp
+}
+
+function filterEigentuemer (selectedFilter, data) {
+  const selectedKhsEigentuemer = []
+  data.forEach(khs => {
+    selectedFilter.forEach(filter => {
+      if (khs.properties.Traeger === filter) {
+        selectedKhsEigentuemer.push(khs)
+      }
+    })
+  })
+  return selectedKhsEigentuemer
+}
+
+function filterNv (selectedFilter, data) {
+  const selectedKhsNv = []
+  data.forEach(khs => {
+    for (let i = 0; i < selectedFilter.length; i++) {
+      const filter = selectedFilter[i]
+      if (nvObj[filter].Name === 'Allgemeine_Notfallversorgung') {
+        nvObj[filter].Value.forEach(value => {
+          if (value === khs.properties[nvObj[filter].Name]) {
+            selectedKhsNv.push(khs)
+            i = selectedFilter.length
+          }
+        })
+      } else {
+        if (khs.properties[nvObj[filter].Name] === 2) {
+          selectedKhsNv.push(khs)
+          i = selectedFilter.length
+        }
+      }
+    }
+  })
+  return selectedKhsNv
+}
+
+async function filteredSpez (selectedFilter, data) {
+  const selectedSpez = []
+  selectedFilter.forEach((filter, index) => {
+    selectedFilter[index] = String(filter)
+    if (selectedFilter[index].length === 3) {
+      selectedFilter[index] = '0' + selectedFilter[index]
+    } else if (selectedFilter[index].length === 5) {
+      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 5)
+    } else if (selectedFilter[index].length === 4 && selectedFilter[index][1] === '0') {
+      selectedFilter[index] = '0' + selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 4)
+    }
+  })
+  data.forEach(khs => {
+    if (khs.specialisation) {
+      for (let i = 0; i < khs.specialisation.length; i++) {
+        selectedFilter.forEach(filter => {
+          if (filter === khs.specialisation[i]) {
+            selectedSpez.push(khs)
+            i = khs.specialisation.length
+            console.log('Hinzugefügt')
+          }
+        })
+      }
+    }
+  })
+  console.log(selectedSpez)
+  return selectedSpez
+}
+
+function turnObjectIntoArray () {
+  khsWithSpezArray = []
+  khsWithSpez.features.forEach(khs => {
+    khsWithSpezArray.push(khs)
+  })
+  return khsWithSpezArray
+}
+
+function reverseSchwerpunkte () {
+  return new Promise((resolve, reject) => {
+    try {
+      const khsSchwerpunkteReverse = Object.fromEntries(
+        Object.entries(khsSpezialisierung.Schwerpunkte).map(([key, value]) => [value, key])
+      )
+      resolve(khsSchwerpunkteReverse)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+function loadKhsMarkerOnMap (data) {
+  markersHospital = []
+  const radius = (parseInt(document.getElementById('radiusSlider').value) * 1000)
+  userCoords = [userLocationMarker.getLatLng().lat, userLocationMarker.getLatLng().lng]
+  const center = L.latLng(userCoords[0], userCoords[1])
+
+  data.forEach(khs => {
+    const coords = [khs.geometry.coordinates[1], khs.geometry.coordinates[0]]
+    if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+      const distance = center.distanceTo(coords)
+      if (distance <= radius) {
+        const temp = createMarker(khs, coords, hospIcon)
+        markersHospital.push(temp)
+        const markerCoords = coords
+        // Add an event listener to the marker
+        temp.on('click', function () {
+          updateRouting(L.latLng(markerCoords))
+          const messageElement = document.getElementById('message')
+          messageElement.textContent = '' // Clear the message
+        })
+      }
+    }
+  })
+
+  markersHospital.forEach(hospitalMarker => {
+    map.addControl(hospitalMarker)
+  })
 }

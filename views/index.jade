@@ -154,7 +154,7 @@ block content
             label.form-check-label(for='activeHeatmapSwitch') Heatmap erstellen
           br
           br
-        p Im folgenden können Sie verschiedene Möglichkeiten auswählen, welche Krankenhäuser in die Analyse einbezogen werden sollen:
+        p.fst-italic Im folgenden können Sie verschiedene Möglichkeiten auswählen, welche Krankenhäuser in die Analyse einbezogen werden sollen:
       br
       br
       .row
@@ -162,8 +162,10 @@ block content
           .form-check.form-switch
             input.form-check-input(type='checkbox', id='useActiveFilterSwitch')
             label.form-check-label(for='useActiveFilterSwitch') Verwende aktive Filter
-        .d-flex.justify-content-center 
-          p Wird dies aktiviert so werden nur die Krankenhäuser verwendet, die durch die Filter ausgewählt wurden. Bei deaktivierung werden alle Krankenhäuser aus dem Datensatz verwendet.
+          br
+          br
+        .d-flex.justify-content-center.text-center
+          p.fst-italic Wird dies aktiviert so werden nur die Krankenhäuser verwendet, die durch die Filter ausgewählt wurden. Bei deaktivierung werden alle Krankenhäuser aus dem Datensatz verwendet.
 
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")
