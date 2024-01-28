@@ -590,7 +590,7 @@ function showHospitalOnMap (hospital) {
   // Add marker to the map
   map.addControl(temp)
   temp.openPopup()
-  map.setView(coords, 13)
+  map.flyTo(coords, 13)
   // TODO: add routing
 }
 
@@ -759,7 +759,13 @@ function loadKhsMarkerOnMap (data) {
       }
     }
   })
-
+  // zoom to markers or user location
+  if (markersHospital.length === 0) {
+    map.flyTo(userCoords, 13)
+    alert('Keine Krankenhäuser gefunden!')
+  } else {
+    map.fitBounds(markersHospital.map(marker => marker.getLatLng()))
+  }
   markersHospital.forEach(hospitalMarker => {
     map.addControl(hospitalMarker)
   })
