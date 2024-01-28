@@ -96,6 +96,8 @@ const khsTypCount = document.getElementById('khs_typ_count')
 const khsEigentuemerCount = document.getElementById('khs_eigentuemer_count')
 const khsNotfallCount = document.getElementById('khs_notfall_count')
 const khsSpezialisierungCount = document.getElementById('khs_spezialisierung_count')
+// eslint-disable-next-line no-unused-vars
+const countArray = [khsTypCount, khsEigentuemerCount, khsNotfallCount, khsSpezialisierungCount]
 
 // DOM Element for the datalist
 const datalist = document.getElementById('allKHS')

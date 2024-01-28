@@ -156,6 +156,11 @@ a.navbar-brand {
   border-color: var(--primary-200);
 }
 
+#button_reset{
+  background-color: var(--primary-600);
+  border-color: var(--primary-200);
+}
+
 #message {
   position: fixed;
   top: 130px;
@@ -386,6 +391,11 @@ input[type="radio"]:checked + #radiobutton {
   border-color: var(--primary-200);
 }
 
+#btnGoToFilter {
+  background-color: var(--primary-200);
+  border-color: var(--primary-400);
+  color: var(--primary-700);
+}
 
 /* footer--------------------------------------------------------------------- */
 footer {

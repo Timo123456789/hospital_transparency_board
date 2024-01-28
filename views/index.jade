@@ -105,8 +105,11 @@ block content
                 label(for='star1') 1 star
         hr
         div.input-group.mb-3.d-flex.justify-content-center
-          br
-          button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
+          div.col-3
+          div.col-6.text-center.flex-grow-1
+            button.btn.btn-lg.btn-primary#button_submit(data-bs-dismiss="offcanvas",aria-label="Close") Filter anwenden
+          div.d-flex.align-items-center.text-end
+            button.btn.btn-sm.btn-primary#button_reset Zurücksetzen 
   div.offcanvas.offcanvas-bottom#offcanvasBottom(tabindex='-1' aria-labelledby='offcanvasBottomLabel')
     div.offcanvas-header#offcanvasBottomHeader
       h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
@@ -166,6 +169,14 @@ block content
           br
         .d-flex.justify-content-center.text-center
           p.fst-italic Wird dies aktiviert so werden nur die Krankenhäuser verwendet, die durch die Filter ausgewählt wurden. Bei deaktivierung werden alle Krankenhäuser aus dem Datensatz verwendet.
+      br
+      br
+      br
+      .row 
+        .d-flex.justify-content-center.text-center
+          p.fst-italic Um tiefergende Analysen durchzuführen können Sie die Filter für die Krankenhäuser anpassen. Nach der Änderungder Filter müssen Sie die Heatmap neu laden.
+        button.btn.btn-primary#btnGoToFilter Hier geht es zu den Filtern
+          
 
   script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="")
   script(src="/javascripts/indexScript_main.js")

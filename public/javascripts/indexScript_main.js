@@ -176,6 +176,11 @@ window.onload = function () {
   document.getElementById('useActiveFilterSwitch').addEventListener('change', () => {
     const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
+    const routingButton = document.getElementById('button_routing')
+    endRouting()
+    routingButton.style.backgroundColor = '' // Reset the button color
+    routingButton.innerHTML = '<i class="fas fa-route"></i>' // Change the button text to an icon
+    routingControl.hide() // Hide the directions
     removeHeatMap(map)
     if (userLocationMarker) {
       map.removeControl(userLocationMarker)
@@ -196,6 +201,11 @@ window.onload = function () {
   document.getElementById('activeHeatmapSwitch').addEventListener('change', () => {
     const activeHeatmapSwitch = document.getElementById('activeHeatmapSwitch')
     const useActiveFilterSwitch = document.getElementById('useActiveFilterSwitch')
+    const routingButton = document.getElementById('button_routing')
+    endRouting()
+    routingButton.style.backgroundColor = '' // Reset the button color
+    routingButton.innerHTML = '<i class="fas fa-route"></i>' // Change the button text to an icon
+    routingControl.hide() // Hide the directions
     if (userLocationMarker) {
       map.removeControl(userLocationMarker)
     }
@@ -215,9 +225,31 @@ window.onload = function () {
     }
   })
 
+  document.getElementById('btnGoToFilter').addEventListener('click', () => {
+    const offcanvasLeft = document.getElementById('offcanvasLeft')
+    const offcanvasEnd = document.getElementById('offcanvasEnd')
+    const bsOffcanvasLeft = new bootstrap.Offcanvas(offcanvasLeft)
+    const bsOffcanvasEnd = bootstrap.Offcanvas.getInstance(offcanvasEnd)
+
+    if (bsOffcanvasEnd) {
+      bsOffcanvasEnd.hide()
+    }
+    bsOffcanvasLeft.show()
+  })
+
   document.getElementById('locationSearch').addEventListener('change', () => {
     const khs = locationSearch.value
     khsSearchHandler(khs)
+  })
+
+  document.getElementById('button_reset').addEventListener('click', () => {
+    const dropdownItems = document.querySelectorAll('.checkbox-group:checked')
+    dropdownItems.forEach(item => {
+      item.checked = false
+    })
+    countArray.forEach(count => {
+      count.textContent = '[0]'
+    })
   })
 
   $(document).ready(function () {
@@ -738,29 +770,33 @@ function turnObjectIntoArray () {
  */
 function loadKhsMarkerOnMap (data) {
   markersHospital = []
-  const radius = (parseInt(document.getElementById('radiusSlider').value) * 1000)
-  userCoords = [userLocationMarker.getLatLng().lat, userLocationMarker.getLatLng().lng]
-  const center = L.latLng(userCoords[0], userCoords[1])
+  if (data.length === 0) {
+    alert('Keine Krankenhäuser gefunden')
+  } else {
+    const radius = (parseInt(document.getElementById('radiusSlider').value) * 1000)
+    userCoords = [userLocationMarker.getLatLng().lat, userLocationMarker.getLatLng().lng]
+    const center = L.latLng(userCoords[0], userCoords[1])
 
-  data.forEach(khs => {
-    const coords = [khs.geometry.coordinates[1], khs.geometry.coordinates[0]]
-    if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-      const distance = center.distanceTo(coords)
-      if (distance <= radius) {
-        const temp = createMarker(khs, coords, hospIcon)
-        markersHospital.push(temp)
-        const markerCoords = coords
-        // Add an event listener to the marker
-        temp.on('click', function () {
-          updateRouting(L.latLng(markerCoords))
-          const messageElement = document.getElementById('message')
-          messageElement.textContent = '' // Clear the message
-        })
+    data.forEach(khs => {
+      const coords = [khs.geometry.coordinates[1], khs.geometry.coordinates[0]]
+      if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+        const distance = center.distanceTo(coords)
+        if (distance <= radius) {
+          const temp = createMarker(khs, coords, hospIcon)
+          markersHospital.push(temp)
+          const markerCoords = coords
+          // Add an event listener to the marker
+          temp.on('click', function () {
+            updateRouting(L.latLng(markerCoords))
+            const messageElement = document.getElementById('message')
+            messageElement.textContent = '' // Clear the message
+          })
+        }
       }
-    }
-  })
+    })
 
-  markersHospital.forEach(hospitalMarker => {
-    map.addControl(hospitalMarker)
-  })
+    markersHospital.forEach(hospitalMarker => {
+      map.addControl(hospitalMarker)
+    })
+  }
 }
