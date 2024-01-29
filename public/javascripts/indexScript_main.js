@@ -620,15 +620,14 @@ function showHospitalOnMap (hospital) {
     messageElement.textContent = '' // Clear the message
   })
   // create markert for user location
-  // const userLocation = document.getElementById('userLocationField').value
-  // const userLocationObj = JSON.parse(userLocation)
-  // const userLocationCoords = [userLocationObj.lat, userLocationObj.lon]
-  // setUserMarker(userLocationCoords)
+  const userLocation = document.getElementById('userLocationField').value
+  const userLocationObj = JSON.parse(userLocation)
+  const userLocationCoords = [userLocationObj.lat, userLocationObj.lon]
+  setUserMarker(userLocationCoords)
   // Add marker to the map
   map.addControl(temp)
   temp.openPopup()
-  map.flyTo(coords, 13)
-  // TODO: add routing
+  zoomToHospitals()
 }
 
 /**
@@ -816,7 +815,13 @@ function loadKhsMarkerOnMap (data) {
       })
     }
   }
-  // zoom to markers or user location
+  zoomToHospitals()
+  markersHospital.forEach(hospitalMarker => {
+    map.addControl(hospitalMarker)
+  })
+}
+
+function zoomToHospitals () {
   if (markersHospital.length === 0) {
     map.flyTo(userCoords, 13)
     alert('Keine Krankenhäuser gefunden!')
@@ -824,9 +829,6 @@ function loadKhsMarkerOnMap (data) {
     // add hospital maker and user location in one array
     const allMarkers = markersHospital
     allMarkers.push(userLocationMarker)
-    map.fitBounds(allMarkers.map(marker => marker.getLatLng()))
+    map.flyToBounds(allMarkers.map(marker => marker.getLatLng()))
   }
-  markersHospital.forEach(hospitalMarker => {
-    map.addControl(hospitalMarker)
-  })
 }
