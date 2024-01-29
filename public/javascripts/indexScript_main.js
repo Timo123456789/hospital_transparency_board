@@ -91,7 +91,7 @@ window.onload = function () {
   // event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   document.getElementById('button_getUserLoc').addEventListener('click', async function () {
-    showLoader()
+    showLoader(loader, mapContainer)
     if (userLocationMarker !== null && markersHospital !== null) {
       endHeatmap()
       clearMarker()
@@ -107,7 +107,7 @@ window.onload = function () {
         map.flyTo(coords, 13)
         setUserMarker(coords)
         filterFunction()
-        hideLoader()
+        hideLoader(loader, mapContainer)
       }, function (error) {
         console.error('Fehler beim Abrufen der Position:', error)
       })
@@ -829,12 +829,20 @@ function zoomToHospitals () {
   }
 }
 
-function showLoader () {
+/**
+ * shows loader
+ * @param {*} loader
+ */
+function showLoader (loader, div) {
   loader.classList.remove('visually-hidden')
-  mapContainer.style.opacity = '0.5'
+  div.style.opacity = '0.5'
 }
 
-function hideLoader () {
+/**
+ * hides loader
+ * @param {*} loader
+ */
+function hideLoader (loader, div) {
   loader.classList.add('visually-hidden')
-  mapContainer.style.opacity = '1'
+  div.style.opacity = '1'
 }

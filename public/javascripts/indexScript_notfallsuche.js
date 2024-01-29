@@ -206,7 +206,7 @@ function writeTable (result) {
 async function notfallsuche () {
   // function from indexScript_main.js
   // eslint-disable-next-line no-undef
-  showLoader()
+  showLoader(loaderNotfallsuche, offcanvasBottom)
   const { query, search } = getQueryString()
   let userLocation = document.getElementById('userLocationField').value
   // check if userLocation is empty
@@ -227,7 +227,7 @@ async function notfallsuche () {
   setUserMarker(userLocationCoords)
   // function from indexScript_main.js
   // eslint-disable-next-line no-undef
-  hideLoader()
+  hideLoader(loaderNotfallsuche, offcanvasBottom)
   writeTable(result)
 }
 

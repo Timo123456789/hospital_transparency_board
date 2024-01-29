@@ -103,11 +103,11 @@ a.navbar-brand {
   width: var(--sidebar-width);
 }
 
-#siteLoading{
+#siteLoading, #siteLoadingNotfallsuche{
   position: absolute;
   left: 49%;
   top: 49%;
-  z-index: 1000;
+  z-index: 5000;
 }
 
 .loader, .loader:before, .loader:after {
