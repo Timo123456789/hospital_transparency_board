@@ -200,15 +200,26 @@ function writeTable (result) {
   notfallsucheTable.appendChild(table)
 }
 
+/**
+ * function for notfallsuche
+ */
 async function notfallsuche () {
+  const loader = document.getElementById('loader')
+  loader.classList.remove('visually-hidden')
   const { query, search } = getQueryString()
-  const userLocation = document.getElementById('userLocationField').value
+  let userLocation = document.getElementById('userLocationField').value
+  // check if userLocation is empty
   if (userLocation === '') {
-    alert('Bitte lassen Sie Ihren Standort ermitteln.')
-    return
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject)
+    })
+    const coords = [position.coords.latitude, position.coords.longitude]
+    userLocation = '{"lat":' + coords[0] + ', "lon":' + coords[1] + '}'
+    document.getElementById('userLocationField').value = userLocation
   }
   const userLocationParsed = JSON.parse(userLocation)
   const result = await queryData(query, search, userLocationParsed)
+  loader.classList.add('visually-hidden')
   writeTable(result)
 }
 
