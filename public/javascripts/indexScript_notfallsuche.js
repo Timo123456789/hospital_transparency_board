@@ -204,8 +204,9 @@ function writeTable (result) {
  * function for notfallsuche
  */
 async function notfallsuche () {
-  const loader = document.getElementById('loader')
-  loader.classList.remove('visually-hidden')
+  // function from indexScript_main.js
+  // eslint-disable-next-line no-undef
+  showLoader()
   const { query, search } = getQueryString()
   let userLocation = document.getElementById('userLocationField').value
   // check if userLocation is empty
@@ -219,7 +220,14 @@ async function notfallsuche () {
   }
   const userLocationParsed = JSON.parse(userLocation)
   const result = await queryData(query, search, userLocationParsed)
-  loader.classList.add('visually-hidden')
+  // create markert for user location
+  const userLocationCoords = [userLocationParsed.lat, userLocationParsed.lon]
+  // function from indexScript_main.js
+  // eslint-disable-next-line no-undef
+  setUserMarker(userLocationCoords)
+  // function from indexScript_main.js
+  // eslint-disable-next-line no-undef
+  hideLoader()
   writeTable(result)
 }
 
