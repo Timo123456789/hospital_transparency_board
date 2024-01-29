@@ -730,16 +730,30 @@ async function filterNv (selectedFilter, data) {
  */
 async function filteredSpez (selectedFilter, data) {
   const selectedSpez = []
+  console.log(selectedFilter)
   selectedFilter.forEach((filter, index) => {
     selectedFilter[index] = String(filter)
     if (selectedFilter[index].length === 3) {
       selectedFilter[index] = '0' + selectedFilter[index]
-    } else if (selectedFilter[index].length === 5) {
-      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 5)
-    } else if (selectedFilter[index].length === 4 && selectedFilter[index][1] === '0') {
+    } else if (selectedFilter[index].length === 4 && selectedFilter[index][2] === '0' && selectedFilter[index][3] === '1') {
+      selectedFilter[index] = String(parseInt(selectedFilter[index]) - 1)
       selectedFilter[index] = '0' + selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 4)
+    } else if (selectedFilter[index].length === 4 && selectedFilter[index][2] === '0' && selectedFilter[index][3] === '0') {
+      console.log('passt')
+    } else if (selectedFilter[index].length === 4 && selectedFilter[index][2] === '0' && selectedFilter[index][3] !== '0') {
+      selectedFilter[index] = '0' + selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 4)
+    } else if (selectedFilter[index].length === 5 && selectedFilter[index][3] === '0' && selectedFilter[index][4] === '1') {
+      selectedFilter[index] = String(parseInt(selectedFilter[index]) - 1)
+      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 5)
+    } else if (selectedFilter[index].length === 5 && selectedFilter[index][3] === '0' && selectedFilter[index][4] !== '0') {
+      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(3, 5)
+    } else if (selectedFilter[index].length === 5 && selectedFilter[index][1] === '0' && selectedFilter[index][2] === '0') {
+      selectedFilter[index] = '0' + selectedFilter[index].substring(0, 1) + selectedFilter[index].substring(3, 5)
+    } else if (selectedFilter[index].length === 6) {
+      selectedFilter[index] = selectedFilter[index].substring(0, 2) + selectedFilter[index].substring(4, 6)
     }
   })
+  console.log(selectedFilter)
   data.forEach(khs => {
     if (khs.specialisation) {
       for (let i = 0; i < khs.specialisation.length; i++) {
@@ -803,12 +817,12 @@ function loadKhsMarkerOnMap (data) {
     }
   }
   // zoom to markers or user location
-  if (markersHospital.length === 0) {
-    map.flyTo(userCoords, 13)
-    alert('Keine Krankenhäuser gefunden!')
-  } else {
-    map.fitBounds(markersHospital.map(marker => marker.getLatLng()))
-  }
+  // if (markersHospital.length === 0) {
+  //   map.flyTo(userCoords, 13)
+  //   alert('Keine Krankenhäuser gefunden!')
+  // } else {
+  //   map.fitBounds(markersHospital.map(marker => marker.getLatLng()))
+  // }
   markersHospital.forEach(hospitalMarker => {
     map.addControl(hospitalMarker)
   })
