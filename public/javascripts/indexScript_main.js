@@ -91,8 +91,7 @@ window.onload = function () {
   // event listener ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   document.getElementById('button_getUserLoc').addEventListener('click', async function () {
-    loader.classList.remove('visually-hidden')
-    mapContainer.style.opacity = '0.5'
+    showLoader()
     if (userLocationMarker !== null && markersHospital !== null) {
       endHeatmap()
       clearMarker()
@@ -108,8 +107,7 @@ window.onload = function () {
         map.flyTo(coords, 13)
         setUserMarker(coords)
         filterFunction()
-        loader.classList.add('visually-hidden')
-        mapContainer.style.opacity = '1'
+        hideLoader()
       }, function (error) {
         console.error('Fehler beim Abrufen der Position:', error)
       })
@@ -619,11 +617,6 @@ function showHospitalOnMap (hospital) {
     const messageElement = document.getElementById('message')
     messageElement.textContent = '' // Clear the message
   })
-  // create markert for user location
-  const userLocation = document.getElementById('userLocationField').value
-  const userLocationObj = JSON.parse(userLocation)
-  const userLocationCoords = [userLocationObj.lat, userLocationObj.lon]
-  setUserMarker(userLocationCoords)
   // Add marker to the map
   map.addControl(temp)
   temp.openPopup()
@@ -821,6 +814,9 @@ function loadKhsMarkerOnMap (data) {
   })
 }
 
+/**
+ * zooms to hospitals and user location
+ */
 function zoomToHospitals () {
   if (markersHospital.length === 0) {
     map.flyTo(userCoords, 13)
@@ -831,4 +827,14 @@ function zoomToHospitals () {
     allMarkers.push(userLocationMarker)
     map.flyToBounds(allMarkers.map(marker => marker.getLatLng()))
   }
+}
+
+function showLoader () {
+  loader.classList.remove('visually-hidden')
+  mapContainer.style.opacity = '0.5'
+}
+
+function hideLoader () {
+  loader.classList.add('visually-hidden')
+  mapContainer.style.opacity = '1'
 }
