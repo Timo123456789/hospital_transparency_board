@@ -51,9 +51,9 @@ block content
           h5 Allgemeines
         div.input-group.mb-3.justify-content-center
           label(for='radiusSlider') Maximale Entfernung zu einem Krankenhaus in km
-          input#radiusSlider.custom-range(type='range' min='0' max='100' step='1' value='10' )
+          input#radiusSlider.custom-range(type='range' min='0' max='400' step='1' value='10' )
           .input-group#InputGroup
-            input.form-control#radiusInput(type='number', min='0', max='100', value='10')
+            input.form-control#radiusInput(type='number', min='0', max='400', value='10')
             span.input-group-text km
         div.row
           div.col.d-flex.justify-content-center
@@ -115,32 +115,45 @@ block content
       h5#offcanvasBottomLabel.offcanvas-title Notfallsuche
       button.btn-close(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
     div.offcanvas-body#offcanvasBottomBody
-      .row
+      .row.text-center.mb-1
         h5 Wählen Sie eine Notfallversorgungsart aus:
       .row
         .col.d-flex.justify-content-center
           .btn-group.btn-group-sm.d-none.d-md-flex#notfallsuche(role='group' aria-label='Basic radio toggle button group')
-            input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio1') Allgemeine stationäre Notfallversorgung
-            input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio2') Schwerverletztenversorgung
-            input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio3') Notfallversorgung Kinder
-            input#btnradio4.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio4') Schlaganfallversorgung
-            input#btnradio5.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio5') Durchblutungsstörungen des Herzens
+            div.mx-2.mb-2#notfallsucheAllgemein
+              input#btnradio1.btn-check(type='radio' name='btnradio' autocomplete='off')
+              label.btn#radiobutton(for='btnradio1') Allgemein 
+                img(src="/images/krankenhaus.png", alt="Icon" width='28' height='28')
+            div.mx-2.mb-2#notfallsucheUnfall
+              input#btnradio2.btn-check(type='radio' name='btnradio' autocomplete='off')
+              label.btn#radiobutton(for='btnradio2') Unfall 
+                img(src="/images/unfall.png", alt="Icon" width='28' height='28')
+            div.mx-2.mb-2#notfallsucheKinder
+              input#btnradio3.btn-check(type='radio' name='btnradio' autocomplete='off')
+              label.btn#radiobutton(for='btnradio3') Kinder 
+                img(src="/images/spielzeuge.png", alt="Icon" width='28' height='28')
+            div.mx-2.mb-2#notfallsucheSchlaganfall
+              input#btnradio4.btn-check(type='radio' name='btnradio' autocomplete='off')
+              label.btn#radiobutton(for='btnradio4') Schlaganfall 
+                img(src="/images/schlaganfall.png", alt="Icon" width='28' height='28')
+            div.mx-2.mb-2#notfallsucheHerz
+              input#btnradio5.btn-check(type='radio' name='btnradio' autocomplete='off')
+              label.btn#radiobutton(for='btnradio5') Herz 
+                svg.bi.bi-heart-pulse(xmlns='http://www.w3.org/2000/svg' width='25' height='25' fill='currentColor' viewBox='0 0 16 16')
+                  path(d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857q.09.083.176.171a3 3 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01zM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5')
+                  path(d='M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162z')
+
           .btn-group-vertical.btn-group-sm.d-block.d-md-none#notfallsuchev(role='group' aria-label='Basic radio toggle button group')
             input#btnradio1v.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio1v') Allgemeine stationäre Notfallversorgung
+            label.btn#radiobutton(for='btnradio1v') Allgemein
             input#btnradio2v.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio2v') Schwerverletztenversorgung
+            label.btn#radiobutton(for='btnradio2v') Unfall
             input#btnradio3v.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio3v') Notfallversorgung Kinder
+            label.btn#radiobutton(for='btnradio3v') Kinder
             input#btnradio4v.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio4v') Schlaganfallversorgung
+            label.btn#radiobutton(for='btnradio4v') Schlaganfall
             input#btnradio5v.btn-check(type='radio' name='btnradio' autocomplete='off')
-            label.btn#radiobutton(for='btnradio5v') Durchblutungsstörungen des Herzens
+            label.btn#radiobutton(for='btnradio5v') Herz
       .row 
         .col.d-flex.justify-content-center#notfallsucheTable
 

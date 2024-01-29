@@ -499,9 +499,14 @@ function createMarker (data, coords, hospIcon) {
     Typ: decodeType(data.properties.EinrichtungsTyp)
   }
 
-  const websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
-  const mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
-
+  let websiteUrl = 'N/A'
+  let mailtoLink = 'N/A'
+  if (textJson.Website) {
+    websiteUrl = textJson.Website.startsWith('http') ? textJson.Website : 'http://' + textJson.Website || 'N/A'
+  }
+  if (textJson.Email) {
+    mailtoLink = textJson.Email ? `<a href="mailto:${textJson.Email}">${textJson.Email}</a>` : 'N/A'
+  }
   tempMarker = L.marker(coords, { icon: hospIcon }).on('click', function (e) {
     if (routingButtonClicked) {
       this.openPopup()
@@ -773,30 +778,34 @@ function loadKhsMarkerOnMap (data) {
   if (data.length === 0) {
     alert('Keine Krankenhäuser gefunden')
   } else {
-    const radius = (parseInt(document.getElementById('radiusSlider').value) * 1000)
-    userCoords = [userLocationMarker.getLatLng().lat, userLocationMarker.getLatLng().lng]
-    const center = L.latLng(userCoords[0], userCoords[1])
+    if (userLocationMarker !== null) {
+      const radius = (parseInt(document.getElementById('radiusSlider').value) * 1000)
+      userCoords = [userLocationMarker.getLatLng().lat, userLocationMarker.getLatLng().lng]
+      const center = L.latLng(userCoords[0], userCoords[1])
 
-    data.forEach(khs => {
-      const coords = [khs.geometry.coordinates[1], khs.geometry.coordinates[0]]
-      if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
-        const distance = center.distanceTo(coords)
-        if (distance <= radius) {
-          const temp = createMarker(khs, coords, hospIcon)
-          markersHospital.push(temp)
-          const markerCoords = coords
-          // Add an event listener to the marker
-          temp.on('click', function () {
-            updateRouting(L.latLng(markerCoords))
-            const messageElement = document.getElementById('message')
-            messageElement.textContent = '' // Clear the message
-          })
+      data.forEach(khs => {
+        const coords = [khs.geometry.coordinates[1], khs.geometry.coordinates[0]]
+        if (typeof coords[0] !== 'undefined' && typeof coords[1] !== 'undefined') {
+          const distance = center.distanceTo(coords)
+          if (distance <= radius) {
+            const temp = createMarker(khs, coords, hospIcon)
+            markersHospital.push(temp)
+            const markerCoords = coords
+            // Add an event listener to the marker
+            temp.on('click', function () {
+              updateRouting(L.latLng(markerCoords))
+              const messageElement = document.getElementById('message')
+              messageElement.textContent = '' // Clear the message
+            })
+          }
         }
-      }
-    })
+      })
 
-    markersHospital.forEach(hospitalMarker => {
-      map.addControl(hospitalMarker)
-    })
+      markersHospital.forEach(hospitalMarker => {
+        map.addControl(hospitalMarker)
+      })
+    } else {
+      alert('Wählen Sie zurerst ihren Standort aus')
+    }
   }
 }

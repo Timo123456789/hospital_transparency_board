@@ -12,6 +12,8 @@ function addHeatMap (data, map, radius) {
   if (radius) {
     if (parseInt(radius) < 50) {
       rad = 50
+    } else if (parseInt(radius) > 100) {
+      rad = 100
     }
   } else {
     rad = 50
