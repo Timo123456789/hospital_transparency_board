@@ -817,12 +817,15 @@ function loadKhsMarkerOnMap (data) {
     }
   }
   // zoom to markers or user location
-  // if (markersHospital.length === 0) {
-  //   map.flyTo(userCoords, 13)
-  //   alert('Keine Krankenhäuser gefunden!')
-  // } else {
-  //   map.fitBounds(markersHospital.map(marker => marker.getLatLng()))
-  // }
+  if (markersHospital.length === 0) {
+    map.flyTo(userCoords, 13)
+    alert('Keine Krankenhäuser gefunden!')
+  } else {
+    // add hospital maker and user location in one array
+    const allMarkers = markersHospital
+    allMarkers.push(userLocationMarker)
+    map.fitBounds(allMarkers.map(marker => marker.getLatLng()))
+  }
   markersHospital.forEach(hospitalMarker => {
     map.addControl(hospitalMarker)
   })
